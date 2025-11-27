@@ -144,6 +144,19 @@ When ALL tasks are done:
 - Update feature status in main spec
 - Clear current task list
 
+## Multi-Project Structure
+
+This repository contains multiple projects in different languages:
+- **Python**: `projects/pytest_tracer_python/` - pytest tracing functionality
+- **Rust**: `projects/trace_analyzer/` - trace analysis CLI and MCP server
+
+Each project has its own:
+- Source code and tests
+- `devtools/` directory with validation scripts
+- Language-specific configuration (pyproject.toml, Cargo.toml, etc.)
+
+The root `devtools/run_all_agent_validations.sh` runs validations for ALL projects.
+
 ## Implementation Details
 
 ### How to Implement Each Task
@@ -152,7 +165,10 @@ When ALL tasks are done:
 
 1. **Plan** - Read spec requirements. Design tests. Check if existing tests need updates.
 2. **Implement** - Write code and tests together covering ALL spec scenarios.
-3. **Validate** - Run `./devtools/run_all_agent_validations.sh` until zero errors/warnings.
+3. **Validate** - Run validations from the appropriate location:
+   - All projects: `./devtools/run_all_agent_validations.sh` (from root)
+   - Python only: `cd projects/pytest_tracer_python && ./devtools/run_all_agent_validations.sh`
+   - Rust only: `cd projects/trace_analyzer && ./devtools/run_all_agent_validations.sh`
 
 🚨 **ZERO TOLERANCE** 🚨
 - ZERO test failures, linting errors, type errors, warnings

@@ -9,6 +9,11 @@ wheels/
 # Virtual environments
 .venv
 
+# Rust-generated files
+target/
+Cargo.lock
+**/*.rs.bk
+
 # Logs
 logs
 *.log
