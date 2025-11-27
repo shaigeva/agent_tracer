@@ -53,7 +53,8 @@ run_step "ruff-format-check" uv run ruff format --diff . || {
     exit 1
 }
 
-run_step "type-check" uv run ty check || {
+# Exclude sample_project fixture from type checking - it has its own import structure
+run_step "type-check" uv run ty check --exclude "tests/fixtures/sample_project/**" || {
     echo "❌ Type checking failed:"
     cat "$TEMP_OUTPUT"
     exit 1
