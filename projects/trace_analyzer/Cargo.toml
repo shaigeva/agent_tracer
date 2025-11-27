@@ -10,9 +10,23 @@ name = "trace_analyzer"
 path = "src/main.rs"
 
 [dependencies]
-# CLI dependencies
+# CLI
 clap = { version = "4.5", features = ["derive"] }
+
+# Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
+# Database (for .coverage parsing and index storage)
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Python AST parsing (for line->function mapping)
+# tree-sitter = "0.22"
+# tree-sitter-python = "0.21"
+
 [dev-dependencies]
+tempfile = "3.10"

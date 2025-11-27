@@ -1,7 +1,7 @@
 [project]
 name = "pytest_tracer_python"
 version = "0.1.0"
-description = "Add your description here"
+description = "Pytest plugin for capturing scenario test metadata and enabling AI agent context gathering"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
