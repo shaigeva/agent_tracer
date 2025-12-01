@@ -157,6 +157,7 @@ class ScenarioCollectorPlugin:
 def collect_scenarios(
     project_root: Path,
     test_dir: str = "tests",
+    quiet: bool = True,
 ) -> ScenariosFile:
     """
     Collect scenario metadata from a project's tests.
@@ -167,10 +168,14 @@ def collect_scenarios(
     Args:
         project_root: Path to project root directory
         test_dir: Subdirectory containing tests (default: "tests")
+        quiet: If True, suppress pytest's stdout/stderr output (default: True)
 
     Returns:
         ScenariosFile containing all collected scenarios
     """
+    import io
+    from contextlib import redirect_stderr, redirect_stdout
+
     test_path = project_root / test_dir
     plugin = ScenarioCollectorPlugin(project_root)
 
@@ -185,18 +190,22 @@ def collect_scenarios(
         # Run pytest in collect-only mode with our plugin
         # Use --rootdir to isolate from parent project's pytest config
         # Note: Don't use "-p no:terminal" as it removes the -q/-v options
-        pytest.main(
-            [
-                str(test_path),
-                "--collect-only",
-                "-q",
-                f"--rootdir={project_root}",
-                # Don't inherit any filterwarnings settings from parent project
-                "-o",
-                "filterwarnings=",
-            ],
-            plugins=[plugin],
-        )
+        args = [
+            str(test_path),
+            "--collect-only",
+            "-q",
+            f"--rootdir={project_root}",
+            # Don't inherit any filterwarnings settings from parent project
+            "-o",
+            "filterwarnings=",
+        ]
+
+        if quiet:
+            # Suppress pytest's output when running as a library
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                pytest.main(args, plugins=[plugin])
+        else:
+            pytest.main(args, plugins=[plugin])
     finally:
         # Clean up sys.path
         if path_added:
