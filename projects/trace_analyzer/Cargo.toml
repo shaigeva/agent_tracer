@@ -5,8 +5,12 @@ edition = "2021"
 authors = ["Agent Tracer Contributors"]
 description = "Trace analyzer - CLI and MCP server for analyzing test traces"
 
-[[bin]]
+[lib]
 name = "trace_analyzer"
+path = "src/lib.rs"
+
+[[bin]]
+name = "trace"
 path = "src/main.rs"
 
 [dependencies]

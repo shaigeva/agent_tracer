@@ -212,5 +212,32 @@ In addition to the external API-level tests, also create tests for the smaller c
 For example, a serialization and deserialization capability based on the model type is individually testable.
 - **Before committing** - All new behaviors have comprehensive tests
 
+## Architecture: Separation of Concerns
+
+**CLI/MCP are triggers only** - they delegate to core modules that are execution-context agnostic.
+
+```
+┌─────────────┐  ┌─────────────┐
+│     CLI     │  │     MCP     │   ← Thin layers: parse args, call core, format output
+└──────┬──────┘  └──────┬──────┘
+       │                │
+       └───────┬────────┘
+               ▼
+       ┌───────────────┐
+       │  Core Modules │   ← Business logic: index, query, coverage parsing
+       │  (no IO deps) │      No knowledge of CLI args or MCP protocol
+       └───────────────┘
+```
+
+**Rules:**
+- Core modules receive parsed parameters, return data structures
+- Core modules never print to stdout or know about CLI/MCP
+- CLI/MCP handle argument parsing, output formatting, error presentation
+- This enables: unit testing core logic without CLI, reuse across CLI/MCP
+
+**Testing Strategy:**
+- **Unit tests**: Test core modules directly with in-memory data
+- **Integration tests**: Test CLI commands end-to-end via subprocess
+
 ### Testing Guidelines
 See `tests/CLAUDE.md` and `docs/spec/how_to_write_specs.md`
