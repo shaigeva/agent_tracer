@@ -8,4 +8,5 @@ pub mod coverage;
 pub mod error;
 pub mod index;
 pub mod models;
+pub mod query;
 pub mod scenarios;

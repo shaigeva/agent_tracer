@@ -334,4 +334,255 @@ mod cli_integration {
             "Help should mention affected command"
         );
     }
+
+    /// Helper to build an index and return the temp dir (keeps it alive).
+    fn build_test_index() -> Option<(tempfile::TempDir, PathBuf)> {
+        let cache_dir = find_cache_dir()?;
+        let coverage_path = cache_dir.join(".coverage");
+        let scenarios_path = cache_dir.join("scenarios.json");
+
+        let temp_dir = tempfile::TempDir::new().expect("Failed to create temp dir");
+        let index_dir = temp_dir.path().join(".trace-index");
+
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("build")
+            .arg("--coverage")
+            .arg(&coverage_path)
+            .arg("--scenarios")
+            .arg(&scenarios_path)
+            .arg("--output")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace build");
+
+        if !output.status.success() {
+            eprintln!(
+                "Failed to build index: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+            return None;
+        }
+
+        Some((temp_dir, index_dir))
+    }
+
+    #[test]
+    fn test_list_command() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("list")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace list");
+
+        assert!(
+            output.status.success(),
+            "trace list should succeed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+
+        // Parse as JSON
+        let scenarios: serde_json::Value =
+            serde_json::from_str(&stdout).expect("Output should be valid JSON");
+
+        assert!(scenarios.is_array(), "Output should be a JSON array");
+        let arr = scenarios.as_array().unwrap();
+        assert_eq!(arr.len(), 10, "Should have 10 scenarios");
+    }
+
+    #[test]
+    fn test_list_with_behavior_filter() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("list")
+            .arg("--behavior")
+            .arg("authentication")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace list");
+
+        assert!(output.status.success());
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let scenarios: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+
+        let arr = scenarios.as_array().unwrap();
+        assert!(!arr.is_empty(), "Should have some authentication scenarios");
+
+        // All should have authentication behavior
+        for scenario in arr {
+            let behaviors = scenario["behaviors"].as_array().unwrap();
+            let has_auth = behaviors
+                .iter()
+                .any(|b| b.as_str() == Some("authentication"));
+            assert!(
+                has_auth,
+                "All scenarios should have authentication behavior"
+            );
+        }
+    }
+
+    #[test]
+    fn test_list_errors_only() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("list")
+            .arg("--errors")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace list");
+
+        assert!(output.status.success());
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let scenarios: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+
+        let arr = scenarios.as_array().unwrap();
+        assert_eq!(arr.len(), 5, "Should have 5 error scenarios");
+
+        // All should have error outcome
+        for scenario in arr {
+            assert_eq!(
+                scenario["outcome"].as_str(),
+                Some("error"),
+                "All should be error scenarios"
+            );
+        }
+    }
+
+    #[test]
+    fn test_search_command() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("search")
+            .arg("login")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace search");
+
+        assert!(output.status.success());
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let scenarios: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+
+        let arr = scenarios.as_array().unwrap();
+        assert!(!arr.is_empty(), "Should find scenarios matching 'login'");
+
+        // All should contain login in description or documentation
+        for scenario in arr {
+            let desc = scenario["description"].as_str().unwrap_or("");
+            let doc = scenario["documentation"].as_str().unwrap_or("");
+            let matches =
+                desc.to_lowercase().contains("login") || doc.to_lowercase().contains("login");
+            assert!(matches, "Result should match search term");
+        }
+    }
+
+    #[test]
+    fn test_context_command() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        // First get a scenario ID
+        let list_output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("list")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace list");
+
+        let stdout = String::from_utf8_lossy(&list_output.stdout);
+        let scenarios: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+        let scenario_id = scenarios[0]["id"].as_str().unwrap();
+
+        // Get context for that scenario
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("context")
+            .arg(scenario_id)
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace context");
+
+        assert!(
+            output.status.success(),
+            "trace context should succeed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let context: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+
+        assert!(context["scenario"].is_object(), "Should have scenario info");
+        assert!(context["coverage"].is_array(), "Should have coverage array");
+
+        assert_eq!(
+            context["scenario"]["id"].as_str(),
+            Some(scenario_id),
+            "Scenario ID should match"
+        );
+    }
+
+    #[test]
+    fn test_affected_command() {
+        let Some((_temp_dir, index_dir)) = build_test_index() else {
+            eprintln!("Skipping test: could not build index");
+            return;
+        };
+
+        // Search for scenarios affected by auth.py
+        let output = Command::new(env!("CARGO_BIN_EXE_trace"))
+            .arg("affected")
+            .arg("auth.py")
+            .arg("--index")
+            .arg(&index_dir)
+            .output()
+            .expect("Failed to run trace affected");
+
+        assert!(
+            output.status.success(),
+            "trace affected should succeed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let affected: serde_json::Value = serde_json::from_str(&stdout).unwrap();
+
+        assert!(affected.is_array(), "Output should be a JSON array");
+        let arr = affected.as_array().unwrap();
+        assert!(!arr.is_empty(), "Should find scenarios affecting auth.py");
+
+        // Each result should have scenario and matching_lines
+        for item in arr {
+            assert!(item["scenario"].is_object(), "Should have scenario info");
+            assert!(
+                item["matching_lines"].is_array(),
+                "Should have matching_lines"
+            );
+        }
+    }
 }

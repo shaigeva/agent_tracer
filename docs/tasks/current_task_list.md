@@ -21,17 +21,17 @@ Implement core data structures and parsers for coverage data and scenario metada
 ---
 
 ## Task: Rust trace_analyzer - Index Building
-**Status**: Not Started
+**Status**: ✅ Completed
 **Requirements**: REQ-INDEX-003, REQ-INDEX-004, REQ-INDEX-005, REQ-CLI-001
 
 ### Description
 Build queryable SQLite index from coverage and scenario data.
 
 ### Subtasks
-1. Index schema and storage
-2. Line-to-function mapping (Python AST analysis)
-3. `trace build` CLI command
-4. Incremental index updates
+1. ✅ Index schema and storage
+2. ⏸️ Line-to-function mapping (Python AST analysis) - deferred
+3. ✅ `trace build` CLI command
+4. ⏸️ Incremental index updates - deferred
 
 ---
 

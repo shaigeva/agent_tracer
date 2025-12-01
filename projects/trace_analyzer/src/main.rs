@@ -7,6 +7,9 @@ use std::path::{Path, PathBuf};
 
 use clap::{Parser, Subcommand};
 
+/// Default index directory.
+const DEFAULT_INDEX_DIR: &str = ".trace-index";
+
 #[derive(Parser)]
 #[command(name = "trace")]
 #[command(about = "Analyze pytest coverage traces for AI agent context", long_about = None)]
@@ -41,24 +44,40 @@ enum Commands {
         /// Show only error scenarios
         #[arg(long)]
         errors: bool,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
     },
 
     /// Search scenario descriptions
     Search {
         /// Search query
         query: String,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
     },
 
     /// Get full coverage context for a scenario
     Context {
         /// Scenario ID (pytest node ID)
         scenario_id: String,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
     },
 
     /// Find scenarios that cover a file or line
     Affected {
         /// File path, optionally with line number (e.g., "src/auth.py" or "src/auth.py:25")
         target: String,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
     },
 
     /// Run a scenario with coverage collection
@@ -80,10 +99,14 @@ fn main() {
             scenarios,
             output,
         } => cmd_build(&coverage, &scenarios, &output),
-        Commands::List { behavior, errors } => cmd_list(behavior.as_deref(), errors),
-        Commands::Search { query } => cmd_search(&query),
-        Commands::Context { scenario_id } => cmd_context(&scenario_id),
-        Commands::Affected { target } => cmd_affected(&target),
+        Commands::List {
+            behavior,
+            errors,
+            index,
+        } => cmd_list(behavior.as_deref(), errors, &index),
+        Commands::Search { query, index } => cmd_search(&query, &index),
+        Commands::Context { scenario_id, index } => cmd_context(&scenario_id, &index),
+        Commands::Affected { target, index } => cmd_affected(&target, &index),
         Commands::Run { scenario_id } => cmd_run(&scenario_id),
         Commands::Mcp => cmd_mcp(),
     };
@@ -128,23 +151,52 @@ fn cmd_build(coverage: &Path, scenarios: &Path, output: &Path) -> anyhow::Result
     Ok(())
 }
 
-fn cmd_list(_behavior: Option<&str>, _errors: bool) -> anyhow::Result<()> {
-    println!("List command not yet implemented");
+fn cmd_list(behavior: Option<&str>, errors: bool, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+    let scenarios = query::list_scenarios(&index, behavior, errors)?;
+
+    // Output as JSON
+    println!("{}", serde_json::to_string_pretty(&scenarios)?);
     Ok(())
 }
 
-fn cmd_search(_query: &str) -> anyhow::Result<()> {
-    println!("Search command not yet implemented");
+fn cmd_search(query_str: &str, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+    let scenarios = query::search_scenarios(&index, query_str)?;
+
+    // Output as JSON
+    println!("{}", serde_json::to_string_pretty(&scenarios)?);
     Ok(())
 }
 
-fn cmd_context(_scenario_id: &str) -> anyhow::Result<()> {
-    println!("Context command not yet implemented");
+fn cmd_context(scenario_id: &str, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+    let context = query::get_scenario_context(&index, scenario_id)?;
+
+    // Output as JSON
+    println!("{}", serde_json::to_string_pretty(&context)?);
     Ok(())
 }
 
-fn cmd_affected(_target: &str) -> anyhow::Result<()> {
-    println!("Affected command not yet implemented");
+fn cmd_affected(target: &str, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+    let (file_path, line) = query::parse_target(target);
+    let affected = query::find_affected_scenarios(&index, &file_path, line)?;
+
+    // Output as JSON
+    println!("{}", serde_json::to_string_pretty(&affected)?);
     Ok(())
 }
 
