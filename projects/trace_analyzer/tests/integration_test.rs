@@ -260,6 +260,10 @@ mod cli_integration {
         let coverage_path = cache_dir.join(".coverage");
         let scenarios_path = cache_dir.join("scenarios.json");
 
+        // Create a temp directory for the index
+        let temp_dir = tempfile::TempDir::new().expect("Failed to create temp dir");
+        let index_dir = temp_dir.path().join(".trace-index");
+
         // Run the trace build command
         let output = Command::new(env!("CARGO_BIN_EXE_trace"))
             .arg("build")
@@ -267,19 +271,38 @@ mod cli_integration {
             .arg(&coverage_path)
             .arg("--scenarios")
             .arg(&scenarios_path)
+            .arg("--output")
+            .arg(&index_dir)
             .output()
             .expect("Failed to run trace build");
 
-        assert!(output.status.success(), "trace build should succeed");
+        assert!(
+            output.status.success(),
+            "trace build should succeed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
 
         let stdout = String::from_utf8_lossy(&output.stdout);
         assert!(
             stdout.contains("Parsed") && stdout.contains("test contexts"),
-            "Should report parsed test contexts"
+            "Should report parsed test contexts. Got: {}",
+            stdout
         );
         assert!(
             stdout.contains("Parsed") && stdout.contains("scenarios"),
-            "Should report parsed scenarios"
+            "Should report parsed scenarios. Got: {}",
+            stdout
+        );
+        assert!(
+            stdout.contains("Built index"),
+            "Should report index built. Got: {}",
+            stdout
+        );
+
+        // Verify the index was created
+        assert!(
+            index_dir.join("index.db").exists(),
+            "Index database should be created"
         );
     }
 

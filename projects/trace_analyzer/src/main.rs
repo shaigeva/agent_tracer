@@ -94,28 +94,36 @@ fn main() {
     }
 }
 
-fn cmd_build(coverage: &Path, scenarios: &Path, _output: &Path) -> anyhow::Result<()> {
-    use trace_analyzer::coverage::CoverageParser;
-    use trace_analyzer::scenarios::ScenarioParser;
+fn cmd_build(coverage: &Path, scenarios: &Path, output: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::index::IndexBuilder;
 
-    // Parse coverage data
-    let parser = CoverageParser::open(coverage)?;
-    let coverage_data = parser.read_coverage()?;
-    let metadata = parser.read_metadata()?;
+    // Load and build index
+    let builder = IndexBuilder::load(coverage, scenarios)?;
+    let result = builder.build(output)?;
 
-    // Parse scenarios
-    let scenarios = ScenarioParser::parse(scenarios)?;
-
-    // For now, just print summary
+    // Print summary
+    println!("Parsed {} test contexts", result.scenarios_with_coverage);
+    println!("Parsed {} scenarios", result.scenarios_imported);
     println!(
-        "Parsed {} test contexts from coverage database",
-        coverage_data.len()
+        "Built index with {} coverage entries",
+        result.coverage_entries
     );
-    println!("Coverage.py version: {:?}", metadata.version);
-    println!("Parsed {} scenarios", scenarios.len());
 
-    // TODO: Build index
-    println!("Index building not yet implemented");
+    if !result.scenarios_without_coverage.is_empty() {
+        println!(
+            "Warning: {} scenarios have no coverage data",
+            result.scenarios_without_coverage.len()
+        );
+    }
+
+    if !result.unmatched_contexts.is_empty() {
+        println!(
+            "Note: {} test contexts didn't match any scenario",
+            result.unmatched_contexts.len()
+        );
+    }
+
+    println!("Index written to {}", output.display());
 
     Ok(())
 }
