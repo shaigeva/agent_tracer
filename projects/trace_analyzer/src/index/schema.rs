@@ -32,6 +32,12 @@ pub struct Index {
     conn: Connection,
 }
 
+impl std::fmt::Debug for Index {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Index").finish_non_exhaustive()
+    }
+}
+
 impl Index {
     /// Create a new index at the given path.
     ///

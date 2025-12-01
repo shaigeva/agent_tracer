@@ -36,31 +36,32 @@ Build queryable SQLite index from coverage and scenario data.
 ---
 
 ## Task: Rust trace_analyzer - Query Commands
-**Status**: Not Started
+**Status**: ✅ Completed
 **Requirements**: REQ-CLI-002, REQ-CLI-003, REQ-CLI-004, REQ-CLI-005, REQ-CLI-006, REQ-CLI-007, REQ-CLI-008
 
 ### Description
 Implement CLI query commands with JSON output.
 
 ### Subtasks
-1. `trace list` - List scenarios with filters
-2. `trace search` - Search scenario descriptions
-3. `trace context` - Get coverage context for scenario
-4. `trace affected` - Find scenarios covering file/line
-5. `trace run` - Run scenario with coverage
+1. ✅ `trace list` - List scenarios with filters
+2. ✅ `trace search` - Search scenario descriptions
+3. ✅ `trace context` - Get coverage context for scenario
+4. ✅ `trace affected` - Find scenarios covering file/line
+5. ⏸️ `trace run` - Run scenario with coverage - deferred
 
 ---
 
 ## Task: Rust trace_analyzer - MCP Server
-**Status**: Not Started
+**Status**: ✅ Completed
 **Requirements**: REQ-MCP-001, REQ-MCP-002, REQ-MCP-003, REQ-MCP-004, REQ-MCP-005
 
 ### Description
 Expose query capabilities via Model Context Protocol.
 
 ### Subtasks
-1. MCP server infrastructure
-2. scenario_search tool
-3. scenario_context tool
-4. coverage_affected tool
-5. scenario_run tool
+1. ✅ MCP server infrastructure
+2. ✅ scenario_list tool
+3. ✅ scenario_search tool
+4. ✅ scenario_context tool
+5. ✅ coverage_affected_file tool
+6. ✅ coverage_affected_line tool

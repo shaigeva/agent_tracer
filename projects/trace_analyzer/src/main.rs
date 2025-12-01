@@ -87,7 +87,11 @@ enum Commands {
     },
 
     /// Start MCP server mode
-    Mcp,
+    Mcp {
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
+    },
 }
 
 fn main() {
@@ -108,7 +112,7 @@ fn main() {
         Commands::Context { scenario_id, index } => cmd_context(&scenario_id, &index),
         Commands::Affected { target, index } => cmd_affected(&target, &index),
         Commands::Run { scenario_id } => cmd_run(&scenario_id),
-        Commands::Mcp => cmd_mcp(),
+        Commands::Mcp { index } => cmd_mcp(&index),
     };
 
     if let Err(e) = result {
@@ -205,7 +209,8 @@ fn cmd_run(_scenario_id: &str) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn cmd_mcp() -> anyhow::Result<()> {
-    println!("MCP server not yet implemented");
-    Ok(())
+fn cmd_mcp(index_dir: &Path) -> anyhow::Result<()> {
+    // Run the async MCP server
+    tokio::runtime::Runtime::new()?
+        .block_on(async { trace_analyzer::mcp::run_server(index_dir.to_path_buf()).await })
 }
