@@ -17,27 +17,41 @@ AI coding agents struggle to understand codebases because they lack execution co
 - Making it easy to find tests that exercise particular code
 - Enabling agents to focus on relevant files/functions rather than searching randomly
 
-## Quick Start (Local Development)
+## Quick Start
 
 ### Prerequisites
 
 - Python 3.11+ with [uv](https://github.com/astral-sh/uv)
-- Rust toolchain (cargo)
-- jq (for JSON parsing in examples)
+- Rust toolchain (cargo) - for building the trace analyzer once
 
-### 1. Install Dependencies
+### 1. Build the Rust CLI (one-time setup)
 
 ```bash
-# Python project
-cd projects/pytest_tracer_python
-uv sync
+# Clone pytest-tracer somewhere on your machine
+git clone <pytest-tracer-repo> ~/tools/pytest-tracer
 
-# Rust project
-cd projects/trace_analyzer
+# Build the Rust CLI
+cd ~/tools/pytest-tracer/projects/trace_analyzer
 cargo build --release
+
+# The binary is now at:
+# ~/tools/pytest-tracer/projects/trace_analyzer/target/release/trace
 ```
 
-### 2. Mark Your Tests as Scenarios
+### 2. Add pytest-tracer to Your Project
+
+In your project directory:
+
+```bash
+cd your_project
+
+# Add pytest-tracer as a dev dependency (from local path)
+uv add --dev ~/tools/pytest-tracer/projects/pytest_tracer_python
+
+# This also adds pytest and pytest-cov as dependencies
+```
+
+### 3. Mark Your Tests as Scenarios
 
 Add markers to tests you want to track:
 
@@ -67,59 +81,72 @@ def test_login_invalid_password():
     assert result["status"] == 401
 ```
 
-### 3. Run Tests with Coverage
+### 4. Run Tests with Coverage
 
 ```bash
-cd your_project
-pytest tests/ --cov=src --cov-context=test
+# Run pytest with per-test coverage context
+uv run pytest tests/ --cov=src --cov-context=test
 ```
 
-### 4. Collect Scenario Metadata
+### 5. Collect Scenario Metadata
 
 ```bash
-cd /path/to/pytest-tracer/projects/pytest_tracer_python
-uv run python -m pytest_tracer_python.cli collect \
-    /path/to/your_project \
-    --test-dir tests \
-    -o /path/to/your_project/scenarios.json
+# Collect scenario metadata from your tests
+uv run pytest-tracer collect . -o scenarios.json
 ```
 
-### 5. Build the Trace Index
+### 6. Build the Trace Index
 
 ```bash
-cd /path/to/pytest-tracer/projects/trace_analyzer
-cargo run --release -- build \
-    --coverage /path/to/your_project/.coverage \
-    --scenarios /path/to/your_project/scenarios.json \
-    --output /path/to/your_project/.trace-index
+# Use the Rust CLI to build the index
+~/tools/pytest-tracer/projects/trace_analyzer/target/release/trace build \
+    --coverage .coverage \
+    --scenarios scenarios.json \
+    --output .trace-index
 ```
 
-### 6. Query the Index
+### 7. Query the Index
 
 ```bash
+# Set up an alias for convenience (add to your shell config)
+alias trace="~/tools/pytest-tracer/projects/trace_analyzer/target/release/trace"
+
 # List all scenarios
-cargo run --release -- list --index /path/to/your_project/.trace-index
+trace list --index .trace-index
 
 # Search for scenarios by description
-cargo run --release -- search "login" --index /path/to/your_project/.trace-index
+trace search "login" --index .trace-index
 
 # Find scenarios covering a file
-cargo run --release -- affected src/auth.py --index /path/to/your_project/.trace-index
+trace affected src/auth.py --index .trace-index
 
 # Find scenarios covering a specific line
-cargo run --release -- affected src/auth.py:25 --index /path/to/your_project/.trace-index
+trace affected src/auth.py:25 --index .trace-index
 
 # Get full coverage context for a scenario
-cargo run --release -- context "tests/test_auth.py::test_login" --index /path/to/your_project/.trace-index
+trace context "tests/test_auth.py::test_login" --index .trace-index
 
 # Run a specific scenario with coverage
-cargo run --release -- run "tests/test_auth.py::test_login"
+trace run "tests/test_auth.py::test_login"
 ```
 
-### 7. Start MCP Server (for AI Agent Integration)
+### 8. Start MCP Server (for AI Agent Integration)
 
 ```bash
-cargo run --release -- mcp --index /path/to/your_project/.trace-index
+trace mcp --index .trace-index
+```
+
+To configure with Claude Desktop, add to `~/.config/claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "trace-analyzer": {
+      "command": "/Users/you/tools/pytest-tracer/projects/trace_analyzer/target/release/trace",
+      "args": ["mcp", "--index", "/path/to/your/project/.trace-index"]
+    }
+  }
+}
 ```
 
 ## CLI Reference
