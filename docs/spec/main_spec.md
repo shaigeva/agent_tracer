@@ -67,7 +67,7 @@ Phase 1 uses pytest-cov's `--cov-context=test` feature to get per-test line cove
 ---
 
 ## Feature: Scenario Test Markers
-**Status**: 0/4 requirements implemented (0%)
+**Status**: 4/4 requirements implemented (100%)
 **Detail Spec**: [detailed/scenario_markers_detailed_spec.md](detailed/scenario_markers_detailed_spec.md)
 **Purpose**: Define test conventions for scenario tests that AI agents can query
 **Version**: V1
@@ -77,15 +77,15 @@ Phase 1 uses pytest-cov's `--cov-context=test` feature to get per-test line cove
 Scenario tests serve as documented entry points into the codebase. By using consistent markers, we enable agents to discover and understand tests programmatically.
 
 ### High-Level Requirements
-- REQ-MARKER-001: `@pytest.mark.scenario` marker identifies scenario tests
-- REQ-MARKER-002: `@pytest.mark.behavior("name")` tags tests with behaviors (multiple allowed)
-- REQ-MARKER-003: `@pytest.mark.error` marks tests as error/failure scenarios
-- REQ-MARKER-004: Scenario docstrings follow structured format (description + optional GIVEN/WHEN/THEN)
+- REQ-MARKER-001: `@pytest.mark.scenario` marker identifies scenario tests ✅
+- REQ-MARKER-002: `@pytest.mark.behavior("name")` tags tests with behaviors (multiple allowed) ✅
+- REQ-MARKER-003: `@pytest.mark.error` marks tests as error/failure scenarios ✅
+- REQ-MARKER-004: Scenario docstrings follow structured format (description + optional GIVEN/WHEN/THEN) ✅
 
 ---
 
 ## Feature: Scenario Metadata Collection
-**Status**: 0/5 requirements implemented (0%)
+**Status**: 5/5 requirements implemented (100%)
 **Detail Spec**: [detailed/metadata_collection_detailed_spec.md](detailed/metadata_collection_detailed_spec.md)
 **Purpose**: Collect and export scenario metadata for indexing
 **Version**: V1
@@ -95,16 +95,16 @@ Scenario tests serve as documented entry points into the codebase. By using cons
 Before analyzing coverage, we need to collect all scenario test metadata (names, docstrings, behaviors, error flags) into a format the Rust analyzer can consume.
 
 ### High-Level Requirements
-- REQ-META-001: Collect scenario tests from test directory
-- REQ-META-002: Extract docstring description and structured sections
-- REQ-META-003: Extract behavior markers
-- REQ-META-004: Identify error scenarios
-- REQ-META-005: Export metadata as JSON for analyzer consumption
+- REQ-META-001: Collect scenario tests from test directory ✅
+- REQ-META-002: Extract docstring description and structured sections ✅
+- REQ-META-003: Extract behavior markers ✅
+- REQ-META-004: Identify error scenarios ✅
+- REQ-META-005: Export metadata as JSON for analyzer consumption ✅
 
 ---
 
 ## Feature: Index Building
-**Status**: 0/5 requirements implemented (0%)
+**Status**: 4/5 requirements implemented (80%)
 **Detail Spec**: [detailed/index_building_detailed_spec.md](detailed/index_building_detailed_spec.md)
 **Purpose**: Build queryable index from coverage data and scenario metadata
 **Version**: V1
@@ -114,16 +114,16 @@ Before analyzing coverage, we need to collect all scenario test metadata (names,
 The Rust analyzer needs to parse pytest-cov output (SQLite .coverage file) and scenario metadata to build an efficient index for queries.
 
 ### High-Level Requirements
-- REQ-INDEX-001: Parse .coverage SQLite file from pytest-cov
-- REQ-INDEX-002: Import scenario metadata from JSON
-- REQ-INDEX-003: Map coverage lines to functions via AST analysis
-- REQ-INDEX-004: Build SQLite index with scenarios, coverage, and mappings
-- REQ-INDEX-005: Support incremental index updates
+- REQ-INDEX-001: Parse .coverage SQLite file from pytest-cov ✅
+- REQ-INDEX-002: Import scenario metadata from JSON ✅
+- REQ-INDEX-003: Map coverage lines to functions via AST analysis (deferred)
+- REQ-INDEX-004: Build SQLite index with scenarios, coverage, and mappings ✅
+- REQ-INDEX-005: Support incremental index updates (deferred)
 
 ---
 
 ## Feature: CLI Queries
-**Status**: 0/8 requirements implemented (0%)
+**Status**: 8/8 requirements implemented (100%)
 **Detail Spec**: [detailed/cli_queries_detailed_spec.md](detailed/cli_queries_detailed_spec.md)
 **Purpose**: Command-line interface for querying scenario and coverage data
 **Version**: V1
@@ -133,19 +133,19 @@ The Rust analyzer needs to parse pytest-cov output (SQLite .coverage file) and s
 AI agents interact with tools via CLI. The trace-analyzer CLI provides commands for discovering scenarios, getting coverage context, and finding affected tests.
 
 ### High-Level Requirements
-- REQ-CLI-001: `trace build` - Build/rebuild index from coverage and metadata
-- REQ-CLI-002: `trace list` - List all scenarios with optional filters
-- REQ-CLI-003: `trace search "query"` - Search scenario descriptions
-- REQ-CLI-004: `trace context <scenario>` - Get full coverage context for a scenario
-- REQ-CLI-005: `trace affected <file>` - Find tests covering a file
-- REQ-CLI-006: `trace affected <file:line>` - Find tests covering specific line
-- REQ-CLI-007: `trace run <scenario>` - Run scenario with coverage
-- REQ-CLI-008: JSON output format for all commands
+- REQ-CLI-001: `trace build` - Build/rebuild index from coverage and metadata ✅
+- REQ-CLI-002: `trace list` - List all scenarios with optional filters ✅
+- REQ-CLI-003: `trace search "query"` - Search scenario descriptions ✅
+- REQ-CLI-004: `trace context <scenario>` - Get full coverage context for a scenario ✅
+- REQ-CLI-005: `trace affected <file>` - Find tests covering a file ✅
+- REQ-CLI-006: `trace affected <file:line>` - Find tests covering specific line ✅
+- REQ-CLI-007: `trace run <scenario>` - Run scenario with coverage ✅
+- REQ-CLI-008: JSON output format for all commands ✅
 
 ---
 
 ## Feature: MCP Server
-**Status**: 0/5 requirements implemented (0%)
+**Status**: 5/5 requirements implemented (100%)
 **Detail Spec**: [detailed/mcp_server_detailed_spec.md](detailed/mcp_server_detailed_spec.md)
 **Purpose**: Model Context Protocol server for AI agent integration
 **Version**: V1
@@ -155,11 +155,11 @@ AI agents interact with tools via CLI. The trace-analyzer CLI provides commands 
 MCP provides standardized tool interfaces for AI agents. Exposing scenario queries via MCP allows agents like Claude to directly query coverage information.
 
 ### High-Level Requirements
-- REQ-MCP-001: MCP server exposes scenario_search tool
-- REQ-MCP-002: MCP server exposes scenario_context tool
-- REQ-MCP-003: MCP server exposes coverage_affected tool
-- REQ-MCP-004: MCP server exposes scenario_run tool
-- REQ-MCP-005: Server follows MCP specification for tool definitions
+- REQ-MCP-001: MCP server exposes scenario_search tool ✅
+- REQ-MCP-002: MCP server exposes scenario_context tool ✅
+- REQ-MCP-003: MCP server exposes coverage_affected tool ✅
+- REQ-MCP-004: MCP server exposes scenario_run tool ✅
+- REQ-MCP-005: Server follows MCP specification for tool definitions ✅
 
 ---
 

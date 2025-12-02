@@ -47,7 +47,7 @@ Implement CLI query commands with JSON output.
 2. ✅ `trace search` - Search scenario descriptions
 3. ✅ `trace context` - Get coverage context for scenario
 4. ✅ `trace affected` - Find scenarios covering file/line
-5. ⏸️ `trace run` - Run scenario with coverage - deferred
+5. ✅ `trace run` - Run scenario with coverage
 
 ---
 
@@ -65,3 +65,4 @@ Expose query capabilities via Model Context Protocol.
 4. ✅ scenario_context tool
 5. ✅ coverage_affected_file tool
 6. ✅ coverage_affected_line tool
+7. ✅ scenario_run tool

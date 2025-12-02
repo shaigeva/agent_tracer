@@ -204,8 +204,19 @@ fn cmd_affected(target: &str, index_dir: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn cmd_run(_scenario_id: &str) -> anyhow::Result<()> {
-    println!("Run command not yet implemented");
+fn cmd_run(scenario_id: &str) -> anyhow::Result<()> {
+    use trace_analyzer::run;
+
+    let result = run::run_scenario(scenario_id)?;
+
+    // Output as JSON
+    println!("{}", serde_json::to_string_pretty(&result)?);
+
+    // Exit with test result code
+    if !result.passed {
+        std::process::exit(result.exit_code);
+    }
+
     Ok(())
 }
 

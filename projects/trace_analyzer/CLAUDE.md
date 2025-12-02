@@ -15,33 +15,23 @@ Rust CLI and MCP server for:
 ```
 trace_analyzer/
 ├── src/
-│   ├── main.rs            # CLI entry point
-│   ├── cli/               # CLI command implementations
-│   │   ├── mod.rs
-│   │   ├── build.rs       # trace build
-│   │   ├── list.rs        # trace list
-│   │   ├── search.rs      # trace search
-│   │   ├── context.rs     # trace context
-│   │   ├── affected.rs    # trace affected
-│   │   └── run.rs         # trace run
+│   ├── main.rs            # CLI entry point (thin layer)
+│   ├── lib.rs             # Library root
+│   ├── error.rs           # Error types
+│   ├── models.rs          # Core data models
+│   ├── coverage.rs        # .coverage SQLite parser
+│   ├── scenarios.rs       # scenarios.json parser
+│   ├── run.rs             # Scenario execution with coverage
 │   ├── index/             # Index building
 │   │   ├── mod.rs
-│   │   ├── builder.rs     # Index construction
-│   │   ├── coverage.rs    # .coverage parser
-│   │   ├── metadata.rs    # .scenarios.json parser
-│   │   └── ast.rs         # Python AST for line→function
+│   │   ├── schema.rs      # SQLite schema and Index handle
+│   │   └── builder.rs     # IndexBuilder implementation
 │   ├── query/             # Query implementations
-│   │   ├── mod.rs
-│   │   ├── scenarios.rs
-│   │   ├── coverage.rs
-│   │   └── affected.rs
+│   │   └── mod.rs         # list, search, context, affected queries
 │   └── mcp/               # MCP server
-│       ├── mod.rs
-│       ├── server.rs
-│       └── tools.rs
+│       └── mod.rs         # TraceServer with all tools
 ├── tests/
-│   ├── integration_test.rs
-│   └── ...
+│   └── cli_tests.rs       # CLI integration tests
 ├── Cargo.toml
 └── devtools/
     └── run_all_agent_validations.sh
@@ -82,7 +72,10 @@ cargo run -- mcp
 - `clap`: CLI argument parsing
 - `rusqlite`: SQLite database (for .coverage parsing and index storage)
 - `serde` / `serde_json`: JSON serialization
-- `tree-sitter` / `tree-sitter-python`: Python AST parsing (for line→function mapping)
+- `schemars`: JSON schema generation for MCP tool parameters
+- `rmcp`: Rust MCP SDK for MCP server implementation
+- `tokio`: Async runtime for MCP server
+- `thiserror` / `anyhow`: Error handling
 
 ## CLI Commands
 
@@ -98,17 +91,21 @@ cargo run -- mcp
 
 ## Output Format
 
-All commands output JSON to stdout. Errors output JSON with error structure:
+All CLI commands output JSON to stdout.
 
-```json
-{
-  "error": {
-    "code": "INDEX_NOT_FOUND",
-    "message": "Index not found. Run 'trace build' first.",
-    "hint": "trace build --coverage .coverage --scenarios .scenarios.json"
-  }
-}
-```
+## MCP Tools
+
+The MCP server (`trace mcp`) exposes these tools:
+
+| Tool | Description |
+|------|-------------|
+| `scenario_list` | List all test scenarios |
+| `scenario_list_errors` | List only error scenarios |
+| `scenario_search` | Search scenarios by description |
+| `scenario_context` | Get coverage context for a scenario |
+| `coverage_affected_file` | Find scenarios covering a file |
+| `coverage_affected_line` | Find scenarios covering a specific line |
+| `scenario_run` | Run a scenario with coverage collection |
 
 ## Testing Guidelines
 

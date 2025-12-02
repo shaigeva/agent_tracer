@@ -19,6 +19,7 @@ use serde::Deserialize;
 
 use crate::index::Index;
 use crate::query;
+use crate::run;
 
 /// Request for scenario_search tool.
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -48,6 +49,13 @@ pub struct CoverageAffectedLineRequest {
     pub file: String,
     /// Line number
     pub line: u32,
+}
+
+/// Request for scenario_run tool.
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct ScenarioRunRequest {
+    /// Full scenario ID (e.g., 'tests/scenarios/test_auth.py::test_login')
+    pub scenario_id: String,
 }
 
 /// MCP server for trace analyzer.
@@ -214,6 +222,28 @@ impl TraceServer {
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
+
+    #[tool(
+        description = "Run a specific test scenario with coverage collection. Returns test result with pass/fail status, exit code, and output. scenario_id is the full pytest node ID like 'tests/scenarios/test_auth.py::test_login'."
+    )]
+    async fn scenario_run(
+        &self,
+        params: Parameters<ScenarioRunRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = run::run_scenario(&params.0.scenario_id).map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("Run failed: {}", e)),
+            data: None,
+        })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("JSON error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
 }
 
 #[tool_handler]
@@ -227,8 +257,9 @@ impl ServerHandler for TraceServer {
                 "Trace analyzer MCP server. Query test scenario coverage data \
                  to understand which code paths are covered by which tests. \
                  Use scenario_list to see all scenarios, scenario_search to find \
-                 specific tests, scenario_context to get coverage details, and \
-                 coverage_affected_file/coverage_affected_line to find tests covering specific code."
+                 specific tests, scenario_context to get coverage details, \
+                 coverage_affected_file/coverage_affected_line to find tests covering specific code, \
+                 and scenario_run to execute a specific test with coverage collection."
                     .to_string(),
             ),
         }
