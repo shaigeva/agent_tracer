@@ -72,4 +72,5 @@ select = [
 "tests/*" = ["F811"]  # Ignore redefinition warnings in test files (pytest fixtures)
 # Sample project fixture files are example tests - don't require annotations
 "tests/fixtures/sample_project/*" = ["ANN"]
+"tests/fixtures/sample_project_2/*" = ["ANN"]
 
