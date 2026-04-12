@@ -17,6 +17,7 @@ use rmcp::{tool, tool_handler, tool_router, ServerHandler};
 use schemars::JsonSchema;
 use serde::Deserialize;
 
+use crate::diagram;
 use crate::index::Index;
 use crate::query;
 use crate::run;
@@ -56,6 +57,20 @@ pub struct CoverageAffectedLineRequest {
 pub struct ScenarioRunRequest {
     /// Full scenario ID (e.g., 'tests/scenarios/test_auth.py::test_login')
     pub scenario_id: String,
+}
+
+/// Request for diagram_scenario tool.
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct DiagramScenarioRequest {
+    /// Full scenario ID (e.g., 'tests/scenarios/test_auth.py::test_login')
+    pub scenario_id: String,
+}
+
+/// Request for diagram_file tool.
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct DiagramFileRequest {
+    /// Source file path (e.g., 'src/auth.py'), optionally with line number (e.g., 'src/auth.py:25')
+    pub file: String,
 }
 
 /// MCP server for trace analyzer.
@@ -215,6 +230,56 @@ impl TraceServer {
             })?;
 
         let json = serde_json::to_string_pretty(&affected).map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("JSON error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    #[tool(
+        description = "Generate a mermaid diagram showing all files covered by a specific scenario. Returns JSON with a 'mermaid' field containing the diagram source."
+    )]
+    async fn diagram_scenario(
+        &self,
+        params: Parameters<DiagramScenarioRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let index = self.open_index()?;
+
+        let output =
+            diagram::diagram_for_scenario(&index, &params.0.scenario_id).map_err(|e| McpError {
+                code: ErrorCode::INTERNAL_ERROR,
+                message: Cow::from(format!("Diagram generation failed: {}", e)),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&output).map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("JSON error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    #[tool(
+        description = "Generate a mermaid diagram showing all scenarios that cover a specific file. The file parameter can include a line number like 'src/auth.py:25'. Returns JSON with a 'mermaid' field containing the diagram source."
+    )]
+    async fn diagram_file(
+        &self,
+        params: Parameters<DiagramFileRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let index = self.open_index()?;
+
+        let (path, line) = query::parse_target(&params.0.file);
+        let output = diagram::diagram_for_file(&index, &path, line).map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("Diagram generation failed: {}", e)),
+            data: None,
+        })?;
+
+        let json = serde_json::to_string_pretty(&output).map_err(|e| McpError {
             code: ErrorCode::INTERNAL_ERROR,
             message: Cow::from(format!("JSON error: {}", e)),
             data: None,

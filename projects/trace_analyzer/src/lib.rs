@@ -5,6 +5,7 @@
 //! independent of the execution context (CLI, MCP, etc.).
 
 pub mod coverage;
+pub mod diagram;
 pub mod error;
 pub mod index;
 pub mod mcp;

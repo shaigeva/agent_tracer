@@ -205,6 +205,23 @@ Run a specific test with coverage collection:
 trace run "tests/test_auth.py::test_login"
 ```
 
+### trace diagram
+
+Generate mermaid diagrams from coverage data:
+
+```bash
+# Show all files covered by a scenario
+trace diagram "tests/test_auth.py::test_login"
+
+# Show all scenarios covering a file
+trace diagram --file src/auth.py
+
+# Show scenarios covering a specific line
+trace diagram --file src/auth.py:25
+```
+
+Returns JSON with a `mermaid` field containing the diagram source code. Paste the mermaid content into any mermaid renderer (GitHub markdown, Mermaid Live Editor, etc.).
+
 ### trace mcp
 
 Start the MCP server for AI agent integration:
@@ -226,6 +243,8 @@ When running as an MCP server, these tools are exposed:
 | `coverage_affected_file` | Find scenarios covering a file |
 | `coverage_affected_line` | Find scenarios covering a specific line |
 | `scenario_run` | Run a scenario with coverage collection |
+| `diagram_scenario` | Generate mermaid diagram for a scenario |
+| `diagram_file` | Generate mermaid diagram for a file |
 
 ## Example Output
 
@@ -300,6 +319,46 @@ cd projects/trace_analyzer && ./devtools/run_all_agent_validations.sh
 ```bash
 ./tests/e2e_workflow_test.sh
 ```
+
+## Installing on PATH
+
+To make `trace` available globally, symlink the release binary:
+
+```bash
+# Build release binary
+cd projects/trace_analyzer
+cargo build --release
+
+# Symlink to a directory on your PATH
+ln -s "$(pwd)/target/release/trace" ~/.local/bin/trace
+```
+
+## Claude Code Integration
+
+### MCP Server
+
+Add to your project's `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "trace-analyzer": {
+      "command": "trace",
+      "args": ["mcp", "--index", ".trace-index"]
+    }
+  }
+}
+```
+
+If `trace` is not on your PATH, use the full path to the binary.
+
+### Skill File
+
+See `docs/skill.md` for a skill description that can be used with Claude Code.
+
+### CLAUDE.md Snippet
+
+See `docs/claude_md_snippet.md` for a ready-to-paste CLAUDE.md section that teaches agents how to write scenario tests and use the tracer.
 
 ## Current Limitations
 

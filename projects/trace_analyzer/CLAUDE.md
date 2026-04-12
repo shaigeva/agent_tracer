@@ -87,6 +87,7 @@ cargo run -- mcp
 | `context` | Get full coverage context for a scenario |
 | `affected` | Find scenarios covering a file/line |
 | `run` | Run scenario with coverage collection |
+| `diagram` | Generate mermaid diagram for a scenario or file |
 | `mcp` | Start MCP server mode |
 
 ## Output Format
@@ -106,6 +107,8 @@ The MCP server (`trace mcp`) exposes these tools:
 | `coverage_affected_file` | Find scenarios covering a file |
 | `coverage_affected_line` | Find scenarios covering a specific line |
 | `scenario_run` | Run a scenario with coverage collection |
+| `diagram_scenario` | Generate mermaid diagram for a scenario |
+| `diagram_file` | Generate mermaid diagram for a file |
 
 ## Testing Guidelines
 

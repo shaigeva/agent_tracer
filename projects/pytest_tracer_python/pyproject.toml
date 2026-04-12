@@ -73,4 +73,5 @@ select = [
 # Sample project fixture files are example tests - don't require annotations
 "tests/fixtures/sample_project/*" = ["ANN"]
 "tests/fixtures/sample_project_2/*" = ["ANN"]
+"tests/fixtures/sample_project_3/*" = ["ANN"]
 

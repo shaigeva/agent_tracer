@@ -86,6 +86,20 @@ enum Commands {
         scenario_id: String,
     },
 
+    /// Generate a mermaid diagram
+    Diagram {
+        /// Scenario ID to diagram (shows all files covered by the scenario)
+        scenario_id: Option<String>,
+
+        /// File path to diagram (shows all scenarios covering the file)
+        #[arg(long)]
+        file: Option<String>,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
+    },
+
     /// Start MCP server mode
     Mcp {
         /// Index directory (default: .trace-index)
@@ -112,6 +126,11 @@ fn main() {
         Commands::Context { scenario_id, index } => cmd_context(&scenario_id, &index),
         Commands::Affected { target, index } => cmd_affected(&target, &index),
         Commands::Run { scenario_id } => cmd_run(&scenario_id),
+        Commands::Diagram {
+            scenario_id,
+            file,
+            index,
+        } => cmd_diagram(scenario_id.as_deref(), file.as_deref(), &index),
         Commands::Mcp { index } => cmd_mcp(&index),
     };
 
@@ -217,6 +236,33 @@ fn cmd_run(scenario_id: &str) -> anyhow::Result<()> {
         std::process::exit(result.exit_code);
     }
 
+    Ok(())
+}
+
+fn cmd_diagram(
+    scenario_id: Option<&str>,
+    file: Option<&str>,
+    index_dir: &Path,
+) -> anyhow::Result<()> {
+    use trace_analyzer::diagram;
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+
+    let output = match (scenario_id, file) {
+        (Some(id), _) => diagram::diagram_for_scenario(&index, id)?,
+        (None, Some(file_path)) => {
+            let (path, line) = query::parse_target(file_path);
+            diagram::diagram_for_file(&index, &path, line)?
+        }
+        (None, None) => {
+            anyhow::bail!("Provide either a scenario ID or --file <path>");
+        }
+    };
+
+    // Output as JSON with mermaid field
+    println!("{}", serde_json::to_string_pretty(&output)?);
     Ok(())
 }
 
