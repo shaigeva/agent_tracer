@@ -307,6 +307,39 @@ pub fn find_affected_scenarios(
     Ok(affected)
 }
 
+/// Get call trace events for a scenario.
+pub fn get_call_trace(
+    index: &Index,
+    scenario_id: &str,
+) -> Result<Vec<crate::call_trace::CallEvent>, IndexError> {
+    let conn = index.connection();
+
+    let mut stmt = conn.prepare(
+        "SELECT event, file_path, function, line, depth, timestamp_ns
+         FROM call_traces
+         WHERE scenario_id = ?1
+         ORDER BY seq",
+    )?;
+
+    let rows = stmt.query_map([scenario_id], |row| {
+        Ok(crate::call_trace::CallEvent {
+            event: row.get(0)?,
+            file: row.get(1)?,
+            function: row.get(2)?,
+            line: row.get(3)?,
+            depth: row.get(4)?,
+            timestamp_ns: row.get(5)?,
+        })
+    })?;
+
+    let mut events = Vec::new();
+    for row in rows {
+        events.push(row?);
+    }
+
+    Ok(events)
+}
+
 /// Helper to get behaviors for a scenario.
 fn get_behaviors(
     conn: &rusqlite::Connection,

@@ -95,17 +95,25 @@ uv run pytest tests/ --cov=src --cov-context=test
 uv run pytest-tracer collect . -o scenarios.json
 ```
 
-### 6. Build the Trace Index
+### 6. Collect Call Traces (optional, for flame graphs)
+
+```bash
+# Collect call traces using sys.monitoring (Python 3.12+)
+uv run pytest-tracer trace . -o call_traces.json
+```
+
+### 7. Build the Trace Index
 
 ```bash
 # Use the Rust CLI to build the index
 ~/tools/pytest-tracer/projects/trace_analyzer/target/release/trace build \
     --coverage .coverage \
     --scenarios scenarios.json \
+    --call-traces call_traces.json \
     --output .trace-index
 ```
 
-### 7. Query the Index
+### 8. Query the Index
 
 ```bash
 # Set up an alias for convenience (add to your shell config)
@@ -205,6 +213,20 @@ Run a specific test with coverage collection:
 trace run "tests/test_auth.py::test_login"
 ```
 
+### trace flamegraph
+
+Generate flame graph or call-chain sequence diagram from call traces:
+
+```bash
+# Folded stacks format (for speedscope, flamegraph.pl)
+trace flamegraph "tests/test_auth.py::test_login"
+
+# Mermaid sequence diagram showing call chain between files
+trace flamegraph "tests/test_auth.py::test_login" --format mermaid
+```
+
+Folded stacks output can be loaded directly into [speedscope](https://www.speedscope.app/) for interactive flame graph visualization. Requires building the index with `--call-traces`.
+
 ### trace diagram
 
 Generate mermaid diagrams from coverage data:
@@ -267,6 +289,7 @@ When running as an MCP server, these tools are exposed:
 | `scenario_run` | Run a scenario with coverage collection |
 | `diagram_scenario` | Generate mermaid diagram for a scenario |
 | `diagram_file` | Generate mermaid diagram for a file |
+| `flamegraph` | Generate flame graph or sequence diagram from call traces |
 
 ## Example Output
 

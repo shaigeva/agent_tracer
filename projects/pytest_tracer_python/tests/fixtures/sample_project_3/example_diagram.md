@@ -1,9 +1,43 @@
-# Example Diagram: test_add_item_to_order
+# Example Diagrams: test_add_item_to_order
 
 This scenario tests adding an item to an order through all 5 layers:
 **route -> middleware -> service -> repository -> model**
 
-## Scenario Diagram
+## Call-Chain Sequence Diagram (from sys.monitoring traces)
+
+This shows the actual function calls in order, with arrows between files:
+
+```mermaid
+sequenceDiagram
+    participant test as test_add_item_to_order
+    participant routes as routes/order_routes.py
+    participant middleware as middleware/auth.py
+    participant services as services/order_service.py
+    participant repos as repositories/order_repository.py
+    participant products as repositories/product_repository.py
+    participant order_model as models/order.py
+    participant product_model as models/product.py
+    test ->> routes: OrderRoutes.post_order
+    routes ->> middleware: AuthMiddleware.create_order
+    middleware ->> services: OrderService.create_order
+    services ->> repos: OrderRepository.next_id
+    services ->> order_model: Order.__init__
+    services ->> repos: OrderRepository.save
+    test ->> routes: OrderRoutes.post_order_item
+    routes ->> middleware: AuthMiddleware.add_item
+    middleware ->> services: OrderService.add_item
+    services ->> repos: OrderRepository.get
+    services ->> products: ProductRepository.get
+    services ->> product_model: Product.is_available
+    services ->> product_model: Product.reserve
+    services ->> order_model: OrderItem.__init__
+    services ->> order_model: Order.add_item
+    services ->> repos: OrderRepository.save
+```
+
+## Coverage Diagram (from pytest-cov line coverage)
+
+This shows which files are touched, grouped by directory:
 
 ```mermaid
 graph TD
@@ -43,25 +77,26 @@ uv run pytest tests/ --cov=src --cov-context=test
 # 2. Collect scenario metadata
 uv run pytest-tracer collect . -o scenarios.json
 
-# 3. Build trace index
-trace build --coverage .coverage --scenarios scenarios.json --output .trace-index
+# 3. Collect call traces (uses sys.monitoring)
+uv run pytest-tracer trace . -o call_traces.json
 
-# 4. Generate diagram
+# 4. Build trace index with call traces
+trace build --coverage .coverage --scenarios scenarios.json \
+  --call-traces call_traces.json --output .trace-index
+
+# 5. Generate sequence diagram (call chain)
+trace flamegraph "tests/test_order_flow.py::test_add_item_to_order" \
+  --format mermaid --index .trace-index
+
+# 6. Generate folded stacks (for speedscope flame graph viewer)
+trace flamegraph "tests/test_order_flow.py::test_add_item_to_order" \
+  --index .trace-index > profile.folded
+
+# 7. Generate coverage diagram
 trace diagram "tests/test_order_flow.py::test_add_item_to_order" --index .trace-index
-
-# 5. Extract mermaid to a viewable file
-trace diagram "tests/test_order_flow.py::test_add_item_to_order" --index .trace-index \
-  | python3 -c "
-import sys, json
-m = json.load(sys.stdin)['mermaid']
-print('```mermaid')
-print(m)
-print('```')
-" > diagram.md
 ```
 
-## Viewing the diagram
+## Viewing
 
-- **GitHub**: Renders mermaid blocks natively in `.md` files
-- **VS Code**: Install [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) (`bierner.markdown-mermaid`), then Cmd+Shift+V to preview
-- **Web**: Paste mermaid source at https://mermaid.live
+- **Sequence diagrams**: GitHub renders mermaid natively. VS Code needs the "Markdown Preview Mermaid Support" extension (`bierner.markdown-mermaid`)
+- **Flame graphs**: Load the folded stacks file in [speedscope](https://www.speedscope.app/) or pipe through `flamegraph.pl`

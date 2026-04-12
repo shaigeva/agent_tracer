@@ -30,6 +30,10 @@ enum Commands {
         #[arg(long)]
         scenarios: PathBuf,
 
+        /// Path to call_traces.json from pytest-tracer trace (optional)
+        #[arg(long)]
+        call_traces: Option<PathBuf>,
+
         /// Output directory for the index (default: .trace-index)
         #[arg(long, short, default_value = ".trace-index")]
         output: PathBuf,
@@ -86,6 +90,20 @@ enum Commands {
         scenario_id: String,
     },
 
+    /// Generate flame graph or call-chain diagram from call traces
+    Flamegraph {
+        /// Scenario ID
+        scenario_id: String,
+
+        /// Output format: "folded" for folded stacks, "mermaid" for sequence diagram
+        #[arg(long, default_value = "folded")]
+        format: String,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
+    },
+
     /// Generate a mermaid diagram
     Diagram {
         /// Scenario ID to diagram (shows all files covered by the scenario)
@@ -115,8 +133,9 @@ fn main() {
         Commands::Build {
             coverage,
             scenarios,
+            call_traces,
             output,
-        } => cmd_build(&coverage, &scenarios, &output),
+        } => cmd_build(&coverage, &scenarios, call_traces.as_deref(), &output),
         Commands::List {
             behavior,
             errors,
@@ -126,6 +145,11 @@ fn main() {
         Commands::Context { scenario_id, index } => cmd_context(&scenario_id, &index),
         Commands::Affected { target, index } => cmd_affected(&target, &index),
         Commands::Run { scenario_id } => cmd_run(&scenario_id),
+        Commands::Flamegraph {
+            scenario_id,
+            format,
+            index,
+        } => cmd_flamegraph(&scenario_id, &format, &index),
         Commands::Diagram {
             scenario_id,
             file,
@@ -140,11 +164,16 @@ fn main() {
     }
 }
 
-fn cmd_build(coverage: &Path, scenarios: &Path, output: &Path) -> anyhow::Result<()> {
+fn cmd_build(
+    coverage: &Path,
+    scenarios: &Path,
+    call_traces: Option<&Path>,
+    output: &Path,
+) -> anyhow::Result<()> {
     use trace_analyzer::index::IndexBuilder;
 
     // Load and build index
-    let builder = IndexBuilder::load(coverage, scenarios)?;
+    let builder = IndexBuilder::load(coverage, scenarios, call_traces)?;
     let result = builder.build(output)?;
 
     // Print summary
@@ -154,6 +183,10 @@ fn cmd_build(coverage: &Path, scenarios: &Path, output: &Path) -> anyhow::Result
         "Built index with {} coverage entries",
         result.coverage_entries
     );
+
+    if result.call_trace_events > 0 {
+        println!("Imported {} call trace events", result.call_trace_events);
+    }
 
     if !result.scenarios_without_coverage.is_empty() {
         println!(
@@ -234,6 +267,39 @@ fn cmd_run(scenario_id: &str) -> anyhow::Result<()> {
     // Exit with test result code
     if !result.passed {
         std::process::exit(result.exit_code);
+    }
+
+    Ok(())
+}
+
+fn cmd_flamegraph(scenario_id: &str, format: &str, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::call_trace;
+    use trace_analyzer::index::Index;
+    use trace_analyzer::query;
+
+    let index = Index::open_readonly(index_dir)?;
+    let events = query::get_call_trace(&index, scenario_id)?;
+
+    if events.is_empty() {
+        anyhow::bail!(
+            "No call trace data for scenario '{}'. Did you build the index with --call-traces?",
+            scenario_id
+        );
+    }
+
+    match format {
+        "folded" => {
+            let folded = call_trace::to_folded_stacks(&events);
+            print!("{}", folded);
+        }
+        "mermaid" => {
+            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
+            let mermaid = call_trace::to_mermaid_sequence(&events, short_name);
+            println!("{}", mermaid);
+        }
+        _ => {
+            anyhow::bail!("Unknown format '{}'. Use 'folded' or 'mermaid'.", format);
+        }
     }
 
     Ok(())

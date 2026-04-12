@@ -19,6 +19,8 @@ pub struct BuildResult {
     pub scenarios_with_coverage: usize,
     /// Number of coverage entries (file/line pairs) imported.
     pub coverage_entries: usize,
+    /// Number of call trace events imported.
+    pub call_trace_events: usize,
     /// Scenarios that were in metadata but not in coverage.
     pub scenarios_without_coverage: Vec<String>,
     /// Test contexts in coverage that didn't match any scenario.
@@ -29,11 +31,16 @@ pub struct BuildResult {
 pub struct IndexBuilder {
     scenarios: Vec<Scenario>,
     coverage: Vec<TestCoverage>,
+    call_traces: Option<crate::call_trace::CallTraces>,
 }
 
 impl IndexBuilder {
     /// Create a new builder by loading data from coverage and scenario files.
-    pub fn load(coverage_path: &Path, scenarios_path: &Path) -> Result<Self, BuildError> {
+    pub fn load(
+        coverage_path: &Path,
+        scenarios_path: &Path,
+        call_traces_path: Option<&Path>,
+    ) -> Result<Self, BuildError> {
         // Parse coverage data
         let coverage_parser = CoverageParser::open(coverage_path)?;
         let coverage = coverage_parser.read_coverage()?;
@@ -41,9 +48,17 @@ impl IndexBuilder {
         // Parse scenarios
         let scenarios = ScenarioParser::parse(scenarios_path)?;
 
+        // Parse call traces if provided
+        let call_traces = if let Some(path) = call_traces_path {
+            Some(crate::call_trace::parse_call_traces(path)?)
+        } else {
+            None
+        };
+
         Ok(Self {
             scenarios,
             coverage,
+            call_traces,
         })
     }
 
@@ -52,6 +67,7 @@ impl IndexBuilder {
         Self {
             scenarios,
             coverage,
+            call_traces: None,
         }
     }
 
@@ -72,6 +88,7 @@ impl IndexBuilder {
             scenarios_imported: 0,
             scenarios_with_coverage: 0,
             coverage_entries: 0,
+            call_trace_events: 0,
             scenarios_without_coverage: Vec::new(),
             unmatched_contexts: Vec::new(),
         };
@@ -121,6 +138,29 @@ impl IndexBuilder {
                 }
             } else {
                 result.scenarios_without_coverage.push(scenario.id.clone());
+            }
+        }
+
+        // Import call traces if available
+        if let Some(ref call_traces) = self.call_traces {
+            for (test_id, events) in call_traces {
+                for (seq, event) in events.iter().enumerate() {
+                    conn.execute(
+                        "INSERT OR IGNORE INTO call_traces (scenario_id, seq, event, file_path, function, line, depth, timestamp_ns)
+                         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+                        (
+                            test_id,
+                            seq as i64,
+                            &event.event,
+                            &event.file,
+                            &event.function,
+                            event.line,
+                            event.depth,
+                            event.timestamp_ns as i64,
+                        ),
+                    )?;
+                    result.call_trace_events += 1;
+                }
             }
         }
 

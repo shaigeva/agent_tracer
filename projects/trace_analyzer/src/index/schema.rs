@@ -125,6 +125,19 @@ impl Index {
                 PRIMARY KEY (file_path, name, start_line)
             );
 
+            -- Call traces from sys.monitoring
+            CREATE TABLE IF NOT EXISTS call_traces (
+                scenario_id TEXT NOT NULL REFERENCES scenarios(id) ON DELETE CASCADE,
+                seq INTEGER NOT NULL,
+                event TEXT NOT NULL,
+                file_path TEXT NOT NULL,
+                function TEXT NOT NULL,
+                line INTEGER NOT NULL,
+                depth INTEGER NOT NULL,
+                timestamp_ns INTEGER NOT NULL,
+                PRIMARY KEY (scenario_id, seq)
+            );
+
             -- Indexes for query performance
             CREATE INDEX IF NOT EXISTS idx_coverage_file_line
                 ON coverage(file_path, line_number);
@@ -144,6 +157,7 @@ impl Index {
     pub fn clear(&self) -> Result<(), IndexError> {
         self.conn.execute_batch(
             r#"
+            DELETE FROM call_traces;
             DELETE FROM coverage;
             DELETE FROM scenario_behaviors;
             DELETE FROM scenarios;

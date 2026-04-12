@@ -88,6 +88,7 @@ cargo run -- mcp
 | `affected` | Find scenarios covering a file/line |
 | `run` | Run scenario with coverage collection |
 | `diagram` | Generate mermaid diagram for a scenario or file |
+| `flamegraph` | Generate flame graph or sequence diagram from call traces |
 | `mcp` | Start MCP server mode |
 
 ## Output Format
@@ -109,6 +110,7 @@ The MCP server (`trace mcp`) exposes these tools:
 | `scenario_run` | Run a scenario with coverage collection |
 | `diagram_scenario` | Generate mermaid diagram for a scenario |
 | `diagram_file` | Generate mermaid diagram for a file |
+| `flamegraph` | Generate flame graph or sequence diagram from call traces |
 
 ## Testing Guidelines
 

@@ -1,0 +1,6963 @@
+{
+  "version": "1.0",
+  "traces": {
+    "tests/test_order_flow.py::test_create_order_via_route": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985399228458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985399233625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985399236166
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985399238041
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985399270041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985399272666
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985399274000
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399277000
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399278541
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399280375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399281666
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399283083
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399284500
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399285708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399286958
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399288125
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985399289291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399290541
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985399291666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985399292833
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985399330833
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985399334750
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985399336583
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985399337875
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985399371375
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985399374166
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985399375666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985399376708
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985399397208
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985399399041
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985399400125
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985399401000
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985399428166
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985399429750
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985399431041
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985399431916
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_create_order_via_route",
+        "line": 11,
+        "depth": 0,
+        "timestamp_ns": 764985399610083
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985399611750
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985399613208
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985399614250
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985399615375
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985399617041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985399618750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985399620708
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985399622500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985399624375
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985399625791
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985399627041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985399628500
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985399629875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985399631458
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985399632375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985399633583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985399635583
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985399636791
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985399637791
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985399638791
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_create_order_via_route",
+        "line": 11,
+        "depth": 0,
+        "timestamp_ns": 764985399640458
+      }
+    ],
+    "tests/test_order_flow.py::test_add_item_to_order": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985400008208
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985400009916
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985400011166
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985400012083
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985400033250
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985400035000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985400036041
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400037708
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400038666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400039875
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400040833
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400041875
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400042750
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400043625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400044541
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400045458
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985400046291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400047250
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985400048125
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985400049041
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985400068625
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985400069916
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985400070916
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985400071750
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985400088750
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985400090083
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985400091291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985400092083
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985400109000
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985400110166
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985400111125
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985400111958
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985400134083
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985400135250
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985400136291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985400137041
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_add_item_to_order",
+        "line": 29,
+        "depth": 0,
+        "timestamp_ns": 764985400264375
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985400266083
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985400267458
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400268375
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400269458
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985400270958
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985400272458
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985400274250
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985400275916
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985400277416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985400278625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985400279791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985400280750
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985400281833
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985400283291
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985400284250
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985400285250
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985400287125
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985400288291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985400289375
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985400290333
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985400291833
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985400293125
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400294000
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400294916
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400297166
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985400298375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985400299375
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985400300666
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985400301875
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985400303541
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985400304583
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985400306375
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985400307291
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985400310166
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985400311416
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985400313958
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985400315166
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985400316333
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985400317333
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985400318375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985400320333
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985400321208
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985400322541
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985400323750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985400325416
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985400326500
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985400327416
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985400328375
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985400329250
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985400330208
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985400331583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985400332541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985400333958
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985400334958
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985400335916
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985400336958
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_add_item_to_order",
+        "line": 29,
+        "depth": 0,
+        "timestamp_ns": 764985400425500
+      }
+    ],
+    "tests/test_order_flow.py::test_complete_order_lifecycle": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985401404750
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985401407791
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985401409750
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985401411000
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985401434625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985401436375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985401437458
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401439958
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401440875
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401442208
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401443333
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401444375
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401445250
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401446208
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401447166
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401448166
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985401448958
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401450000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985401450958
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985401451916
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985401473208
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985401474916
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985401475958
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985401476791
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985401494250
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985401495666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985401496791
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985401497625
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985401514875
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985401516375
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985401517291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985401518125
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985401540416
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985401541666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985401542916
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985401543750
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_complete_order_lifecycle",
+        "line": 52,
+        "depth": 0,
+        "timestamp_ns": 764985401676625
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985401678333
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985401679416
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401680291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401681291
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985401682625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401683916
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401685833
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985401687500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985401688916
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401690041
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401691000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401691916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401692958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401694208
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401695291
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401696291
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401698333
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985401699500
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985401700583
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985401701541
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985401702666
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985401703791
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401704750
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401705583
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401706791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401707875
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401709125
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985401710333
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985401714125
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401715250
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401716208
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401717250
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985401718083
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985401718916
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401720041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401721750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401722791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985401723875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985401724875
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401725833
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401727625
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401728500
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401729541
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401730708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401732000
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401733000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401733958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401734916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401735750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401736625
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401737833
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401738875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401740333
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401741291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985401742458
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985401743458
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985401745208
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985401746166
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401747000
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401747916
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401748916
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401749791
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401750708
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985401751666
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985401754166
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401755125
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985401756083
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401756958
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985401757833
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985401758625
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401759500
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401760625
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985401761791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985401762666
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985401763500
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401764416
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401765333
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401766125
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401767041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401767875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401768958
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401769958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401770791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401771583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401772375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401773250
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401774083
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401775000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401775791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401776583
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401777541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401778333
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401779791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401780666
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401781916
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401782750
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985401783625
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985401784583
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_confirm",
+        "line": 24,
+        "depth": 1,
+        "timestamp_ns": 764985401786083
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.confirm_order",
+        "line": 40,
+        "depth": 2,
+        "timestamp_ns": 764985401787375
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401788291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985401789166
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.confirm_order",
+        "line": 53,
+        "depth": 3,
+        "timestamp_ns": 764985401790833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401791750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985401792666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.confirm",
+        "line": 48,
+        "depth": 4,
+        "timestamp_ns": 764985401794416
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.confirm",
+        "line": 48,
+        "depth": 4,
+        "timestamp_ns": 764985401796000
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401797041
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985401797958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401798875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401799750
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401800500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401801583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401802458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401803250
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401804041
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985401804791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985401805625
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401806458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401807333
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401808166
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401809041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401809916
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985401810708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985401811541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985401812333
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985401813541
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.confirm_order",
+        "line": 53,
+        "depth": 3,
+        "timestamp_ns": 764985401814375
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.confirm_order",
+        "line": 40,
+        "depth": 2,
+        "timestamp_ns": 764985401815208
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_confirm",
+        "line": 24,
+        "depth": 1,
+        "timestamp_ns": 764985401816083
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_complete_order_lifecycle",
+        "line": 52,
+        "depth": 0,
+        "timestamp_ns": 764985401817458
+      }
+    ],
+    "tests/test_order_flow.py::test_cancel_order_releases_stock": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985402141416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402142791
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402144000
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985402144916
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985402165125
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402166291
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402167375
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402168625
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402169625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402170625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402171625
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402172708
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402173625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402174541
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402175500
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402176416
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402177250
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402178166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402179083
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985402179875
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985402199125
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985402200166
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985402201166
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985402201958
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985402218541
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402219833
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402220875
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985402221666
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985402238333
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402239375
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402240375
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985402241250
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985402262541
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985402263541
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985402264583
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985402265416
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_cancel_order_releases_stock",
+        "line": 77,
+        "depth": 0,
+        "timestamp_ns": 764985402362250
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985402363416
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985402364333
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402365208
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402366208
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985402367291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985402368250
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985402369625
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985402370708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985402371791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402372791
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402373833
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402374708
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402375666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402376666
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402377541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402378458
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402379875
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985402380833
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985402381708
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985402382625
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985402383708
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985402384666
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402385500
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402386375
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402387333
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402388166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402389166
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985402390125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985402391333
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985402392333
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985402393291
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985402394291
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985402395166
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 5,
+        "timestamp_ns": 764985402396000
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985402396875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985402397958
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 4,
+        "timestamp_ns": 764985402398916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985402399791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 4,
+        "timestamp_ns": 764985402400666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402401583
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402402791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402403583
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985402404416
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985402405250
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985402406208
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985402407125
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402408000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402408875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985402409666
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985402410500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402411500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402412500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402413791
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402414666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985402415583
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985402416500
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402417833
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402418875
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_cancel",
+        "line": 28,
+        "depth": 1,
+        "timestamp_ns": 764985402420250
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.cancel_order",
+        "line": 46,
+        "depth": 2,
+        "timestamp_ns": 764985402421416
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402422291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402423125
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.cancel_order",
+        "line": 81,
+        "depth": 3,
+        "timestamp_ns": 764985402424875
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402425916
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402426750
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.cancel",
+        "line": 60,
+        "depth": 4,
+        "timestamp_ns": 764985402428000
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.cancel",
+        "line": 60,
+        "depth": 4,
+        "timestamp_ns": 764985402429458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985402430708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985402431625
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.release",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402432958
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.release",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985402434083
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402435083
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985402436083
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402436958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985402437750
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985402438583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 6,
+        "timestamp_ns": 764985402439416
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 5,
+        "timestamp_ns": 764985402440333
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402441125
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402441958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985402442708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 7,
+        "timestamp_ns": 764985402443541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985402444416
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985402445250
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985402446500
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.cancel_order",
+        "line": 81,
+        "depth": 3,
+        "timestamp_ns": 764985402447375
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.cancel_order",
+        "line": 46,
+        "depth": 2,
+        "timestamp_ns": 764985402448250
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_cancel",
+        "line": 28,
+        "depth": 1,
+        "timestamp_ns": 764985402449166
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_cancel_order_releases_stock",
+        "line": 77,
+        "depth": 0,
+        "timestamp_ns": 764985402450541
+      }
+    ],
+    "tests/test_order_flow.py::test_unauthenticated_create_order": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985402720458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402721708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402722833
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985402723750
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985402743375
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402744500
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985402745541
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402746750
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402747791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402748750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402749750
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402750750
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402751625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402752500
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402753375
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402754333
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985402755125
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402756041
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985402756958
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985402757750
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985402776166
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985402777208
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985402778166
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985402778958
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985402795208
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402796291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402797291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985402798083
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985402814208
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402815250
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985402816166
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985402817000
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_unauthenticated_create_order",
+        "line": 104,
+        "depth": 0,
+        "timestamp_ns": 764985402907000
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985402908250
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985402909291
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402910125
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985402911291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985402912166
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985402913041
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_unauthenticated_create_order",
+        "line": 104,
+        "depth": 0,
+        "timestamp_ns": 764985402915166
+      }
+    ],
+    "tests/test_order_flow.py::test_add_out_of_stock_item": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985403161833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403165166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403166375
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985403167333
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985403187166
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403188333
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403189333
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403190583
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403191541
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403192416
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403193375
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403194416
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403195291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403196208
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403197083
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403198083
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403198875
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403199750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403200666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985403201416
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985403219750
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985403220833
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985403223041
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985403223875
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985403240583
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403241708
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403242666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985403243458
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985403259916
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403261000
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403261875
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985403262708
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985403283833
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985403284833
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985403285791
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985403286583
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_add_out_of_stock_item",
+        "line": 116,
+        "depth": 0,
+        "timestamp_ns": 764985403381625
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985403382791
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985403383750
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403384666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403385583
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985403386666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403387583
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403388750
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985403389875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985403391041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985403392000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985403393000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985403394083
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985403395041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985403396083
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985403397000
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985403397916
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985403399583
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985403400500
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985403401375
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985403402250
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985403403416
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985403404291
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403405083
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403405916
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403406833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985403407750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985403408791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985403409750
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 4,
+        "timestamp_ns": 764985403410958
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403411875
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403412833
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403414291
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.add_item",
+        "line": 34,
+        "depth": 2,
+        "timestamp_ns": 764985403415291
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_item",
+        "line": 20,
+        "depth": 1,
+        "timestamp_ns": 764985403416166
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_add_out_of_stock_item",
+        "line": 116,
+        "depth": 0,
+        "timestamp_ns": 764985403417708
+      }
+    ],
+    "tests/test_order_flow.py::test_confirm_empty_order": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985403672083
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403673375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403674500
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985403675458
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985403695000
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403696125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985403697208
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403698375
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403699375
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403700333
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403701250
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403702291
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403703208
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403704125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403705041
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403705958
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985403706833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403707708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985403708625
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985403709416
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985403727791
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985403728833
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985403729750
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985403730583
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985403746833
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403748000
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403749041
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "auth",
+        "line": 37,
+        "depth": 0,
+        "timestamp_ns": 764985403749791
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985403766500
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403767583
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.__init__",
+        "line": 13,
+        "depth": 1,
+        "timestamp_ns": 764985403768541
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "routes",
+        "line": 43,
+        "depth": 0,
+        "timestamp_ns": 764985403769375
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985403790666
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985403791666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.login",
+        "line": 17,
+        "depth": 1,
+        "timestamp_ns": 764985403792666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "logged_in_user",
+        "line": 49,
+        "depth": 0,
+        "timestamp_ns": 764985403793500
+      },
+      {
+        "event": "call",
+        "file": "tests/test_order_flow.py",
+        "function": "test_confirm_empty_order",
+        "line": 139,
+        "depth": 0,
+        "timestamp_ns": 764985403879708
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985403880958
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985403881833
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403882666
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403883583
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985403884666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403885583
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 4,
+        "timestamp_ns": 764985403886666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985403887791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 4,
+        "timestamp_ns": 764985403888916
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985403889916
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 4,
+        "timestamp_ns": 764985403890958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985403891875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985403892875
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985403893875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 6,
+        "timestamp_ns": 764985403894750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 5,
+        "timestamp_ns": 764985403895708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 4,
+        "timestamp_ns": 764985403897250
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 3,
+        "timestamp_ns": 764985403898166
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.create_order",
+        "line": 28,
+        "depth": 2,
+        "timestamp_ns": 764985403899041
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985403899916
+      },
+      {
+        "event": "call",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_confirm",
+        "line": 24,
+        "depth": 1,
+        "timestamp_ns": 764985403901041
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.confirm_order",
+        "line": 40,
+        "depth": 2,
+        "timestamp_ns": 764985403902083
+      },
+      {
+        "event": "call",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403903041
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware._check_auth",
+        "line": 23,
+        "depth": 3,
+        "timestamp_ns": 764985403903875
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.confirm_order",
+        "line": 53,
+        "depth": 3,
+        "timestamp_ns": 764985403904958
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985403906000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 4,
+        "timestamp_ns": 764985403907041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.confirm",
+        "line": 48,
+        "depth": 4,
+        "timestamp_ns": 764985403908041
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.confirm_order",
+        "line": 53,
+        "depth": 4,
+        "timestamp_ns": 764985403911125
+      },
+      {
+        "event": "return",
+        "file": "src/middleware/auth.py",
+        "function": "AuthMiddleware.confirm_order",
+        "line": 40,
+        "depth": 3,
+        "timestamp_ns": 764985403912125
+      },
+      {
+        "event": "return",
+        "file": "src/routes/order_routes.py",
+        "function": "OrderRoutes.post_order_confirm",
+        "line": 24,
+        "depth": 2,
+        "timestamp_ns": 764985403913083
+      },
+      {
+        "event": "return",
+        "file": "tests/test_order_flow.py",
+        "function": "test_confirm_empty_order",
+        "line": 139,
+        "depth": 1,
+        "timestamp_ns": 764985403914625
+      }
+    ],
+    "tests/test_service_direct.py::test_create_order_direct": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985404272958
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404275250
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404276791
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985404278083
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985404300416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404301958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404303000
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404304750
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404305708
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404307000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404308083
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404309166
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404310041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404311000
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404311958
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404312958
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404313791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404314708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404315666
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985404316500
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985404336666
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985404338041
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985404339041
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985404339875
+      },
+      {
+        "event": "call",
+        "file": "tests/test_service_direct.py",
+        "function": "test_create_order_direct",
+        "line": 11,
+        "depth": 0,
+        "timestamp_ns": 764985404444166
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985404445666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404446958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404448500
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985404450041
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985404451291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404452458
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404453458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404454375
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404455375
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404456500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404457375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404458416
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404460041
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985404461208
+      },
+      {
+        "event": "return",
+        "file": "tests/test_service_direct.py",
+        "function": "test_create_order_direct",
+        "line": 11,
+        "depth": 0,
+        "timestamp_ns": 764985404462791
+      }
+    ],
+    "tests/test_service_direct.py::test_add_item_direct": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985404711791
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404713166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404714291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985404715166
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985404734833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404735958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985404737041
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404738208
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404741958
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404742958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404743916
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404744916
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404745833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404746708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404747625
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404748583
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985404749416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404750291
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985404751250
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985404752041
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985404772125
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985404773291
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985404774291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985404775208
+      },
+      {
+        "event": "call",
+        "file": "tests/test_service_direct.py",
+        "function": "test_add_item_direct",
+        "line": 21,
+        "depth": 0,
+        "timestamp_ns": 764985404869458
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985404870666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404871666
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404873166
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985404874375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985404875458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404876583
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404877666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404878583
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404879666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404880791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404881708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404882625
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404884208
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985404885166
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 1,
+        "timestamp_ns": 764985404886458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 2,
+        "timestamp_ns": 764985404887375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 2,
+        "timestamp_ns": 764985404888416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 2,
+        "timestamp_ns": 764985404889416
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 2,
+        "timestamp_ns": 764985404890500
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404891458
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985404892416
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 2,
+        "timestamp_ns": 764985404893458
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 3,
+        "timestamp_ns": 764985404894291
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.is_available",
+        "line": 11,
+        "depth": 3,
+        "timestamp_ns": 764985404895083
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.reserve",
+        "line": 14,
+        "depth": 2,
+        "timestamp_ns": 764985404895958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 2,
+        "timestamp_ns": 764985404897291
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.__init__",
+        "line": 14,
+        "depth": 2,
+        "timestamp_ns": 764985404898166
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 2,
+        "timestamp_ns": 764985404899291
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.add_item",
+        "line": 41,
+        "depth": 2,
+        "timestamp_ns": 764985404900291
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404901208
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985404902208
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404903000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 3,
+        "timestamp_ns": 764985404904000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 4,
+        "timestamp_ns": 764985404904875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 4,
+        "timestamp_ns": 764985404905916
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.to_dict",
+        "line": 24,
+        "depth": 3,
+        "timestamp_ns": 764985404906916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404907791
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404908666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 5,
+        "timestamp_ns": 764985404909500
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "OrderItem.total",
+        "line": 20,
+        "depth": 5,
+        "timestamp_ns": 764985404910375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985404911833
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985404912750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985404914208
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 1,
+        "timestamp_ns": 764985404915291
+      },
+      {
+        "event": "return",
+        "file": "tests/test_service_direct.py",
+        "function": "test_add_item_direct",
+        "line": 21,
+        "depth": 0,
+        "timestamp_ns": 764985404916916
+      }
+    ],
+    "tests/test_service_direct.py::test_add_item_nonexistent_product": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985405152875
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405154166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405155291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985405156166
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985405176833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405177958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405179041
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405180125
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405181041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405182041
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405182958
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405183958
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405184833
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405185708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405186583
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405187416
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405188250
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405189166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405190041
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985405190833
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985405210125
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985405213166
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985405214208
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985405215125
+      },
+      {
+        "event": "call",
+        "file": "tests/test_service_direct.py",
+        "function": "test_add_item_nonexistent_product",
+        "line": 34,
+        "depth": 0,
+        "timestamp_ns": 764985405302291
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405303583
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405304625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405305916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405307000
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405308083
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405309125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405310125
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405311041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405312083
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405313125
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405314000
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405314958
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405316458
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405317375
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 1,
+        "timestamp_ns": 764985405318583
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 2,
+        "timestamp_ns": 764985405319458
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.get",
+        "line": 19,
+        "depth": 2,
+        "timestamp_ns": 764985405320500
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 2,
+        "timestamp_ns": 764985405321458
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.get",
+        "line": 13,
+        "depth": 2,
+        "timestamp_ns": 764985405322500
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.add_item",
+        "line": 23,
+        "depth": 1,
+        "timestamp_ns": 764985405323541
+      },
+      {
+        "event": "return",
+        "file": "tests/test_service_direct.py",
+        "function": "test_add_item_nonexistent_product",
+        "line": 34,
+        "depth": 0,
+        "timestamp_ns": 764985405325166
+      }
+    ],
+    "tests/test_service_direct.py::test_list_customer_orders": [
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985405556916
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405558125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405559291
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_repo",
+        "line": 25,
+        "depth": 0,
+        "timestamp_ns": 764985405560208
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985405580416
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405581541
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.__init__",
+        "line": 7,
+        "depth": 1,
+        "timestamp_ns": 764985405582583
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405583666
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405584625
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405585625
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405586583
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405587583
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405588458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405589333
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405590250
+      },
+      {
+        "event": "call",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405591166
+      },
+      {
+        "event": "return",
+        "file": "src/models/product.py",
+        "function": "Product.__init__",
+        "line": 5,
+        "depth": 1,
+        "timestamp_ns": 764985405592041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405592958
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/product_repository.py",
+        "function": "ProductRepository.add",
+        "line": 10,
+        "depth": 1,
+        "timestamp_ns": 764985405593833
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "product_repo",
+        "line": 15,
+        "depth": 0,
+        "timestamp_ns": 764985405594708
+      },
+      {
+        "event": "call",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985405613958
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985405615041
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.__init__",
+        "line": 12,
+        "depth": 1,
+        "timestamp_ns": 764985405616000
+      },
+      {
+        "event": "return",
+        "file": "conftest.py",
+        "function": "order_service",
+        "line": 31,
+        "depth": 0,
+        "timestamp_ns": 764985405616916
+      },
+      {
+        "event": "call",
+        "file": "tests/test_service_direct.py",
+        "function": "test_list_customer_orders",
+        "line": 48,
+        "depth": 0,
+        "timestamp_ns": 764985405704083
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405705208
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405706166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405707458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405708541
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405709666
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405710708
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405711666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405712625
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405713666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405714875
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405715750
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405716708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405718208
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405719125
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405720208
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405721125
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405722416
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405723375
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405724333
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405725208
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405726208
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405727041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405727916
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405728791
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405729708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405730583
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405731875
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405732791
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405733750
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405734666
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.next_id",
+        "line": 11,
+        "depth": 2,
+        "timestamp_ns": 764985405735666
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405736666
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.__init__",
+        "line": 35,
+        "depth": 2,
+        "timestamp_ns": 764985405876041
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405877375
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.save",
+        "line": 16,
+        "depth": 2,
+        "timestamp_ns": 764985405878458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405879375
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405880458
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405881458
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405882333
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405883208
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405884833
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.create_order",
+        "line": 16,
+        "depth": 1,
+        "timestamp_ns": 764985405885791
+      },
+      {
+        "event": "call",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.list_customer_orders",
+        "line": 113,
+        "depth": 1,
+        "timestamp_ns": 764985405888458
+      },
+      {
+        "event": "call",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.find_by_customer",
+        "line": 22,
+        "depth": 2,
+        "timestamp_ns": 764985405891166
+      },
+      {
+        "event": "return",
+        "file": "src/repositories/order_repository.py",
+        "function": "OrderRepository.find_by_customer",
+        "line": 22,
+        "depth": 2,
+        "timestamp_ns": 764985405894125
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405895208
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405896083
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405896916
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405897833
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405898708
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405900041
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405901000
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405902958
+      },
+      {
+        "event": "call",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405903833
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total.<locals>.<genexpr>",
+        "line": 46,
+        "depth": 4,
+        "timestamp_ns": 764985405904625
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.total",
+        "line": 44,
+        "depth": 3,
+        "timestamp_ns": 764985405905458
+      },
+      {
+        "event": "return",
+        "file": "src/models/order.py",
+        "function": "Order.to_dict",
+        "line": 65,
+        "depth": 2,
+        "timestamp_ns": 764985405906750
+      },
+      {
+        "event": "return",
+        "file": "src/services/order_service.py",
+        "function": "OrderService.list_customer_orders",
+        "line": 113,
+        "depth": 1,
+        "timestamp_ns": 764985405908125
+      },
+      {
+        "event": "return",
+        "file": "tests/test_service_direct.py",
+        "function": "test_list_customer_orders",
+        "line": 48,
+        "depth": 0,
+        "timestamp_ns": 764985405909666
+      }
+    ]
+  }
+}

@@ -4,6 +4,7 @@
 //! scenario metadata, and building queryable indexes. It is designed to be
 //! independent of the execution context (CLI, MCP, etc.).
 
+pub mod call_trace;
 pub mod coverage;
 pub mod diagram;
 pub mod error;

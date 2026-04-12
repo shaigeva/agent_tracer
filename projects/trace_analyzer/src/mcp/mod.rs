@@ -17,6 +17,7 @@ use rmcp::{tool, tool_handler, tool_router, ServerHandler};
 use schemars::JsonSchema;
 use serde::Deserialize;
 
+use crate::call_trace;
 use crate::diagram;
 use crate::index::Index;
 use crate::query;
@@ -71,6 +72,20 @@ pub struct DiagramScenarioRequest {
 pub struct DiagramFileRequest {
     /// Source file path (e.g., 'src/auth.py'), optionally with line number (e.g., 'src/auth.py:25')
     pub file: String,
+}
+
+/// Request for flamegraph tool.
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct FlamegraphRequest {
+    /// Full scenario ID (e.g., 'tests/scenarios/test_auth.py::test_login')
+    pub scenario_id: String,
+    /// Output format: "folded" for folded stacks (default), "mermaid" for sequence diagram
+    #[serde(default = "default_format")]
+    pub format: String,
+}
+
+fn default_format() -> String {
+    "folded".to_string()
 }
 
 /// MCP server for trace analyzer.
@@ -286,6 +301,48 @@ impl TraceServer {
         })?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    #[tool(
+        description = "Generate a flame graph or call-chain sequence diagram for a scenario. Requires call trace data (build with --call-traces). Format: 'folded' for folded stacks (use with speedscope or flamegraph tools), 'mermaid' for a sequence diagram showing the call chain between files."
+    )]
+    async fn flamegraph(
+        &self,
+        params: Parameters<FlamegraphRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let index = self.open_index()?;
+
+        let events =
+            query::get_call_trace(&index, &params.0.scenario_id).map_err(|e| McpError {
+                code: ErrorCode::INTERNAL_ERROR,
+                message: Cow::from(format!("Query failed: {}", e)),
+                data: None,
+            })?;
+
+        if events.is_empty() {
+            return Err(McpError {
+                code: ErrorCode::INTERNAL_ERROR,
+                message: Cow::from(
+                    "No call trace data. Build the index with --call-traces to enable flame graphs.",
+                ),
+                data: None,
+            });
+        }
+
+        let output = match params.0.format.as_str() {
+            "mermaid" => {
+                let short_name = params
+                    .0
+                    .scenario_id
+                    .split("::")
+                    .last()
+                    .unwrap_or(&params.0.scenario_id);
+                call_trace::to_mermaid_sequence(&events, short_name)
+            }
+            _ => call_trace::to_folded_stacks(&events),
+        };
+
+        Ok(CallToolResult::success(vec![Content::text(output)]))
     }
 
     #[tool(

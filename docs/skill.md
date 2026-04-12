@@ -56,16 +56,29 @@ print('\`\`\`')
 View on GitHub (renders natively) or in VS Code with the
 "Markdown Preview Mermaid Support" extension (`bierner.markdown-mermaid`).
 
+### Generate flame graph / call-chain sequence diagram
+```bash
+# Folded stacks (load in speedscope)
+trace flamegraph "tests/test_auth.py::test_login" --index .trace-index
+
+# Mermaid sequence diagram
+trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
+```
+
+Requires building the index with `--call-traces` (see rebuild section below).
+
 ### Run a specific scenario
 ```bash
 trace run "tests/test_auth.py::test_login"
 ```
 
-### Rebuild the index
+### Rebuild the index (with call traces)
 ```bash
 uv run pytest --cov=src --cov-context=test
 uv run pytest-tracer collect . -o scenarios.json
-trace build --coverage .coverage --scenarios scenarios.json --output .trace-index
+uv run pytest-tracer trace . -o call_traces.json
+trace build --coverage .coverage --scenarios scenarios.json \
+  --call-traces call_traces.json --output .trace-index
 ```
 
 ## Workflow
