@@ -99,4 +99,21 @@ trace diagram "tests/test_order_flow.py::test_add_item_to_order" --index .trace-
 ## Viewing
 
 - **Sequence diagrams**: GitHub renders mermaid natively. VS Code needs the "Markdown Preview Mermaid Support" extension (`bierner.markdown-mermaid`)
-- **Flame graphs**: Load the folded stacks file in [speedscope](https://www.speedscope.app/) or pipe through `flamegraph.pl`
+- **Flame graphs (SVG)**: Open the `.svg` file in any browser — fully interactive, click to zoom, no external tools needed
+- **Flame graphs (folded)**: Load the folded stacks file in [speedscope](https://www.speedscope.app/) for a richer view
+- **Gallery**: Run `trace gallery` to generate a self-contained HTML page showing flame graphs for all scenarios in a grid layout. Open `.trace-gallery/index.html` in a browser.
+
+## Generating an SVG flame graph
+
+```bash
+trace flamegraph "tests/test_order_flow.py::test_add_item_to_order" \
+  --format svg --index .trace-index > flamegraph.svg
+open flamegraph.svg
+```
+
+## Generating the full gallery
+
+```bash
+trace gallery --output .trace-gallery --index .trace-index
+open .trace-gallery/index.html
+```

@@ -215,9 +215,13 @@ trace run "tests/test_auth.py::test_login"
 
 ### trace flamegraph
 
-Generate flame graph or call-chain sequence diagram from call traces:
+Generate flame graph or call-chain sequence diagram from call traces. Requires building the index with `--call-traces`.
 
 ```bash
+# Interactive SVG flame graph (open the .svg file in any browser)
+trace flamegraph "tests/test_auth.py::test_login" --format svg > flamegraph.svg
+open flamegraph.svg  # opens in default browser
+
 # Folded stacks format (for speedscope, flamegraph.pl)
 trace flamegraph "tests/test_auth.py::test_login"
 
@@ -225,7 +229,25 @@ trace flamegraph "tests/test_auth.py::test_login"
 trace flamegraph "tests/test_auth.py::test_login" --format mermaid
 ```
 
-Folded stacks output can be loaded directly into [speedscope](https://www.speedscope.app/) for interactive flame graph visualization. Requires building the index with `--call-traces`.
+The **SVG format** is fully self-contained and interactive — click bars to zoom, hover for details. No external tools required.
+
+Folded stacks can also be loaded into [speedscope](https://www.speedscope.app/) for a richer interactive view.
+
+### trace gallery
+
+Generate a self-contained HTML gallery of **all** scenarios with flame graphs, coverage tables, and call sequence diagrams:
+
+```bash
+trace gallery --output .trace-gallery --index .trace-index
+open .trace-gallery/index.html
+```
+
+The gallery contains:
+- **Index page** — grid of all scenarios with flame graph thumbnails, tags, and stats
+- **Per-scenario detail pages** — embedded interactive flame graph, call sequence diagram, coverage table
+- **No external dependencies** — everything is local HTML/SVG, works offline
+
+Great for reviewing all traced scenarios at a glance and drilling into individual ones.
 
 ### trace diagram
 

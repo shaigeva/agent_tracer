@@ -58,6 +58,9 @@ View on GitHub (renders natively) or in VS Code with the
 
 ### Generate flame graph / call-chain sequence diagram
 ```bash
+# Interactive SVG flame graph (open in any browser - click to zoom)
+trace flamegraph "tests/test_auth.py::test_login" --format svg --index .trace-index > flamegraph.svg
+
 # Folded stacks (load in speedscope)
 trace flamegraph "tests/test_auth.py::test_login" --index .trace-index
 
@@ -66,6 +69,15 @@ trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trac
 ```
 
 Requires building the index with `--call-traces` (see rebuild section below).
+
+### Generate gallery of all scenarios
+```bash
+trace gallery --output .trace-gallery --index .trace-index
+# Then: open .trace-gallery/index.html
+```
+
+Creates a self-contained HTML directory with flame graphs for all scenarios.
+Useful for quickly browsing all traced flows and drilling into specific ones.
 
 ### Run a specific scenario
 ```bash

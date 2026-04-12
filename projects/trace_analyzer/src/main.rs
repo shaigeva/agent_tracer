@@ -95,9 +95,20 @@ enum Commands {
         /// Scenario ID
         scenario_id: String,
 
-        /// Output format: "folded" for folded stacks, "mermaid" for sequence diagram
+        /// Output format: "folded" for folded stacks, "svg" for flame graph SVG, "mermaid" for sequence diagram
         #[arg(long, default_value = "folded")]
         format: String,
+
+        /// Index directory (default: .trace-index)
+        #[arg(long, default_value = DEFAULT_INDEX_DIR)]
+        index: PathBuf,
+    },
+
+    /// Generate a self-contained HTML gallery of all scenarios with flame graphs
+    Gallery {
+        /// Output directory for the gallery
+        #[arg(long, short, default_value = ".trace-gallery")]
+        output: PathBuf,
 
         /// Index directory (default: .trace-index)
         #[arg(long, default_value = DEFAULT_INDEX_DIR)]
@@ -150,6 +161,7 @@ fn main() {
             format,
             index,
         } => cmd_flamegraph(&scenario_id, &format, &index),
+        Commands::Gallery { output, index } => cmd_gallery(&output, &index),
         Commands::Diagram {
             scenario_id,
             file,
@@ -297,10 +309,43 @@ fn cmd_flamegraph(scenario_id: &str, format: &str, index_dir: &Path) -> anyhow::
             let mermaid = call_trace::to_mermaid_sequence(&events, short_name);
             println!("{}", mermaid);
         }
+        "svg" => {
+            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
+            let svg = call_trace::to_svg_flamegraph(&events, short_name)
+                .map_err(|e| anyhow::anyhow!("{}", e))?;
+            print!("{}", svg);
+        }
         _ => {
-            anyhow::bail!("Unknown format '{}'. Use 'folded' or 'mermaid'.", format);
+            anyhow::bail!(
+                "Unknown format '{}'. Use 'folded', 'svg', or 'mermaid'.",
+                format
+            );
         }
     }
+
+    Ok(())
+}
+
+fn cmd_gallery(output_dir: &Path, index_dir: &Path) -> anyhow::Result<()> {
+    use trace_analyzer::gallery;
+    use trace_analyzer::index::Index;
+
+    let index = Index::open_readonly(index_dir)?;
+    let result = gallery::generate_gallery(&index, output_dir)?;
+
+    println!("Generated gallery at {}", output_dir.display());
+    println!(
+        "  {} scenarios with flame graphs",
+        result.scenarios_with_traces
+    );
+    println!(
+        "  {} scenarios (coverage only)",
+        result.scenarios_without_traces
+    );
+    println!(
+        "Open {}/index.html in a browser to view.",
+        output_dir.display()
+    );
 
     Ok(())
 }

@@ -44,6 +44,10 @@ node_modules/
 # don't include the sqlite database
 *.db
 
+# Trace analyzer output directories
+.trace-index/
+.trace-gallery/
+
 # ChromaDB vector database
 chroma_db/
 *.chroma

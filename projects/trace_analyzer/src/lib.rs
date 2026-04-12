@@ -8,6 +8,7 @@ pub mod call_trace;
 pub mod coverage;
 pub mod diagram;
 pub mod error;
+pub mod gallery;
 pub mod index;
 pub mod mcp;
 pub mod models;

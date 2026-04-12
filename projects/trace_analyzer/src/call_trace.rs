@@ -125,6 +125,28 @@ pub fn to_mermaid_sequence(events: &[CallEvent], scenario_name: &str) -> String 
     mermaid
 }
 
+/// Render a flame graph SVG from call events using inferno.
+///
+/// Returns an SVG string, or an error if rendering fails.
+pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, String> {
+    let folded = to_folded_stacks(events);
+    if folded.is_empty() {
+        return Err("No events to render".to_string());
+    }
+
+    let mut options = inferno::flamegraph::Options::default();
+    options.title = title.to_string();
+    options.subtitle = Some("Call trace from sys.monitoring".to_string());
+    options.count_name = "calls".to_string();
+    options.font_size = 11;
+
+    let mut svg = Vec::new();
+    inferno::flamegraph::from_lines(&mut options, folded.lines(), &mut svg)
+        .map_err(|e| format!("Flame graph rendering failed: {}", e))?;
+
+    String::from_utf8(svg).map_err(|e| format!("Invalid UTF-8 in SVG output: {}", e))
+}
+
 /// Shorten a file path to just the last directory + filename.
 fn short_path(path: &str) -> String {
     let parts: Vec<&str> = path.split('/').collect();
