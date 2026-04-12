@@ -57,18 +57,26 @@ View on GitHub (renders natively) or in VS Code with the
 "Markdown Preview Mermaid Support" extension (`bierner.markdown-mermaid`).
 
 ### Generate flame graph / call-chain sequence diagram
-```bash
-# Interactive SVG flame graph (open in any browser - click to zoom)
-trace flamegraph "tests/test_auth.py::test_login" --format svg --index .trace-index > flamegraph.svg
 
-# Folded stacks (load in speedscope)
+Output formats: `png` | `html` | `svg` | `folded` | `mermaid`
+
+```bash
+# PNG - static image, loads anywhere (VS Code, any browser, email, docs)
+trace flamegraph "tests/test_auth.py::test_login" --format png --index .trace-index > flame.png
+
+# HTML - interactive flame graph wrapped in a page (recommended for viewing)
+trace flamegraph "tests/test_auth.py::test_login" --format html --index .trace-index > flame.html
+
+# Folded stacks (for speedscope.app or flamegraph.pl)
 trace flamegraph "tests/test_auth.py::test_login" --index .trace-index
 
 # Mermaid sequence diagram
 trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
 ```
 
-Requires building the index with `--call-traces` (see rebuild section below).
+Recommend PNG or HTML over raw SVG — browsers block scripts in file:// SVGs
+and VS Code shows SVGs as XML text by default. Requires building the index
+with `--call-traces` (see rebuild section below).
 
 ### Generate gallery of all scenarios
 ```bash

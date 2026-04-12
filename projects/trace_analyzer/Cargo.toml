@@ -36,6 +36,9 @@ tokio = { version = "1", features = ["full"] }
 # Flame graph SVG rendering (pure Rust port of flamegraph.pl)
 inferno = { version = "0.12", default-features = false }
 
+# SVG to PNG rendering (pure Rust, no system deps)
+resvg = "0.45"
+
 # Python AST parsing (for line->function mapping)
 # tree-sitter = "0.22"
 # tree-sitter-python = "0.21"

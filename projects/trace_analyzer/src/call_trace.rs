@@ -169,6 +169,79 @@ pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, St
     String::from_utf8(svg).map_err(|e| format!("Invalid UTF-8 in SVG output: {}", e))
 }
 
+/// Render a flame graph PNG from call events.
+///
+/// Uses inferno to produce the SVG, then resvg to rasterize to PNG.
+/// Returns PNG bytes. Static image (no interactivity) but renders in any viewer.
+pub fn to_png_flamegraph(events: &[CallEvent], title: &str) -> Result<Vec<u8>, String> {
+    let svg = to_svg_flamegraph(events, title)?;
+    svg_to_png(&svg, 2.0)
+}
+
+/// Convert SVG string to PNG bytes using resvg. Scale factor doubles resolution.
+fn svg_to_png(svg: &str, scale: f32) -> Result<Vec<u8>, String> {
+    use resvg::usvg;
+
+    let opt = usvg::Options::default();
+    let tree =
+        usvg::Tree::from_str(svg, &opt).map_err(|e| format!("Failed to parse SVG: {}", e))?;
+
+    let size = tree.size();
+    let width = (size.width() * scale) as u32;
+    let height = (size.height() * scale) as u32;
+
+    let mut pixmap = resvg::tiny_skia::Pixmap::new(width, height)
+        .ok_or_else(|| "Failed to allocate pixmap".to_string())?;
+
+    let transform = resvg::tiny_skia::Transform::from_scale(scale, scale);
+    resvg::render(&tree, transform, &mut pixmap.as_mut());
+
+    pixmap
+        .encode_png()
+        .map_err(|e| format!("PNG encoding failed: {}", e))
+}
+
+/// Wrap an SVG in an HTML page for guaranteed browser rendering.
+///
+/// Some browsers restrict scripts in SVGs loaded via file://, and VS Code shows
+/// SVGs as XML text by default. Wrapping in HTML sidesteps both issues.
+pub fn to_html_flamegraph(events: &[CallEvent], title: &str) -> Result<String, String> {
+    let svg = to_svg_flamegraph(events, title)?;
+    Ok(format!(
+        r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{}</title>
+<style>
+  body {{ margin: 0; padding: 1rem; font-family: -apple-system, sans-serif; background: #f5f5f7; }}
+  h1 {{ margin: 0 0 1rem 0; font-size: 1.1rem; font-family: ui-monospace, Menlo, monospace; }}
+  .hint {{ color: #6e6e73; font-size: 0.85rem; margin-bottom: 1rem; }}
+  .container {{ background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }}
+</style>
+</head>
+<body>
+<h1>{}</h1>
+<p class="hint">Interactive flame graph. Click bars to zoom. Right-click to zoom out. Type in the Search field to highlight.</p>
+<div class="container">
+{}
+</div>
+</body>
+</html>
+"#,
+        html_escape(title),
+        html_escape(title),
+        svg
+    ))
+}
+
+fn html_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
 /// Shorten a file path to just the last directory + filename.
 fn short_path(path: &str) -> String {
     let parts: Vec<&str> = path.split('/').collect();

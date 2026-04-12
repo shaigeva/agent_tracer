@@ -95,7 +95,7 @@ enum Commands {
         /// Scenario ID
         scenario_id: String,
 
-        /// Output format: "folded" for folded stacks, "svg" for flame graph SVG, "mermaid" for sequence diagram
+        /// Output format: folded | svg | html | png | mermaid
         #[arg(long, default_value = "folded")]
         format: String,
 
@@ -315,9 +315,22 @@ fn cmd_flamegraph(scenario_id: &str, format: &str, index_dir: &Path) -> anyhow::
                 .map_err(|e| anyhow::anyhow!("{}", e))?;
             print!("{}", svg);
         }
+        "html" => {
+            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
+            let html = call_trace::to_html_flamegraph(&events, short_name)
+                .map_err(|e| anyhow::anyhow!("{}", e))?;
+            print!("{}", html);
+        }
+        "png" => {
+            use std::io::Write;
+            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
+            let png = call_trace::to_png_flamegraph(&events, short_name)
+                .map_err(|e| anyhow::anyhow!("{}", e))?;
+            std::io::stdout().write_all(&png)?;
+        }
         _ => {
             anyhow::bail!(
-                "Unknown format '{}'. Use 'folded', 'svg', or 'mermaid'.",
+                "Unknown format '{}'. Use 'folded', 'svg', 'html', 'png', or 'mermaid'.",
                 format
             );
         }

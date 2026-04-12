@@ -215,23 +215,35 @@ trace run "tests/test_auth.py::test_login"
 
 ### trace flamegraph
 
-Generate flame graph or call-chain sequence diagram from call traces. Requires building the index with `--call-traces`.
+Generate a flame graph or call-chain diagram from call traces. Requires building the index with `--call-traces`.
+
+Output formats:
+
+| Format | Use case |
+|--------|----------|
+| `png` | Static image. Loads in any viewer (VS Code, browser, email, docs). Recommended default. |
+| `html` | Interactive SVG wrapped in an HTML page. Click to zoom, hover, search. Open in any browser. |
+| `svg` | Raw SVG (interactive when viewer supports JS). Some browsers/editors block SVG scripts via `file://`. |
+| `folded` | Folded stacks format. Use with [speedscope](https://www.speedscope.app/) or `flamegraph.pl`. |
+| `mermaid` | Sequence diagram showing call chain between files. |
 
 ```bash
-# Interactive SVG flame graph (open the .svg file in any browser)
-trace flamegraph "tests/test_auth.py::test_login" --format svg > flamegraph.svg
-open flamegraph.svg  # opens in default browser
+# PNG — opens anywhere
+trace flamegraph "tests/test_auth.py::test_login" --format png > flamegraph.png
+open flamegraph.png
 
-# Folded stacks format (for speedscope, flamegraph.pl)
-trace flamegraph "tests/test_auth.py::test_login"
+# HTML — interactive, works in any browser
+trace flamegraph "tests/test_auth.py::test_login" --format html > flamegraph.html
+open flamegraph.html
 
-# Mermaid sequence diagram showing call chain between files
+# Folded stacks for speedscope
+trace flamegraph "tests/test_auth.py::test_login" > profile.folded
+
+# Mermaid sequence diagram
 trace flamegraph "tests/test_auth.py::test_login" --format mermaid
 ```
 
-The **SVG format** is fully self-contained and interactive — click bars to zoom, hover for details. No external tools required.
-
-Folded stacks can also be loaded into [speedscope](https://www.speedscope.app/) for a richer interactive view.
+**Why HTML over raw SVG?** Chrome blocks scripts in SVGs loaded via `file://` (security restriction), and VS Code shows SVGs as XML text by default. The HTML format wraps the SVG in a page so scripts run properly and the page renders in any editor preview.
 
 ### trace gallery
 

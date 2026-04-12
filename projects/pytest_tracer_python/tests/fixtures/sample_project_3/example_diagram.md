@@ -103,13 +103,22 @@ trace diagram "tests/test_order_flow.py::test_add_item_to_order" --index .trace-
 - **Flame graphs (folded)**: Load the folded stacks file in [speedscope](https://www.speedscope.app/) for a richer view
 - **Gallery**: Run `trace gallery` to generate a self-contained HTML page showing flame graphs for all scenarios in a grid layout. Open `.trace-gallery/index.html` in a browser.
 
-## Generating an SVG flame graph
+## Generating a flame graph
 
 ```bash
+# PNG - static, loads in any viewer
 trace flamegraph "tests/test_order_flow.py::test_add_item_to_order" \
-  --format svg --index .trace-index > flamegraph.svg
-open flamegraph.svg
+  --format png --index .trace-index > flamegraph.png
+open flamegraph.png
+
+# HTML - interactive (click to zoom, hover, search)
+trace flamegraph "tests/test_order_flow.py::test_add_item_to_order" \
+  --format html --index .trace-index > flamegraph.html
+open flamegraph.html
 ```
+
+The repo includes a pre-generated `example_flamegraph.png` and `example_flamegraph.html`
+alongside this file — no need to regenerate to see an example.
 
 ## Generating the full gallery
 
