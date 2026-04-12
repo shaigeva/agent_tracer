@@ -149,8 +149,30 @@ pub fn to_mermaid_sequence(events: &[CallEvent], scenario_name: &str) -> String 
 
 /// Render a flame graph SVG from call events using inferno.
 ///
-/// Returns an SVG string, or an error if rendering fails.
+/// Returns an SVG string. With `fixed_width=None` the SVG is "fluid" (scales
+/// to container; needs interactive JS for label layout). With a fixed width,
+/// labels are computed statically so text renders correctly in non-JS viewers
+/// and when rasterized to PNG.
 pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, String> {
+    render_svg(events, title, None)
+}
+
+/// Render a flame graph with a fixed pixel width (useful for static viewers).
+pub fn to_svg_flamegraph_fixed(
+    events: &[CallEvent],
+    title: &str,
+    width: usize,
+) -> Result<String, String> {
+    render_svg(events, title, Some(width))
+}
+
+/// Render a flame graph with a fixed pixel width. Used for PNG rasterization
+/// where we want deterministic label layout since JS can't run.
+fn render_svg(
+    events: &[CallEvent],
+    title: &str,
+    fixed_width: Option<usize>,
+) -> Result<String, String> {
     let folded = to_folded_stacks(events);
     if folded.is_empty() {
         return Err("No events to render".to_string());
@@ -160,7 +182,8 @@ pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, St
     options.title = title.to_string();
     options.subtitle = Some("Call trace from sys.monitoring".to_string());
     options.count_name = "calls".to_string();
-    options.font_size = 11;
+    options.font_size = 12;
+    options.image_width = fixed_width;
 
     let mut svg = Vec::new();
     inferno::flamegraph::from_lines(&mut options, folded.lines(), &mut svg)
@@ -171,11 +194,14 @@ pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, St
 
 /// Render a flame graph PNG from call events.
 ///
-/// Uses inferno to produce the SVG, then resvg to rasterize to PNG.
+/// Uses inferno to produce a fixed-width SVG (so labels layout correctly
+/// without JS), then resvg to rasterize to PNG at 2x scale for crispness.
 /// Returns PNG bytes. Static image (no interactivity) but renders in any viewer.
 pub fn to_png_flamegraph(events: &[CallEvent], title: &str) -> Result<Vec<u8>, String> {
-    let svg = to_svg_flamegraph(events, title)?;
-    svg_to_png(&svg, 2.0)
+    // Use a wide canvas (2400px) so labels fit on narrow bars.
+    // Without JS, inferno can only truncate based on declared width.
+    let svg = render_svg(events, title, Some(2400))?;
+    svg_to_png(&svg, 1.5)
 }
 
 /// Convert SVG string to PNG bytes using resvg. Scale factor doubles resolution.

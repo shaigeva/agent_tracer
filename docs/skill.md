@@ -3,10 +3,24 @@
 Use this skill to query test coverage traces and understand which tests exercise which code.
 Invoke with `/trace` or when the user asks about test coverage, affected tests, or scenario tracing.
 
+## For agents: use text outputs
+
+You cannot read PNGs or interactive SVGs. For extraction and reasoning, use:
+
+- `trace flamegraph <id> --format folded` — call stacks as text
+- `trace flamegraph <id> --format mermaid` — sequence diagram as text
+- `trace context <id>` — JSON coverage data
+- `trace affected <file>` — JSON list of scenarios touching a file
+- `trace list / search` — JSON scenario lists
+
+The `png`, `html`, and `svg` formats are for humans. Only produce them when the user
+explicitly asks to view/share a flame graph.
+
 ## Prerequisites
 
 - A `.trace-index/` directory must exist in the project (built via `trace build`)
 - The `trace` CLI must be on PATH or available at a known path
+- If the index doesn't have call traces (flamegraph commands fail), rebuild with `--call-traces`
 
 ## Available Commands
 
@@ -108,10 +122,23 @@ trace build --coverage .coverage --scenarios scenarios.json \
   --call-traces call_traces.json --output .trace-index
 ```
 
-## Workflow
+## Typical agent workflow
 
-1. Before modifying code, use `trace affected <file>` to find which tests cover that code
-2. Use `trace context <scenario_id>` to understand the full scope of a test
-3. Use `trace diagram <scenario_id>` to visualize file dependencies
-4. After changes, use `trace run <scenario_id>` to verify affected tests still pass
-5. Rebuild the index after adding new tests
+1. **Before editing code**: `trace affected <file>` to find which scenarios cover it
+2. **To understand a scenario**: `trace context <scenario_id>` for coverage, `trace flamegraph <id> --format folded` for call chain
+3. **To map dependencies**: `trace flamegraph <id> --format mermaid` for a textual sequence diagram
+4. **After changes**: `trace run <scenario_id>` to re-execute and verify
+5. **After adding tests**: rebuild the index (see rebuild section above)
+
+## Understanding flame graph folded output
+
+Each line is one call stack:
+
+```
+conftest.order_repo 1
+conftest.order_repo;order_repository.OrderRepository.__init__ 1
+tests_test_order_flow.test_add_item;routes.OrderRoutes.post_order 1
+tests_test_order_flow.test_add_item;routes.OrderRoutes.post_order;middleware.AuthMiddleware.create_order 1
+```
+
+Semicolons separate frames (outermost → innermost). The trailing number is sample count. Frame format is `module.qualname` where `module` is the file stem. This makes the call chain directly readable — each line tells you "this call stack happened during this test."

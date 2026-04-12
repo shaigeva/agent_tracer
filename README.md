@@ -17,11 +17,39 @@ AI coding agents struggle to understand codebases because they lack execution co
 - Making it easy to find tests that exercise particular code
 - Enabling agents to focus on relevant files/functions rather than searching randomly
 
+## For AI Agents
+
+**Agents cannot read PNGs or view interactive SVGs.** Use text-based outputs to extract and understand traces. The recommended workflow:
+
+```bash
+# 1. Find tests that cover the file you're about to change
+trace affected src/auth.py --index .trace-index
+
+# 2. For a specific scenario, read the full call chain (textual)
+trace flamegraph "tests/test_auth.py::test_login" --format folded --index .trace-index
+
+# 3. Or get a mermaid sequence diagram (readable as text, renders if needed)
+trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
+
+# 4. Get coverage context (files + line numbers touched by a test)
+trace context "tests/test_auth.py::test_login" --index .trace-index
+```
+
+All text outputs are JSON or plain text that an agent can parse and reason about:
+- **`folded`** — each line is a call stack (`frame1;frame2;frame3 count`). Good for understanding what got called in what order.
+- **`mermaid`** — sequenceDiagram with `ParticipantA ->> ParticipantB: function_name`. Shows cross-file call flow.
+- **`context`** — JSON with scenario metadata and covered files/lines.
+- **`list` / `search` / `affected`** — JSON scenario lists for discovery.
+
+The **MCP server** (`trace mcp --index .trace-index`) exposes all of these as tools for agents. See [CLAUDE.md snippet](docs/claude_md_snippet.md) for how to wire it into Claude Code.
+
+The `png`, `html`, and `svg` formats are **for humans**. Agents should stick to `folded`, `mermaid`, and the JSON-output commands.
+
 ## Quick Start
 
 ### Prerequisites
 
-- Python 3.11+ with [uv](https://github.com/astral-sh/uv)
+- Python 3.12+ with [uv](https://github.com/astral-sh/uv) (3.12 is required for `sys.monitoring`, used by the call tracer)
 - Rust toolchain (cargo) - for building the trace analyzer once
 
 ### 1. Build the Rust CLI (one-time setup)
@@ -113,6 +141,22 @@ uv run pytest-tracer trace . -o call_traces.json
     --output .trace-index
 ```
 
+### Complete workflow (copy-paste)
+
+Once set up (steps 1-3), this is the everyday loop:
+
+```bash
+# 1. Run tests with coverage + collect metadata + call traces + build index
+uv run pytest tests/ --cov=src --cov-context=test
+uv run pytest-tracer collect . -o scenarios.json
+uv run pytest-tracer trace . -o call_traces.json
+trace build --coverage .coverage --scenarios scenarios.json \
+  --call-traces call_traces.json --output .trace-index
+
+# 2. Query (examples below)
+trace list --index .trace-index
+```
+
 ### 8. Query the Index
 
 ```bash
@@ -138,7 +182,7 @@ trace context "tests/test_auth.py::test_login" --index .trace-index
 trace run "tests/test_auth.py::test_login"
 ```
 
-### 8. Start MCP Server (for AI Agent Integration)
+### 9. Start MCP Server (for AI Agent Integration)
 
 ```bash
 trace mcp --index .trace-index

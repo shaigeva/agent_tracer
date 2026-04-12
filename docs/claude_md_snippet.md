@@ -77,20 +77,40 @@ uv run pytest --cov=src --cov-context=test
 # Collect scenario metadata
 uv run pytest-tracer collect . -o scenarios.json
 
+# Collect call traces (required for flame graphs)
+uv run pytest-tracer trace . -o call_traces.json
+
 # Build trace index
-trace build --coverage .coverage --scenarios scenarios.json --output .trace-index
+trace build --coverage .coverage --scenarios scenarios.json \
+  --call-traces call_traces.json --output .trace-index
 \```
 
-### Generating Diagrams
+### Text outputs for understanding a test
 
-Generate mermaid diagrams showing file dependencies for scenarios:
+You cannot read PNG/SVG. Use these text formats to understand execution:
 
 \```bash
-# Diagram for a specific scenario
+# Call stacks (one line per stack, semicolon-separated frames)
+trace flamegraph "tests/test_auth.py::test_login" --format folded --index .trace-index
+
+# Sequence diagram showing cross-file calls (mermaid text)
+trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
+
+# Files + line numbers covered by a test (JSON)
+trace context "tests/test_auth.py::test_login" --index .trace-index
+\```
+
+### Generating Diagrams (for humans to view)
+
+\```bash
+# Mermaid coverage diagram (files grouped by directory)
 trace diagram "tests/test_auth.py::test_login" --index .trace-index
 
-# Diagram for all scenarios covering a file
-trace diagram --file src/auth.py --index .trace-index
+# PNG flame graph (renders anywhere - email, docs, any viewer)
+trace flamegraph "tests/test_auth.py::test_login" --format png --index .trace-index > flame.png
+
+# Interactive HTML flame graph
+trace flamegraph "tests/test_auth.py::test_login" --format html --index .trace-index > flame.html
 \```
 ```
 
