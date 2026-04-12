@@ -21,6 +21,9 @@ pub struct DiagramOutput {
 pub fn diagram_for_scenario(index: &Index, scenario_id: &str) -> Result<DiagramOutput, IndexError> {
     let context = query::get_scenario_context(index, scenario_id)?;
 
+    let paths: Vec<&str> = context.coverage.iter().map(|c| c.path.as_str()).collect();
+    let prefix = find_common_prefix(&paths);
+
     let mut mermaid = String::new();
     mermaid.push_str("graph TD\n");
 
@@ -33,13 +36,14 @@ pub fn diagram_for_scenario(index: &Index, scenario_id: &str) -> Result<DiagramO
         escape_mermaid(short_name)
     ));
 
-    // Group files by directory
+    // Group files by directory (using relative paths)
     let mut dirs: std::collections::BTreeMap<String, Vec<(String, usize)>> =
         std::collections::BTreeMap::new();
 
     for file_cov in &context.coverage {
-        let dir = extract_dir(&file_cov.path);
-        let filename = extract_filename(&file_cov.path);
+        let rel_path = strip_prefix(&file_cov.path, &prefix);
+        let dir = extract_dir(&rel_path);
+        let filename = extract_filename(&rel_path);
         dirs.entry(dir)
             .or_default()
             .push((filename, file_cov.lines.len()));
@@ -58,7 +62,7 @@ pub fn diagram_for_scenario(index: &Index, scenario_id: &str) -> Result<DiagramO
         for (filename, line_count) in files {
             let file_id = sanitize_id(&format!("{}_{}", dir, filename));
             mermaid.push_str(&format!(
-                "        {}[\"{}\\n({} lines)\"]\n",
+                "        {}[\"{}<br/>({} lines)\"]\n",
                 file_id,
                 escape_mermaid(filename),
                 line_count
@@ -69,8 +73,9 @@ pub fn diagram_for_scenario(index: &Index, scenario_id: &str) -> Result<DiagramO
 
     // Connect scenario to each file
     for file_cov in &context.coverage {
-        let dir = extract_dir(&file_cov.path);
-        let filename = extract_filename(&file_cov.path);
+        let rel_path = strip_prefix(&file_cov.path, &prefix);
+        let dir = extract_dir(&rel_path);
+        let filename = extract_filename(&rel_path);
         let file_id = sanitize_id(&format!("{}_{}", dir, filename));
         mermaid.push_str(&format!("    {} --> {}\n", safe_id, file_id));
     }
@@ -147,16 +152,18 @@ pub fn diagram_for_file(
         }
     }
 
-    // Show other files these scenarios also cover
+    // Show other files these scenarios also cover (with relative paths)
     if !all_files.is_empty() {
+        let other_refs: Vec<&str> = all_files.iter().map(|s| s.as_str()).collect();
+        let other_prefix = find_common_prefix(&other_refs);
         mermaid.push_str("    subgraph also_covered[\"Also covered\"]\n");
         for other_file in &all_files {
-            let other_id = sanitize_id(other_file);
-            let other_name = extract_filename(other_file);
+            let rel = strip_prefix(other_file, &other_prefix);
+            let other_id = sanitize_id(&rel);
             mermaid.push_str(&format!(
                 "        {}[\"{}\"]\n",
                 other_id,
-                escape_mermaid(&other_name)
+                escape_mermaid(&rel)
             ));
         }
         mermaid.push_str("    end\n");
@@ -167,6 +174,39 @@ pub fn diagram_for_file(
         scenario_count,
         file_count: 1 + all_files.len(),
     })
+}
+
+/// Find the longest common directory prefix among a set of paths.
+fn find_common_prefix(paths: &[&str]) -> String {
+    if paths.is_empty() {
+        return String::new();
+    }
+    if paths.len() == 1 {
+        return extract_dir(paths[0]) + "/";
+    }
+
+    let first = paths[0];
+    let mut prefix_end = 0;
+
+    for (i, ch) in first.char_indices() {
+        if paths
+            .iter()
+            .all(|p| p.get(..=i).is_some_and(|s| s == &first[..=i]))
+        {
+            if ch == '/' {
+                prefix_end = i + 1;
+            }
+        } else {
+            break;
+        }
+    }
+
+    first[..prefix_end].to_string()
+}
+
+/// Strip a common prefix from a path, returning the relative portion.
+fn strip_prefix(path: &str, prefix: &str) -> String {
+    path.strip_prefix(prefix).unwrap_or(path).to_string()
 }
 
 /// Sanitize a string for use as a mermaid node ID.

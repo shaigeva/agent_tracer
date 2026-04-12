@@ -39,6 +39,23 @@ trace diagram "tests/test_auth.py::test_login" --index .trace-index
 trace diagram --file src/auth.py --index .trace-index
 ```
 
+The output is JSON with a `mermaid` field. To create a viewable diagram, extract the
+mermaid source and wrap it in a fenced code block in a `.md` file:
+
+```bash
+trace diagram "tests/test_auth.py::test_login" --index .trace-index \
+  | python3 -c "
+import sys, json
+m = json.load(sys.stdin)['mermaid']
+print('# Diagram\n\n\`\`\`mermaid')
+print(m)
+print('\`\`\`')
+" > diagram.md
+```
+
+View on GitHub (renders natively) or in VS Code with the
+"Markdown Preview Mermaid Support" extension (`bierner.markdown-mermaid`).
+
 ### Run a specific scenario
 ```bash
 trace run "tests/test_auth.py::test_login"

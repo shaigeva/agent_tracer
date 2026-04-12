@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "collected_at": "2026-04-12T18:29:00.908020",
+  "scenarios": [
+    {
+      "id": "tests/test_order_flow.py::test_create_order_via_route",
+      "file": "tests/test_order_flow.py",
+      "function": "test_create_order_via_route",
+      "description": "Create order through the full route->model stack",
+      "documentation": "Create order through the full route->model stack\n\nGIVEN an authenticated user\nWHEN creating an order via the route handler\nTHEN order is created through all layers",
+      "behaviors": [
+        "full-stack",
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_add_item_to_order",
+      "file": "tests/test_order_flow.py",
+      "function": "test_add_item_to_order",
+      "description": "Add item through route->middleware->service->repo->model chain",
+      "documentation": "Add item through route->middleware->service->repo->model chain\n\nGIVEN an authenticated user with a draft order\nWHEN adding a product via the route handler\nTHEN product stock is reserved and item appears on order",
+      "behaviors": [
+        "full-stack",
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_complete_order_lifecycle",
+      "file": "tests/test_order_flow.py",
+      "function": "test_complete_order_lifecycle",
+      "description": "Full order lifecycle: create -> add items -> confirm -> ship",
+      "documentation": "Full order lifecycle: create -> add items -> confirm -> ship\n\nGIVEN an authenticated user\nWHEN going through the complete order flow\nTHEN each step transitions through all layers correctly",
+      "behaviors": [
+        "full-stack",
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_cancel_order_releases_stock",
+      "file": "tests/test_order_flow.py",
+      "function": "test_cancel_order_releases_stock",
+      "description": "Cancelling an order releases reserved product stock",
+      "documentation": "Cancelling an order releases reserved product stock\n\nGIVEN an order with items (stock was reserved)\nWHEN cancelling the order via route handler\nTHEN stock is released back through all layers",
+      "behaviors": [
+        "full-stack",
+        "cancellation",
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_unauthenticated_create_order",
+      "file": "tests/test_order_flow.py",
+      "function": "test_unauthenticated_create_order",
+      "description": "Route rejects unauthenticated order creation",
+      "documentation": "Route rejects unauthenticated order creation",
+      "behaviors": [
+        "full-stack",
+        "authentication"
+      ],
+      "outcome": "error"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_add_out_of_stock_item",
+      "file": "tests/test_order_flow.py",
+      "function": "test_add_out_of_stock_item",
+      "description": "Cannot add item when product is out of stock",
+      "documentation": "Cannot add item when product is out of stock\n\nGIVEN a product with zero stock\nWHEN trying to add it to an order\nTHEN error propagates from model through all layers",
+      "behaviors": [
+        "full-stack",
+        "validation",
+        "order-management"
+      ],
+      "outcome": "error"
+    },
+    {
+      "id": "tests/test_order_flow.py::test_confirm_empty_order",
+      "file": "tests/test_order_flow.py",
+      "function": "test_confirm_empty_order",
+      "description": "Cannot confirm order with no items",
+      "documentation": "Cannot confirm order with no items",
+      "behaviors": [
+        "validation",
+        "order-management"
+      ],
+      "outcome": "error"
+    },
+    {
+      "id": "tests/test_service_direct.py::test_create_order_direct",
+      "file": "tests/test_service_direct.py",
+      "function": "test_create_order_direct",
+      "description": "Create order directly through service",
+      "documentation": "Create order directly through service",
+      "behaviors": [
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_service_direct.py::test_add_item_direct",
+      "file": "tests/test_service_direct.py",
+      "function": "test_add_item_direct",
+      "description": "Add item to order through service layer",
+      "documentation": "Add item to order through service layer",
+      "behaviors": [
+        "order-management"
+      ],
+      "outcome": "success"
+    },
+    {
+      "id": "tests/test_service_direct.py::test_add_item_nonexistent_product",
+      "file": "tests/test_service_direct.py",
+      "function": "test_add_item_nonexistent_product",
+      "description": "Adding nonexistent product returns error",
+      "documentation": "Adding nonexistent product returns error",
+      "behaviors": [
+        "order-management"
+      ],
+      "outcome": "error"
+    },
+    {
+      "id": "tests/test_service_direct.py::test_list_customer_orders",
+      "file": "tests/test_service_direct.py",
+      "function": "test_list_customer_orders",
+      "description": "List orders for a specific customer",
+      "documentation": "List orders for a specific customer",
+      "behaviors": [
+        "listing",
+        "order-management"
+      ],
+      "outcome": "success"
+    }
+  ]
+}

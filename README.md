@@ -220,7 +220,29 @@ trace diagram --file src/auth.py
 trace diagram --file src/auth.py:25
 ```
 
-Returns JSON with a `mermaid` field containing the diagram source code. Paste the mermaid content into any mermaid renderer (GitHub markdown, Mermaid Live Editor, etc.).
+Returns JSON with a `mermaid` field containing the diagram source code.
+
+**To extract and save as a viewable diagram:**
+
+```bash
+# Save mermaid source to a markdown file
+trace diagram "tests/test_auth.py::test_login" --index .trace-index \
+  | python3 -c "
+import sys, json
+mermaid = json.load(sys.stdin)['mermaid']
+print('# Diagram\n\n\`\`\`mermaid')
+print(mermaid)
+print('\`\`\`')
+" > diagram.md
+```
+
+**Where to view the rendered diagram:**
+
+- **GitHub** — push the `.md` file; GitHub renders mermaid blocks natively
+- **VS Code** — install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension, then `Cmd+Shift+V` to preview
+- **Mermaid Live Editor** — paste the mermaid source at https://mermaid.live
+
+See `projects/pytest_tracer_python/tests/fixtures/sample_project_3/example_diagram.md` for a complete example.
 
 ### trace mcp
 
