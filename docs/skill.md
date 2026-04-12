@@ -73,11 +73,18 @@ Requires building the index with `--call-traces` (see rebuild section below).
 ### Generate gallery of all scenarios
 ```bash
 trace gallery --output .trace-gallery --index .trace-index
-# Then: open .trace-gallery/index.html
+cd .trace-gallery && python3 -m http.server
+# Then open http://localhost:8000/gallery.html
 ```
 
-Creates a self-contained HTML directory with flame graphs for all scenarios.
-Useful for quickly browsing all traced flows and drilling into specific ones.
+Creates a lazy-loading HTML viewer:
+- `gallery.html` + `flamegraph.js` (reusable standalone renderer)
+- `data/index.json` (scenario metadata, loads eagerly)
+- `data/traces/<id>.json` (per-scenario events, lazy-loaded)
+
+Features: grid view with search, filter by success/error/traced, click-to-drill-in
+flame graph (zoom, hover, text search), call sequence diagram, raw events view.
+Scales to thousands of scenarios since traces are only loaded when viewed.
 
 ### Run a specific scenario
 ```bash

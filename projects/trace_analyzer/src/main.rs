@@ -335,17 +335,13 @@ fn cmd_gallery(output_dir: &Path, index_dir: &Path) -> anyhow::Result<()> {
 
     println!("Generated gallery at {}", output_dir.display());
     println!(
-        "  {} scenarios with flame graphs",
-        result.scenarios_with_traces
+        "  {} scenarios ({} with flame graphs)",
+        result.scenarios_total, result.scenarios_with_traces
     );
-    println!(
-        "  {} scenarios (coverage only)",
-        result.scenarios_without_traces
-    );
-    println!(
-        "Open {}/index.html in a browser to view.",
-        output_dir.display()
-    );
+    println!();
+    println!("To view, serve the directory over HTTP (required for fetch()):");
+    println!("  cd {} && python3 -m http.server", output_dir.display());
+    println!("Then open http://localhost:8000/gallery.html in a browser.");
 
     Ok(())
 }

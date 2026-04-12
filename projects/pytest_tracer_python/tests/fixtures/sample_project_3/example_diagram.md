@@ -115,5 +115,12 @@ open flamegraph.svg
 
 ```bash
 trace gallery --output .trace-gallery --index .trace-index
-open .trace-gallery/index.html
+cd .trace-gallery && python3 -m http.server
+# Open http://localhost:8000/gallery.html
 ```
+
+The gallery is a JS-based viewer that scales to thousands of scenarios:
+- Eagerly loads a small metadata index (~4KB per 10 scenarios)
+- Lazy-loads per-scenario call traces on click
+- Uses the included `flamegraph.js` to render flame graphs client-side
+- Supports search, filtering, zoom, and tooltips

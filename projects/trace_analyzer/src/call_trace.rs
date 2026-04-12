@@ -43,6 +43,10 @@ pub fn parse_call_traces(path: &Path) -> Result<CallTraces, ScenarioError> {
 ///
 /// Each line is: `stack;frames count\n`
 /// where stack is semicolon-separated function names representing the call stack.
+///
+/// Frame format is `module.qualname` where module is the file stem (no path, no .py).
+/// This keeps frames short enough to display on narrow bars while staying unique
+/// (qualname already includes class prefix for methods).
 pub fn to_folded_stacks(events: &[CallEvent]) -> String {
     let mut result = String::new();
     let mut stack: Vec<String> = Vec::new();
@@ -50,9 +54,8 @@ pub fn to_folded_stacks(events: &[CallEvent]) -> String {
     for event in events {
         match event.event.as_str() {
             "call" => {
-                let frame = format!("{}:{}", short_path(&event.file), event.function);
+                let frame = format_frame(&event.file, &event.function);
                 stack.push(frame);
-                // Each call gets a "sample" in the folded format
                 let stack_str = stack.join(";");
                 result.push_str(&stack_str);
                 result.push_str(" 1\n");
@@ -65,6 +68,25 @@ pub fn to_folded_stacks(events: &[CallEvent]) -> String {
     }
 
     result
+}
+
+/// Format a single frame for flame graph display.
+/// Uses `module.qualname` where module is the file stem.
+pub fn format_frame(file: &str, function: &str) -> String {
+    let module = file_stem(file);
+    format!("{}.{}", module, function)
+}
+
+/// Extract the file stem (filename without directory or extension).
+fn file_stem(path: &str) -> String {
+    let filename = match path.rfind('/') {
+        Some(idx) => &path[idx + 1..],
+        None => path,
+    };
+    match filename.rfind('.') {
+        Some(idx) => filename[..idx].to_string(),
+        None => filename.to_string(),
+    }
 }
 
 /// Generate a mermaid sequence diagram from call events.

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Trace Gallery</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --fg: #1d1d1f;
+    --muted: #6e6e73;
+    --card-bg: white;
+    --tag-bg: #e8e8ed;
+    --error-bg: #ffe5e5;
+    --error-fg: #a30000;
+    --success-bg: #d5f5d5;
+    --success-fg: #006400;
+    --accent: #007aff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+  }
+  header {
+    background: white; border-bottom: 1px solid #e0e0e0; padding: 1rem 2rem;
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  header h1 { margin: 0; font-size: 1.3rem; }
+  .stats { color: var(--muted); font-size: 0.9rem; }
+  #search {
+    flex: 1; min-width: 200px; padding: 6px 12px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 0.9rem;
+  }
+  #filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 4px 10px; border: 1px solid #ccc; border-radius: 4px;
+    background: white; cursor: pointer; font-size: 0.85rem;
+  }
+  .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+  main { padding: 2rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1rem; }
+  .card {
+    background: var(--card-bg); border-radius: 10px; padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+  .card h3 { margin: 0 0 0.4rem 0; font-size: 0.95rem; font-family: ui-monospace, Menlo, monospace; }
+  .card .desc { color: #424245; font-size: 0.85rem; margin-bottom: 0.5rem; flex-grow: 1; }
+  .card .meta { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+  .tag {
+    background: var(--tag-bg); padding: 2px 8px; border-radius: 4px;
+    font-size: 0.72rem; color: #424245;
+  }
+  .tag.error { background: var(--error-bg); color: var(--error-fg); }
+  .tag.success { background: var(--success-bg); color: var(--success-fg); }
+  .card .stats-row { font-size: 0.72rem; color: var(--muted); margin-top: auto; padding-top: 0.3rem; border-top: 1px solid #f0f0f0; }
+  .card .preview {
+    height: 40px; background: #fafafa; border-radius: 4px; margin-bottom: 0.5rem;
+    display: flex; align-items: center;
+  }
+  .preview-bar {
+    height: 100%; display: flex; align-items: stretch; width: 100%;
+  }
+  .preview-seg { height: 100%; }
+  .no-trace { color: #a00; font-style: italic; font-size: 0.75rem; }
+
+  /* Modal for flame graph detail view */
+  #modal {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 100; overflow: auto;
+  }
+  #modal.open { display: flex; align-items: flex-start; justify-content: center; padding: 2rem; }
+  .modal-content {
+    background: white; border-radius: 10px; padding: 1.5rem; max-width: 1400px;
+    width: 100%; min-height: 400px; position: relative;
+  }
+  .close-btn {
+    position: absolute; top: 1rem; right: 1rem; background: none; border: none;
+    font-size: 1.5rem; cursor: pointer; color: #999;
+  }
+  .close-btn:hover { color: #333; }
+  .modal-content h2 { margin: 0 0 0.5rem 0; font-family: ui-monospace, Menlo, monospace; font-size: 1.1rem; }
+  .modal-content .modal-desc { color: #424245; margin-bottom: 1rem; }
+  .tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid #e0e0e0; margin-bottom: 1rem; }
+  .tab {
+    padding: 8px 16px; background: none; border: none; cursor: pointer;
+    font-size: 0.9rem; color: var(--muted);
+    border-bottom: 2px solid transparent;
+  }
+  .tab.active { color: var(--fg); border-bottom-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  #flame-container { min-height: 300px; }
+  pre.code {
+    background: #f5f5f7; padding: 1rem; border-radius: 6px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 0.85rem;
+    overflow-x: auto; white-space: pre-wrap;
+  }
+  .empty-state { text-align: center; color: var(--muted); padding: 3rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Trace Gallery</h1>
+  <span class="stats" id="header-stats"></span>
+  <input type="text" id="search" placeholder="Search scenarios (name, description, behavior)...">
+  <div id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="success">Success</button>
+    <button class="filter-btn" data-filter="error">Error</button>
+    <button class="filter-btn" data-filter="traced">With flame graph</button>
+  </div>
+</header>
+<main>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty-state" style="display:none">No scenarios match your filters.</div>
+</main>
+
+<div id="modal">
+  <div class="modal-content">
+    <button class="close-btn" aria-label="Close">&times;</button>
+    <h2 id="modal-title"></h2>
+    <div class="modal-desc" id="modal-desc"></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="flame">Flame graph</button>
+      <button class="tab" data-tab="sequence">Call sequence</button>
+      <button class="tab" data-tab="raw">Raw events</button>
+    </div>
+    <div id="tab-flame" class="tab-content active">
+      <div id="flame-container"></div>
+    </div>
+    <div id="tab-sequence" class="tab-content">
+      <pre class="code" id="sequence-content"></pre>
+      <p style="font-size:0.85rem; color:var(--muted);">Paste this mermaid source at <a href="https://mermaid.live" target="_blank">mermaid.live</a> to render.</p>
+    </div>
+    <div id="tab-raw" class="tab-content">
+      <pre class="code" id="raw-content"></pre>
+    </div>
+  </div>
+</div>
+
+<script src="flamegraph.js"></script>
+<script>
+let scenarios = [];
+let currentFilter = 'all';
+let currentFlamegraph = null;
+
+async function init() {
+  try {
+    const res = await fetch('data/index.json');
+    scenarios = await res.json();
+  } catch (e) {
+    document.getElementById('grid').innerHTML =
+      '<div class="empty-state">Failed to load data/index.json. Open this page via a local server: <code>python3 -m http.server</code></div>';
+    return;
+  }
+
+  updateHeaderStats();
+  render();
+
+  // Search
+  document.getElementById('search').addEventListener('input', render);
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  // Modal close
+  document.querySelector('.close-btn').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target.id === 'modal') closeModal();
+  });
+
+  // Tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ESC to close modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+}
+
+function updateHeaderStats() {
+  const total = scenarios.length;
+  const withTraces = scenarios.filter(s => s.has_trace).length;
+  document.getElementById('header-stats').textContent =
+    total + ' scenarios, ' + withTraces + ' with flame graphs';
+}
+
+function render() {
+  const query = document.getElementById('search').value.toLowerCase().trim();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const filtered = scenarios.filter(s => {
+    if (currentFilter === 'success' && s.outcome !== 'success') return false;
+    if (currentFilter === 'error' && s.outcome !== 'error') return false;
+    if (currentFilter === 'traced' && !s.has_trace) return false;
+
+    if (query) {
+      const searchable = (s.id + ' ' + s.description + ' ' + s.behaviors.join(' ')).toLowerCase();
+      if (!searchable.includes(query)) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    document.getElementById('empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('empty').style.display = 'none';
+
+  for (const s of filtered) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.addEventListener('click', () => openScenario(s));
+
+    const tags = s.behaviors.map(b => '<span class="tag">' + escapeHtml(b) + '</span>').join('');
+    const outcomeClass = s.outcome === 'error' ? 'error' : 'success';
+
+    // Cheap preview: colored strip based on behaviors hash
+    const previewSegs = s.behaviors.length > 0
+      ? s.behaviors.map(b => '<div class="preview-seg" style="background:' + colorHash(b) + '; flex:1"></div>').join('')
+      : '<div class="preview-seg" style="background:#e0e0e0; flex:1"></div>';
+
+    const traceInfo = s.has_trace
+      ? s.event_count + ' events, ' + s.file_count + ' files'
+      : '<span class="no-trace">coverage only (' + s.file_count + ' files)</span>';
+
+    card.innerHTML =
+      '<div class="preview"><div class="preview-bar">' + previewSegs + '</div></div>' +
+      '<h3>' + escapeHtml(s.short_name) + '</h3>' +
+      '<div class="desc">' + escapeHtml(s.description) + '</div>' +
+      '<div class="meta"><span class="tag ' + outcomeClass + '">' + s.outcome + '</span>' + tags + '</div>' +
+      '<div class="stats-row">' + traceInfo + '</div>';
+
+    grid.appendChild(card);
+  }
+}
+
+async function openScenario(s) {
+  document.getElementById('modal-title').textContent = s.id;
+  document.getElementById('modal-desc').textContent = s.description;
+  document.getElementById('modal').classList.add('open');
+
+  // Reset to flame tab
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'flame'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-flame'));
+
+  const flameEl = document.getElementById('flame-container');
+
+  if (!s.has_trace) {
+    flameEl.innerHTML = '<div class="empty-state">No call trace data for this scenario. Build the index with --call-traces to enable flame graphs.</div>';
+    document.getElementById('sequence-content').textContent = '(no call trace data)';
+    document.getElementById('raw-content').textContent = '(no call trace data)';
+    return;
+  }
+
+  flameEl.innerHTML = '<div class="empty-state">Loading...</div>';
+
+  try {
+    const res = await fetch('data/traces/' + s.safe_id + '.json');
+    const events = await res.json();
+
+    // Render flame graph
+    currentFlamegraph = window.flamegraph.render(flameEl, events);
+
+    // Generate sequence diagram
+    document.getElementById('sequence-content').textContent = toMermaidSequence(events, s.short_name);
+
+    // Raw events (first 500 for performance)
+    const preview = events.slice(0, 500);
+    const suffix = events.length > 500 ? '\n... and ' + (events.length - 500) + ' more events' : '';
+    document.getElementById('raw-content').textContent = JSON.stringify(preview, null, 2) + suffix;
+  } catch (e) {
+    flameEl.innerHTML = '<div class="empty-state">Failed to load trace data: ' + escapeHtml(e.message) + '</div>';
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function toMermaidSequence(events, title) {
+  const lines = ['sequenceDiagram', '    participant test as ' + title];
+  const participants = [];
+  const seenParts = new Set();
+  for (const e of events) {
+    if (e.event === 'call') {
+      const mod = fileStem(e.file);
+      if (!seenParts.has(mod)) {
+        seenParts.add(mod);
+        participants.push(mod);
+      }
+    }
+  }
+  for (const p of participants) {
+    lines.push('    participant ' + p.replace(/[^a-zA-Z0-9_]/g, '_') + ' as ' + p);
+  }
+  const depthFile = ['test'];
+  for (const e of events) {
+    if (e.event === 'call') {
+      const targetName = fileStem(e.file);
+      const targetAlias = targetName.replace(/[^a-zA-Z0-9_]/g, '_');
+      const source = e.depth === 0 ? 'test' : (depthFile[e.depth] || 'test');
+      if (source !== targetAlias) {
+        lines.push('    ' + source + ' ->> ' + targetAlias + ': ' + e.function);
+      }
+      depthFile[e.depth + 1] = targetAlias;
+    }
+  }
+  return lines.join('\n');
+}
+
+function fileStem(path) {
+  const slash = path.lastIndexOf('/');
+  const name = slash >= 0 ? path.substring(slash + 1) : path;
+  const dot = name.lastIndexOf('.');
+  return dot >= 0 ? name.substring(0, dot) : name;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function colorHash(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i);
+  const hue = Math.abs(h) % 360;
+  return 'hsl(' + hue + ', 60%, 70%)';
+}
+
+init();
+</script>
+</body>
+</html>

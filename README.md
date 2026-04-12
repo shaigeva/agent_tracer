@@ -235,19 +235,33 @@ Folded stacks can also be loaded into [speedscope](https://www.speedscope.app/) 
 
 ### trace gallery
 
-Generate a self-contained HTML gallery of **all** scenarios with flame graphs, coverage tables, and call sequence diagrams:
+Generate a self-contained HTML viewer for browsing all scenarios. Designed to scale to thousands of scenarios — the index loads eagerly but flame graphs are rendered client-side on demand.
 
 ```bash
 trace gallery --output .trace-gallery --index .trace-index
-open .trace-gallery/index.html
+
+# Serve locally (fetch() requires HTTP, not file://)
+cd .trace-gallery && python3 -m http.server
+# Then open http://localhost:8000/gallery.html
 ```
 
-The gallery contains:
-- **Index page** — grid of all scenarios with flame graph thumbnails, tags, and stats
-- **Per-scenario detail pages** — embedded interactive flame graph, call sequence diagram, coverage table
-- **No external dependencies** — everything is local HTML/SVG, works offline
+Output structure:
+```
+.trace-gallery/
+├── gallery.html              # Viewer (HTML + CSS, loads flamegraph.js)
+├── flamegraph.js             # Standalone JS flame graph renderer (reusable)
+└── data/
+    ├── index.json            # Scenario metadata (small, loads eagerly)
+    └── traces/<id>.json      # Per-scenario call events (lazy-loaded on click)
+```
 
-Great for reviewing all traced scenarios at a glance and drilling into individual ones.
+Features:
+- Grid view with search, filtering by outcome/traced status, color-coded behavior strip
+- Click a scenario → modal with tabs: interactive flame graph, call sequence, raw events
+- Flame graph supports click-to-zoom, right-click to zoom out, hover tooltips, text search
+- Pure vanilla JS, no external deps
+
+**`flamegraph.js` is reusable** — drop it into your own pages and call `flamegraph.render(container, events)` with any call event data matching the pytest-tracer format.
 
 ### trace diagram
 
