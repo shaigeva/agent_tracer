@@ -94,11 +94,16 @@ pub struct FlamegraphRequest {
     pub scenario_id: String,
     /// Output format. For agents, 'summary' (low tokens, unique frames) or
     /// 'folded-compact' (collapsed prefixes) are recommended. Options:
-    /// 'folded' | 'folded-compact' | 'summary' | 'mermaid' | 'svg' | 'html' (png not supported via MCP).
+    /// 'folded' | 'folded-compact' | 'summary' | 'mermaid' | 'svg' | 'html'.
     #[serde(default = "default_format")]
     pub format: String,
-    /// Include pytest fixture (conftest.py) frames. Off by default since
-    /// fixtures dominate trace volume and rarely contain signal.
+    /// Anchor frame pattern. When set, stacks are trimmed to start at the first
+    /// frame matching this pattern. When omitted, the scenario's own test function
+    /// is used automatically (so fixture setup is trimmed off).
+    #[serde(default)]
+    pub from: Option<String>,
+    /// Emit the full trace tree including fixture setup/teardown. Overrides the
+    /// default auto-anchor at the scenario's test function.
     #[serde(default)]
     pub include_fixtures: bool,
     /// Comma-separated glob patterns; keep only stacks containing a matching frame.
@@ -384,7 +389,20 @@ impl TraceServer {
             });
         }
 
+        // Auto-anchor at the scenario's test function unless the user
+        // explicitly asked for fixtures or provided --from.
+        let anchor_function: Option<String> = if let Some(f) = params.0.from.clone() {
+            Some(f)
+        } else if !params.0.include_fixtures {
+            query::get_scenario_context(&index, &params.0.scenario_id)
+                .ok()
+                .map(|ctx| ctx.scenario.function)
+        } else {
+            None
+        };
+
         let opts = call_trace::FilterOptions {
+            anchor_function,
             include_fixtures: params.0.include_fixtures,
             include_patterns: call_trace::parse_patterns(&params.0.include),
             exclude_patterns: call_trace::parse_patterns(&params.0.exclude),

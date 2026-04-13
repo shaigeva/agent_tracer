@@ -109,19 +109,26 @@ enum Commands {
         #[arg(long, default_value = "folded")]
         format: String,
 
-        /// Include pytest fixture (conftest.py) frames. Off by default since fixtures
-        /// dominate trace volume and rarely contain the signal you want.
+        /// Anchor the output at this frame. Stacks are trimmed to start at the first
+        /// frame matching this pattern. When omitted, the scenario's own test function
+        /// is used automatically (so fixture setup is trimmed off).
+        #[arg(long)]
+        from: Option<String>,
+
+        /// Emit the full trace tree including fixture setup/teardown. Overrides the
+        /// default auto-anchor at the scenario's test function.
         #[arg(long)]
         include_fixtures: bool,
 
-        /// Comma-separated patterns; keep only stacks containing a matching frame.
+        /// Keep only stacks containing a matching frame. Accepts repetition
+        /// (`--include a --include b`) and comma-separated (`--include 'a,b'`).
         /// Patterns: `foo*` (prefix), `*foo` (suffix), `foo` (substring).
-        #[arg(long, default_value = "")]
-        include: String,
+        #[arg(long, action = clap::ArgAction::Append)]
+        include: Vec<String>,
 
-        /// Comma-separated patterns; drop stacks containing a matching frame.
-        #[arg(long, default_value = "")]
-        exclude: String,
+        /// Drop stacks containing a matching frame. Same syntax as --include.
+        #[arg(long, action = clap::ArgAction::Append)]
+        exclude: Vec<String>,
 
         /// Cap stack depth at N frames.
         #[arg(long)]
@@ -192,6 +199,7 @@ fn main() {
         Commands::Flamegraph {
             scenario_id,
             format,
+            from,
             include_fixtures,
             include,
             exclude,
@@ -200,6 +208,7 @@ fn main() {
         } => cmd_flamegraph(
             &scenario_id,
             &format,
+            from.as_deref(),
             include_fixtures,
             &include,
             &exclude,
@@ -336,13 +345,25 @@ fn cmd_run(scenario_id: &str) -> anyhow::Result<()> {
     Ok(())
 }
 
+/// Expand each element of the incoming list by comma-splitting it, so the user
+/// can pass either repeated flags (`--include a --include b`) or comma-separated
+/// (`--include 'a,b'`), or both.
+fn flatten_csv(items: &[String]) -> Vec<String> {
+    let mut out = Vec::new();
+    for item in items {
+        out.extend(trace_analyzer::call_trace::parse_patterns(item));
+    }
+    out
+}
+
 #[allow(clippy::too_many_arguments)]
 fn cmd_flamegraph(
     scenario_id: &str,
     format: &str,
+    from: Option<&str>,
     include_fixtures: bool,
-    include: &str,
-    exclude: &str,
+    include: &[String],
+    exclude: &[String],
     max_depth: Option<u32>,
     index_dir: &Path,
 ) -> anyhow::Result<()> {
@@ -360,31 +381,64 @@ fn cmd_flamegraph(
         );
     }
 
+    // Determine the anchor. Explicit --from wins; otherwise use the scenario's
+    // own test function from the index (auto-trims fixture setup).
+    let anchor_function: Option<String> = if let Some(f) = from {
+        Some(f.to_string())
+    } else if !include_fixtures {
+        // Look up the scenario to get its function name
+        match query::get_scenario_context(&index, scenario_id) {
+            Ok(ctx) => Some(ctx.scenario.function),
+            Err(_) => None,
+        }
+    } else {
+        None
+    };
+
     let opts = call_trace::FilterOptions {
+        anchor_function: anchor_function.clone(),
         include_fixtures,
-        include_patterns: call_trace::parse_patterns(include),
-        exclude_patterns: call_trace::parse_patterns(exclude),
+        include_patterns: flatten_csv(include),
+        exclude_patterns: flatten_csv(exclude),
         max_depth,
     };
 
     let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
 
+    let mut empty = false;
     match format {
         "folded" => {
             let folded = call_trace::to_folded_stacks_filtered(&events, &opts);
-            print!("{}", folded);
+            if folded.trim().is_empty() {
+                empty = true;
+            } else {
+                print!("{}", folded);
+            }
         }
         "folded-compact" => {
             let compact = call_trace::to_folded_compact(&events, &opts);
-            print!("{}", compact);
+            if compact.trim().is_empty() {
+                empty = true;
+            } else {
+                print!("{}", compact);
+            }
         }
         "summary" => {
             let summary = call_trace::to_summary(&events, &opts);
-            println!("{}", serde_json::to_string_pretty(&summary)?);
+            if summary.is_empty() {
+                empty = true;
+            } else {
+                println!("{}", serde_json::to_string_pretty(&summary)?);
+            }
         }
         "mermaid" => {
             let mermaid = call_trace::to_mermaid_sequence_filtered(&events, short_name, &opts);
-            println!("{}", mermaid);
+            // A near-empty mermaid has only the header participant line.
+            if mermaid.lines().filter(|l| l.contains("->>")).count() == 0 {
+                empty = true;
+            } else {
+                println!("{}", mermaid);
+            }
         }
         "svg" => {
             let svg = call_trace::to_svg_flamegraph_filtered(&events, short_name, &opts)
@@ -408,6 +462,20 @@ fn cmd_flamegraph(
                 format
             );
         }
+    }
+
+    if empty {
+        let hint = if let Some(ref anchor) = anchor_function {
+            format!(
+                "note: no stacks reached the anchor frame '{}'. \
+                 Try --from <pattern> to pick a different anchor, \
+                 or --include-fixtures to see the full tree.",
+                anchor
+            )
+        } else {
+            "note: all frames were filtered out. Relax --include/--exclude patterns.".to_string()
+        };
+        eprintln!("{}", hint);
     }
 
     Ok(())

@@ -47,14 +47,16 @@ trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trac
 | `folded` | High | Full call tree — every nested call is a separate line |
 | `svg` / `html` / `png` | N/A | For humans only |
 
-### Filters (default-on fixture filtering)
+### Filters (auto-anchored at the test function)
 
-Pytest fixtures (setup/teardown) usually dominate trace volume and rarely contain signal. By default, stacks rooted in `conftest.py` are dropped. Override with `--include-fixtures` if you need the full picture.
+By default, flame graph output is **anchored at the scenario's own test function** — everything above it (pytest fixture graph setup) is trimmed off. This is what agents almost always want: the actual test body and below.
 
-Additional filters:
-- `--include <glob1,glob2>` — keep only stacks containing a matching frame (substring or `foo*` / `*foo`)
-- `--exclude <glob1,glob2>` — drop stacks containing a matching frame
+- `--include-fixtures` — show the full tree, including fixture setup/teardown
+- `--from <pattern>` — anchor at any frame pattern (e.g. `--from OrderService.create_order`)
+- `--include <glob>` / `--exclude <glob>` — filter stacks by frame pattern. Accepts repetition (`--exclude a --exclude b`) or comma-separated (`--exclude 'a,b'`).
 - `--max-depth N` — truncate call stacks beyond N frames
+
+If filtering eliminates all stacks, a hint is printed to stderr suggesting flags to try.
 
 ### `trace affected` enhancements for agents
 

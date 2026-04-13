@@ -17,16 +17,21 @@ You cannot read PNGs or interactive SVGs. For extraction and reasoning, use:
 The `png`, `html`, and `svg` formats are for humans. Only produce them when the user
 explicitly asks to view/share a flame graph.
 
-### Default: fixtures are filtered out
+### Default: auto-anchor at the scenario's test function
 
-Stacks rooted in pytest `conftest.py` fixtures are dropped by default (they're ~95% noise in
-most traces). Use `--include-fixtures` to see them.
+Output is trimmed to start at the scenario's own test function; everything above
+it (pytest fixture graph, framework setup) is dropped. Override with:
+
+- `--include-fixtures` — show the full tree including fixture setup/teardown
+- `--from <pattern>` — anchor at a different frame (e.g. `--from OrderService.create_order`)
 
 ### Scoping and pruning
 
-- `--include 'auth_api,password'` — keep only stacks containing a matching frame
-- `--exclude 'conftest,bootstrap'` — drop stacks containing a matching frame
+- `--include 'auth_api,password'` or `--include auth_api --include password` — keep only stacks containing a matching frame
+- `--exclude 'conftest,bootstrap'` or `--exclude conftest --exclude bootstrap` — drop stacks containing a matching frame
 - `--max-depth 3` — truncate deeply-nested stacks
+
+If filtering produces empty output, a stderr hint suggests what to try.
 
 ## Prerequisites
 

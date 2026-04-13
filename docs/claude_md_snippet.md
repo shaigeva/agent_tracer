@@ -109,9 +109,11 @@ trace affected src/auth.py --with-snippets --functions-only --index .trace-index
 trace context "tests/test_auth.py::test_login" --index .trace-index
 \```
 
-By default, pytest fixture (conftest.py) frames are dropped from flamegraph output
-(they're mostly noise). Use `--include-fixtures` to see them. Further scoping:
-`--include 'auth_api,password'`, `--exclude 'bootstrap'`, `--max-depth 5`.
+By default, flamegraph output is anchored at the scenario's own test function —
+everything above (pytest fixture setup) is trimmed. Use `--include-fixtures` to
+see the full tree, `--from <pattern>` to anchor at a different frame. Further
+scoping: `--include 'auth_api,password'`, `--exclude 'bootstrap'`, `--max-depth 5`.
+`--include`/`--exclude` accept repeated flags or comma-separated values.
 
 ### Generating Diagrams (for humans to view)
 

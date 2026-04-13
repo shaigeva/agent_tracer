@@ -42,8 +42,14 @@ pub fn parse_call_traces(path: &Path) -> Result<CallTraces, ScenarioError> {
 /// Filter options applied when rendering flame graphs and derived formats.
 #[derive(Debug, Clone, Default)]
 pub struct FilterOptions {
-    /// If false (default), drop stacks rooted at a fixture frame (file=conftest.py).
-    /// This cuts pytest fixture setup/teardown noise, which usually dominates the trace.
+    /// Anchor frame. When set, stacks are trimmed to start at the first frame
+    /// matching this pattern; stacks that never reach the anchor are dropped.
+    /// This is how agents "zoom in" on the test body past fixture setup.
+    ///
+    /// Matching: frame ends with `.{pattern}` OR frame == pattern OR frame contains pattern.
+    pub anchor_function: Option<String>,
+    /// If true, ignore `anchor_function` (including any auto-anchor the caller set)
+    /// and emit the full stack tree. Useful for debugging fixture setup itself.
     pub include_fixtures: bool,
     /// If non-empty, keep only stacks containing a frame matching one of these patterns.
     /// Patterns support simple globs: `foo*` (prefix), `*foo` (suffix), `foo` (substring).
@@ -52,6 +58,31 @@ pub struct FilterOptions {
     pub exclude_patterns: Vec<String>,
     /// Cap stacks at this depth. Frames deeper than this are dropped.
     pub max_depth: Option<u32>,
+}
+
+impl FilterOptions {
+    /// Should we apply the anchor filter? Yes if anchor is set AND include_fixtures is not.
+    fn effective_anchor(&self) -> Option<&str> {
+        if self.include_fixtures {
+            None
+        } else {
+            self.anchor_function.as_deref()
+        }
+    }
+}
+
+/// Check if a frame matches the anchor pattern. Matches if frame ends with
+/// `.{anchor}`, frame is exactly `anchor`, or frame contains `anchor` as a substring.
+fn matches_anchor(frame: &str, anchor: &str) -> bool {
+    if frame == anchor {
+        return true;
+    }
+    let dotted = format!(".{}", anchor);
+    if frame.ends_with(&dotted) {
+        return true;
+    }
+    // Fallback to substring for patterns the user provided as globs (e.g. from --from)
+    matches_pattern(frame, anchor)
 }
 
 /// Parse a comma-separated list of patterns.
@@ -130,38 +161,41 @@ pub fn to_folded_stacks_filtered(events: &[CallEvent], opts: &FilterOptions) -> 
 }
 
 /// Build the raw list of stack lines (each: "frame1;frame2;frame3 1") with filters applied.
+///
+/// When `anchor_function` is set, each emitted line is trimmed to start at the
+/// first frame matching the anchor; stacks that never reach the anchor are dropped.
+/// This replaces the old filename-based "drop conftest roots" heuristic, which
+/// broke on any project where the whole call graph lives under a pytest fixture.
 fn build_stack_lines(events: &[CallEvent], opts: &FilterOptions) -> Vec<String> {
     let mut stack: Vec<String> = Vec::new();
     let mut pushed: Vec<bool> = Vec::new();
-    let mut skip_until_depth: Option<u32> = None;
     let mut lines: Vec<String> = Vec::new();
+    let anchor = opts.effective_anchor();
 
     for event in events {
-        // Currently skipping a fixture subtree?
-        if let Some(d) = skip_until_depth {
-            if event.event == "return" && event.depth == d {
-                skip_until_depth = None;
-            }
-            continue;
-        }
-
         match event.event.as_str() {
             "call" => {
-                // Drop fixture-rooted stacks (unless explicitly included)
-                if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
-                    skip_until_depth = Some(event.depth);
-                    continue;
-                }
-
                 // Depth cap: don't push beyond max depth
                 let push_it = opts.max_depth.is_none_or(|m| event.depth <= m);
 
                 if push_it {
                     let frame = format_frame(&event.file, &event.function);
                     stack.push(frame);
-                    // Apply per-stack include/exclude filters
-                    if stack_passes_filters(&stack, opts) {
-                        lines.push(format!("{} 1", stack.join(";")));
+
+                    // Compute the stack to emit: trim to anchor if set
+                    let emit_stack: Option<&[String]> = if let Some(anchor_pat) = anchor {
+                        stack
+                            .iter()
+                            .position(|f| matches_anchor(f, anchor_pat))
+                            .map(|i| &stack[i..])
+                    } else {
+                        Some(&stack[..])
+                    };
+
+                    if let Some(frames) = emit_stack {
+                        if stack_passes_filters(frames, opts) {
+                            lines.push(format!("{} 1", frames.join(";")));
+                        }
                     }
                 }
                 pushed.push(push_it);
@@ -236,62 +270,85 @@ pub struct SummaryFrame {
 pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFrame> {
     let mut seen: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
     let mut result: Vec<SummaryFrame> = Vec::new();
-    let mut skip_until_depth: Option<u32> = None;
+    let anchor = opts.effective_anchor();
+
+    // Track whether we've seen the anchor in the current subtree and the depth
+    // of the anchor itself, so we can emit a depth relative to the anchor.
+    let mut anchor_depth: Option<u32> = None;
+    let mut call_stack_depths: Vec<u32> = Vec::new();
 
     for event in events {
-        if event.event != "call" {
-            if let Some(d) = skip_until_depth {
-                if event.event == "return" && event.depth == d {
-                    skip_until_depth = None;
+        match event.event.as_str() {
+            "call" => {
+                call_stack_depths.push(event.depth);
+
+                if let Some(max) = opts.max_depth {
+                    if event.depth > max {
+                        continue;
+                    }
+                }
+
+                let frame = format_frame(&event.file, &event.function);
+
+                // Check if this frame establishes the anchor
+                if anchor_depth.is_none() {
+                    if let Some(a) = anchor {
+                        if matches_anchor(&frame, a) {
+                            anchor_depth = Some(event.depth);
+                        }
+                    }
+                }
+
+                // If an anchor is required but not yet reached, skip emission
+                if anchor.is_some() && anchor_depth.is_none() {
+                    continue;
+                }
+
+                // Apply include/exclude filters on the single frame
+                if !opts.include_patterns.is_empty()
+                    && !opts
+                        .include_patterns
+                        .iter()
+                        .any(|p| matches_pattern(&frame, p))
+                {
+                    continue;
+                }
+                if opts
+                    .exclude_patterns
+                    .iter()
+                    .any(|p| matches_pattern(&frame, p))
+                {
+                    continue;
+                }
+
+                // Compute depth relative to anchor (0-based) when anchored
+                let emit_depth = match anchor_depth {
+                    Some(ad) => event.depth.saturating_sub(ad),
+                    None => event.depth,
+                };
+
+                if let Some(&idx) = seen.get(&frame) {
+                    result[idx].calls += 1;
+                } else {
+                    seen.insert(frame.clone(), result.len());
+                    result.push(SummaryFrame {
+                        frame,
+                        depth: emit_depth,
+                        calls: 1,
+                        file: event.file.clone(),
+                    });
                 }
             }
-            continue;
-        }
-
-        if skip_until_depth.is_some() {
-            continue;
-        }
-
-        if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
-            skip_until_depth = Some(event.depth);
-            continue;
-        }
-
-        if let Some(max) = opts.max_depth {
-            if event.depth > max {
-                continue;
+            "return" => {
+                // If we're exiting the anchor frame, reset so re-entries work.
+                if let Some(ad) = anchor_depth {
+                    if event.depth < ad {
+                        anchor_depth = None;
+                    }
+                }
+                call_stack_depths.pop();
             }
-        }
-
-        let frame = format_frame(&event.file, &event.function);
-
-        // Apply include/exclude filters on the single frame
-        if !opts.include_patterns.is_empty()
-            && !opts
-                .include_patterns
-                .iter()
-                .any(|p| matches_pattern(&frame, p))
-        {
-            continue;
-        }
-        if opts
-            .exclude_patterns
-            .iter()
-            .any(|p| matches_pattern(&frame, p))
-        {
-            continue;
-        }
-
-        if let Some(&idx) = seen.get(&frame) {
-            result[idx].calls += 1;
-        } else {
-            seen.insert(frame.clone(), result.len());
-            result.push(SummaryFrame {
-                frame,
-                depth: event.depth,
-                calls: 1,
-                file: event.file.clone(),
-            });
+            _ => {}
         }
     }
 
@@ -333,35 +390,42 @@ pub fn to_mermaid_sequence_filtered(
     to_mermaid_sequence_impl(&filtered, scenario_name)
 }
 
-/// Produce a filtered event list (fixture skip + depth cap). Pattern filters
-/// are per-stack so they're not applied here.
+/// Produce a filtered event list: trim everything before the anchor frame,
+/// apply depth cap. Pattern filters are applied per-stack, not here.
 fn filter_events(events: &[CallEvent], opts: &FilterOptions) -> Vec<CallEvent> {
     let mut result = Vec::with_capacity(events.len());
-    let mut skip_until_depth: Option<u32> = None;
+    let anchor = opts.effective_anchor();
+    let mut anchor_depth: Option<u32> = None;
 
     for event in events {
-        if let Some(d) = skip_until_depth {
-            if event.event == "return" && event.depth == d {
-                skip_until_depth = None;
+        // When an anchor is required, skip everything until we see a call matching it.
+        if let Some(a) = anchor {
+            if anchor_depth.is_none() {
+                if event.event == "call" {
+                    let frame = format_frame(&event.file, &event.function);
+                    if matches_anchor(&frame, a) {
+                        anchor_depth = Some(event.depth);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            } else if event.event == "return" {
+                // If we return above the anchor depth, we've exited the anchor's subtree.
+                if let Some(ad) = anchor_depth {
+                    if event.depth < ad {
+                        anchor_depth = None;
+                        continue;
+                    }
+                }
             }
-            continue;
         }
 
-        if event.event == "call" {
-            if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
-                skip_until_depth = Some(event.depth);
+        // Apply depth cap
+        if let Some(max) = opts.max_depth {
+            if event.depth > max {
                 continue;
-            }
-            if let Some(max) = opts.max_depth {
-                if event.depth > max {
-                    continue;
-                }
-            }
-        } else if event.event == "return" {
-            if let Some(max) = opts.max_depth {
-                if event.depth > max {
-                    continue;
-                }
             }
         }
         result.push(event.clone());
