@@ -87,18 +87,31 @@ trace build --coverage .coverage --scenarios scenarios.json \
 
 ### Text outputs for understanding a test
 
-You cannot read PNG/SVG. Use these text formats to understand execution:
+You cannot read PNG/SVG. Use these text formats (ranked by token cost):
 
 \```bash
-# Call stacks (one line per stack, semicolon-separated frames)
+# Compact JSON list of unique frames - recommended first
+trace flamegraph "tests/test_auth.py::test_login" --format summary --index .trace-index
+
+# Call tree with prefix compaction (...(N) collapses shared prefixes)
+trace flamegraph "tests/test_auth.py::test_login" --format folded-compact --index .trace-index
+
+# Full folded stacks (one line per nested call)
 trace flamegraph "tests/test_auth.py::test_login" --format folded --index .trace-index
 
 # Sequence diagram showing cross-file calls (mermaid text)
 trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
 
+# Scenarios covering a file, with source snippets AND function names
+trace affected src/auth.py --with-snippets --functions-only --index .trace-index
+
 # Files + line numbers covered by a test (JSON)
 trace context "tests/test_auth.py::test_login" --index .trace-index
 \```
+
+By default, pytest fixture (conftest.py) frames are dropped from flamegraph output
+(they're mostly noise). Use `--include-fixtures` to see them. Further scoping:
+`--include 'auth_api,password'`, `--exclude 'bootstrap'`, `--max-depth 5`.
 
 ### Generating Diagrams (for humans to view)
 

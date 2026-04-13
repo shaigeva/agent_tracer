@@ -81,14 +81,14 @@ cargo run -- mcp
 
 | Command | Description |
 |---------|-------------|
-| `build` | Build index from .coverage and .scenarios.json |
+| `build` | Build index from .coverage, scenarios.json, and optional call_traces.json |
 | `list` | List scenarios with optional filters |
 | `search` | Search scenario descriptions |
 | `context` | Get full coverage context for a scenario |
-| `affected` | Find scenarios covering a file/line |
+| `affected` | Find scenarios covering a file/line (`--with-snippets`, `--functions-only`) |
 | `run` | Run scenario with coverage collection |
-| `diagram` | Generate mermaid diagram for a scenario or file |
-| `flamegraph` | Generate flame graph (folded/svg) or sequence diagram from call traces |
+| `diagram` | Generate mermaid coverage diagram for a scenario or file |
+| `flamegraph` | Generate flame graph / call chain. Formats: folded, folded-compact, summary, mermaid, svg, html, png. Flags: `--include-fixtures`, `--include <glob>`, `--exclude <glob>`, `--max-depth N` |
 | `gallery` | Generate self-contained HTML gallery of all scenarios |
 | `mcp` | Start MCP server mode |
 
@@ -106,12 +106,12 @@ The MCP server (`trace mcp`) exposes these tools:
 | `scenario_list_errors` | List only error scenarios |
 | `scenario_search` | Search scenarios by description |
 | `scenario_context` | Get coverage context for a scenario |
-| `coverage_affected_file` | Find scenarios covering a file |
-| `coverage_affected_line` | Find scenarios covering a specific line |
+| `coverage_affected_file` | Find scenarios covering a file. Params: `with_snippets`, `functions_only` |
+| `coverage_affected_line` | Find scenarios covering a line. Params: `with_snippets`, `functions_only` |
 | `scenario_run` | Run a scenario with coverage collection |
-| `diagram_scenario` | Generate mermaid diagram for a scenario |
-| `diagram_file` | Generate mermaid diagram for a file |
-| `flamegraph` | Generate flame graph or sequence diagram from call traces |
+| `diagram_scenario` | Generate mermaid coverage diagram for a scenario |
+| `diagram_file` | Generate mermaid coverage diagram for a file |
+| `flamegraph` | Generate flame graph / call chain. Params: `format` (folded/folded-compact/summary/mermaid/svg/html), `include_fixtures`, `include`, `exclude`, `max_depth` |
 
 ## Testing Guidelines
 

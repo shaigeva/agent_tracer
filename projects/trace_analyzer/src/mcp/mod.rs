@@ -42,6 +42,13 @@ pub struct ScenarioContextRequest {
 pub struct CoverageAffectedFileRequest {
     /// Source file path (e.g., 'src/auth.py')
     pub file: String,
+    /// Include source code snippets for the matching lines. Saves a follow-up file read.
+    #[serde(default)]
+    pub with_snippets: bool,
+    /// Return function names (from call traces) covering the matching lines.
+    /// Requires the index to have been built with --call-traces.
+    #[serde(default)]
+    pub functions_only: bool,
 }
 
 /// Request for coverage_affected_line tool.
@@ -51,6 +58,12 @@ pub struct CoverageAffectedLineRequest {
     pub file: String,
     /// Line number
     pub line: u32,
+    /// Include source code snippet for the line.
+    #[serde(default)]
+    pub with_snippets: bool,
+    /// Return function names (from call traces) covering the line.
+    #[serde(default)]
+    pub functions_only: bool,
 }
 
 /// Request for scenario_run tool.
@@ -79,9 +92,25 @@ pub struct DiagramFileRequest {
 pub struct FlamegraphRequest {
     /// Full scenario ID (e.g., 'tests/scenarios/test_auth.py::test_login')
     pub scenario_id: String,
-    /// Output format: "folded" for folded stacks (default), "mermaid" for sequence diagram
+    /// Output format. For agents, 'summary' (low tokens, unique frames) or
+    /// 'folded-compact' (collapsed prefixes) are recommended. Options:
+    /// 'folded' | 'folded-compact' | 'summary' | 'mermaid' | 'svg' | 'html' (png not supported via MCP).
     #[serde(default = "default_format")]
     pub format: String,
+    /// Include pytest fixture (conftest.py) frames. Off by default since
+    /// fixtures dominate trace volume and rarely contain signal.
+    #[serde(default)]
+    pub include_fixtures: bool,
+    /// Comma-separated glob patterns; keep only stacks containing a matching frame.
+    /// Patterns: 'foo*' (prefix), '*foo' (suffix), 'foo' (substring).
+    #[serde(default)]
+    pub include: String,
+    /// Comma-separated glob patterns; drop stacks containing a matching frame.
+    #[serde(default)]
+    pub exclude: String,
+    /// Cap stack depth at N frames.
+    #[serde(default)]
+    pub max_depth: Option<u32>,
 }
 
 fn default_format() -> String {
@@ -204,7 +233,7 @@ impl TraceServer {
     }
 
     #[tool(
-        description = "Find scenarios that cover a specific file. Use this to understand which tests exercise a particular piece of code."
+        description = "Find scenarios that cover a specific file. Set with_snippets:true to include source code for matching lines (saves a follow-up file read). Set functions_only:true to add function names from call traces."
     )]
     async fn coverage_affected_file(
         &self,
@@ -219,7 +248,20 @@ impl TraceServer {
                 data: None,
             })?;
 
-        let json = serde_json::to_string_pretty(&affected).map_err(|e| McpError {
+        let enriched = query::enrich_affected(
+            &index,
+            affected,
+            &params.0.file,
+            params.0.with_snippets,
+            params.0.functions_only,
+        )
+        .map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("Enrichment failed: {}", e)),
+            data: None,
+        })?;
+
+        let json = serde_json::to_string_pretty(&enriched).map_err(|e| McpError {
             code: ErrorCode::INTERNAL_ERROR,
             message: Cow::from(format!("JSON error: {}", e)),
             data: None,
@@ -229,7 +271,7 @@ impl TraceServer {
     }
 
     #[tool(
-        description = "Find scenarios that cover a specific line in a file. Use this to understand which tests exercise a particular piece of code before making changes."
+        description = "Find scenarios that cover a specific line in a file. Set with_snippets:true to include source code (saves a file read). Set functions_only:true to add function names from call traces."
     )]
     async fn coverage_affected_line(
         &self,
@@ -244,7 +286,20 @@ impl TraceServer {
                 data: None,
             })?;
 
-        let json = serde_json::to_string_pretty(&affected).map_err(|e| McpError {
+        let enriched = query::enrich_affected(
+            &index,
+            affected,
+            &params.0.file,
+            params.0.with_snippets,
+            params.0.functions_only,
+        )
+        .map_err(|e| McpError {
+            code: ErrorCode::INTERNAL_ERROR,
+            message: Cow::from(format!("Enrichment failed: {}", e)),
+            data: None,
+        })?;
+
+        let json = serde_json::to_string_pretty(&enriched).map_err(|e| McpError {
             code: ErrorCode::INTERNAL_ERROR,
             message: Cow::from(format!("JSON error: {}", e)),
             data: None,
@@ -304,7 +359,7 @@ impl TraceServer {
     }
 
     #[tool(
-        description = "Generate a flame graph or call-chain sequence diagram for a scenario. Requires call trace data (build with --call-traces). Format: 'folded' for folded stacks (use with speedscope or flamegraph tools), 'mermaid' for a sequence diagram showing the call chain between files."
+        description = "Generate a flame graph or call chain for a scenario. Requires call trace data (build with --call-traces). Formats: 'summary' (JSON list of unique frames - recommended for agents), 'folded-compact' (collapsed stacks), 'folded' (full stacks), 'mermaid' (sequence diagram), 'svg' | 'html' (for humans). By default, fixture (conftest.py) frames are dropped; set include_fixtures:true to see them. Use include / exclude (comma-separated globs) and max_depth to scope the output."
     )]
     async fn flamegraph(
         &self,
@@ -329,17 +384,32 @@ impl TraceServer {
             });
         }
 
+        let opts = call_trace::FilterOptions {
+            include_fixtures: params.0.include_fixtures,
+            include_patterns: call_trace::parse_patterns(&params.0.include),
+            exclude_patterns: call_trace::parse_patterns(&params.0.exclude),
+            max_depth: params.0.max_depth,
+        };
+
+        let short_name = params
+            .0
+            .scenario_id
+            .split("::")
+            .last()
+            .unwrap_or(&params.0.scenario_id);
+
         let output = match params.0.format.as_str() {
-            "mermaid" => {
-                let short_name = params
-                    .0
-                    .scenario_id
-                    .split("::")
-                    .last()
-                    .unwrap_or(&params.0.scenario_id);
-                call_trace::to_mermaid_sequence(&events, short_name)
+            "summary" => {
+                let summary = call_trace::to_summary(&events, &opts);
+                serde_json::to_string_pretty(&summary).unwrap_or_default()
             }
-            _ => call_trace::to_folded_stacks(&events),
+            "folded-compact" => call_trace::to_folded_compact(&events, &opts),
+            "mermaid" => call_trace::to_mermaid_sequence_filtered(&events, short_name, &opts),
+            "svg" => call_trace::to_svg_flamegraph_filtered(&events, short_name, &opts)
+                .unwrap_or_else(|e| format!("Error: {}", e)),
+            "html" => call_trace::to_html_flamegraph_filtered(&events, short_name, &opts)
+                .unwrap_or_else(|e| format!("Error: {}", e)),
+            _ => call_trace::to_folded_stacks_filtered(&events, &opts),
         };
 
         Ok(CallToolResult::success(vec![Content::text(output)]))
@@ -543,6 +613,8 @@ mod tests {
         let server = TraceServer::new(index_dir);
         let params = Parameters(CoverageAffectedFileRequest {
             file: "src/auth.py".to_string(),
+            with_snippets: false,
+            functions_only: false,
         });
         let result = server.coverage_affected_file(params).await;
 
@@ -562,6 +634,8 @@ mod tests {
         let params = Parameters(CoverageAffectedLineRequest {
             file: "src/auth.py".to_string(),
             line: 25,
+            with_snippets: false,
+            functions_only: false,
         });
         let result = server.coverage_affected_line(params).await;
 
