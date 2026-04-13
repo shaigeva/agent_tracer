@@ -53,8 +53,9 @@ By default, flame graph output is **anchored at the scenario's own test function
 
 - `--include-fixtures` — show the full tree, including fixture setup/teardown
 - `--from <pattern>` — anchor at any frame pattern (e.g. `--from OrderService.create_order`)
-- `--include <glob>` / `--exclude <glob>` — filter stacks by frame pattern. Accepts repetition (`--exclude a --exclude b`) or comma-separated (`--exclude 'a,b'`).
-- `--max-depth N` — truncate call stacks beyond N frames
+- `--include <glob>` / `--exclude <glob>` — filter stacks by frame pattern. `--include` keeps stacks that contain a match; `--exclude` drops stacks that contain one. Accepts repetition (`--exclude a --exclude b`) or comma-separated (`--exclude 'a,b'`).
+- `--skip <glob>` — **remove** matching frames from output while keeping the surrounding stack intact (skip-and-reparent). Use for infrastructure frames that appear on every stack and would cause `--exclude` to nuke everything.
+- `--max-depth N` — truncate stacks to N frames below the anchor (relative depth). `--max-depth 3` means "anchor + 3 more frames."
 
 If filtering eliminates all stacks, a hint is printed to stderr suggesting flags to try.
 

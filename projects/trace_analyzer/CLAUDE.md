@@ -88,7 +88,7 @@ cargo run -- mcp
 | `affected` | Find scenarios covering a file/line (`--with-snippets`, `--functions-only`) |
 | `run` | Run scenario with coverage collection |
 | `diagram` | Generate mermaid coverage diagram for a scenario or file |
-| `flamegraph` | Generate flame graph / call chain. Formats: folded, folded-compact, summary, mermaid, svg, html, png. Default auto-anchors at the scenario's test function. Flags: `--from <pattern>` (explicit anchor), `--include-fixtures` (full tree), `--include <glob>` / `--exclude <glob>` (repeat or comma-separate), `--max-depth N`. Empty output prints a stderr hint. |
+| `flamegraph` | Generate flame graph / call chain. Formats: folded, folded-compact, summary, mermaid, svg, html, png. Default auto-anchors at the scenario's test function. Flags: `--from <pattern>` (explicit anchor), `--include-fixtures` (full tree), `--include <glob>` / `--exclude <glob>` (drop stacks; repeat or comma-separate), `--skip <glob>` (skip-and-reparent), `--max-depth N` (relative to anchor). Empty output prints a stderr hint. |
 | `gallery` | Generate self-contained HTML gallery of all scenarios |
 | `mcp` | Start MCP server mode |
 
@@ -111,7 +111,7 @@ The MCP server (`trace mcp`) exposes these tools:
 | `scenario_run` | Run a scenario with coverage collection |
 | `diagram_scenario` | Generate mermaid coverage diagram for a scenario |
 | `diagram_file` | Generate mermaid coverage diagram for a file |
-| `flamegraph` | Generate flame graph / call chain. Params: `format` (folded/folded-compact/summary/mermaid/svg/html), `from` (explicit anchor; defaults to the scenario's test function), `include_fixtures` (full tree), `include`, `exclude`, `max_depth` |
+| `flamegraph` | Generate flame graph / call chain. Params: `format` (folded/folded-compact/summary/mermaid/svg/html), `from` (explicit anchor; defaults to the scenario's test function), `include_fixtures` (full tree), `include`, `exclude`, `skip` (skip-and-reparent), `max_depth` (relative to anchor) |
 
 ## Testing Guidelines
 

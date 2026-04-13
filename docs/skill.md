@@ -28,8 +28,9 @@ it (pytest fixture graph, framework setup) is dropped. Override with:
 ### Scoping and pruning
 
 - `--include 'auth_api,password'` or `--include auth_api --include password` — keep only stacks containing a matching frame
-- `--exclude 'conftest,bootstrap'` or `--exclude conftest --exclude bootstrap` — drop stacks containing a matching frame
-- `--max-depth 3` — truncate deeply-nested stacks
+- `--exclude 'conftest,bootstrap'` or `--exclude conftest --exclude bootstrap` — **drop entire stacks** that contain a matching frame
+- `--skip 'override_get_db_session'` — **remove matching frames** from output, keeping the rest of the stack (skip-and-reparent). Use this when an infrastructure frame sits on every anchored stack.
+- `--max-depth 3` — anchor + 3 more frames (relative to anchor, not absolute)
 
 If filtering produces empty output, a stderr hint suggests what to try.
 

@@ -111,9 +111,14 @@ trace context "tests/test_auth.py::test_login" --index .trace-index
 
 By default, flamegraph output is anchored at the scenario's own test function —
 everything above (pytest fixture setup) is trimmed. Use `--include-fixtures` to
-see the full tree, `--from <pattern>` to anchor at a different frame. Further
-scoping: `--include 'auth_api,password'`, `--exclude 'bootstrap'`, `--max-depth 5`.
-`--include`/`--exclude` accept repeated flags or comma-separated values.
+see the full tree, `--from <pattern>` to anchor at a different frame.
+
+Scoping flags:
+- `--include 'auth_api'` / `--exclude 'bootstrap'` — keep / drop entire stacks containing a match
+- `--skip 'override_get_db_session'` — REMOVE matching frames while keeping the rest of the stack (use for infrastructure that sits on every stack)
+- `--max-depth 3` — anchor + 3 more frames (relative to anchor, not absolute)
+
+`--include`/`--exclude`/`--skip` accept repeated flags or comma-separated values.
 
 ### Generating Diagrams (for humans to view)
 

@@ -56,8 +56,14 @@ pub struct FilterOptions {
     pub include_patterns: Vec<String>,
     /// Drop stacks containing a frame matching any of these patterns.
     pub exclude_patterns: Vec<String>,
-    /// Cap stacks at this depth. Frames deeper than this are dropped.
+    /// Cap stacks at this depth **relative to the anchor**. A value of 3 means
+    /// "anchor + 3 more frames". Applied AFTER anchoring, so fixture setup
+    /// above the anchor never counts toward the budget.
     pub max_depth: Option<u32>,
+    /// Frames matching any of these patterns are removed from output while the
+    /// surrounding stack is kept (skip-and-reparent). Unlike --exclude, which
+    /// drops the entire stack, --skip removes only the matching frame.
+    pub skip_patterns: Vec<String>,
 }
 
 impl FilterOptions {
@@ -164,48 +170,55 @@ pub fn to_folded_stacks_filtered(events: &[CallEvent], opts: &FilterOptions) -> 
 ///
 /// When `anchor_function` is set, each emitted line is trimmed to start at the
 /// first frame matching the anchor; stacks that never reach the anchor are dropped.
-/// This replaces the old filename-based "drop conftest roots" heuristic, which
-/// broke on any project where the whole call graph lives under a pytest fixture.
+/// `max_depth` and `skip_patterns` are applied AFTER anchoring, so fixture setup
+/// above the anchor never counts toward the depth budget and skipped frames
+/// are removed without dropping the surrounding stack.
 fn build_stack_lines(events: &[CallEvent], opts: &FilterOptions) -> Vec<String> {
     let mut stack: Vec<String> = Vec::new();
-    let mut pushed: Vec<bool> = Vec::new();
     let mut lines: Vec<String> = Vec::new();
     let anchor = opts.effective_anchor();
 
     for event in events {
         match event.event.as_str() {
             "call" => {
-                // Depth cap: don't push beyond max depth
-                let push_it = opts.max_depth.is_none_or(|m| event.depth <= m);
+                let frame = format_frame(&event.file, &event.function);
+                stack.push(frame);
 
-                if push_it {
-                    let frame = format_frame(&event.file, &event.function);
-                    stack.push(frame);
+                // Compute the anchored slice (trim to anchor if set)
+                let anchored: Option<&[String]> = if let Some(anchor_pat) = anchor {
+                    stack
+                        .iter()
+                        .position(|f| matches_anchor(f, anchor_pat))
+                        .map(|i| &stack[i..])
+                } else {
+                    Some(&stack[..])
+                };
 
-                    // Compute the stack to emit: trim to anchor if set
-                    let emit_stack: Option<&[String]> = if let Some(anchor_pat) = anchor {
-                        stack
-                            .iter()
-                            .position(|f| matches_anchor(f, anchor_pat))
-                            .map(|i| &stack[i..])
+                if let Some(frames) = anchored {
+                    // Skip-and-reparent: remove frames matching skip_patterns
+                    let after_skip: Vec<&String> = frames
+                        .iter()
+                        .filter(|f| !opts.skip_patterns.iter().any(|p| matches_pattern(f, p)))
+                        .collect();
+
+                    // Apply max_depth relative to anchor (i.e. the trimmed length)
+                    let limited: Vec<&String> = if let Some(max) = opts.max_depth {
+                        let limit = (max as usize) + 1;
+                        after_skip.into_iter().take(limit).collect()
                     } else {
-                        Some(&stack[..])
+                        after_skip
                     };
 
-                    if let Some(frames) = emit_stack {
-                        if stack_passes_filters(frames, opts) {
-                            lines.push(format!("{} 1", frames.join(";")));
+                    if !limited.is_empty() {
+                        let owned: Vec<String> = limited.iter().map(|s| s.to_string()).collect();
+                        if stack_passes_filters(&owned, opts) {
+                            lines.push(format!("{} 1", owned.join(";")));
                         }
                     }
                 }
-                pushed.push(push_it);
             }
             "return" => {
-                if let Some(was_pushed) = pushed.pop() {
-                    if was_pushed {
-                        stack.pop();
-                    }
-                }
+                stack.pop();
             }
             _ => {}
         }
@@ -271,23 +284,11 @@ pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFram
     let mut seen: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
     let mut result: Vec<SummaryFrame> = Vec::new();
     let anchor = opts.effective_anchor();
-
-    // Track whether we've seen the anchor in the current subtree and the depth
-    // of the anchor itself, so we can emit a depth relative to the anchor.
     let mut anchor_depth: Option<u32> = None;
-    let mut call_stack_depths: Vec<u32> = Vec::new();
 
     for event in events {
         match event.event.as_str() {
             "call" => {
-                call_stack_depths.push(event.depth);
-
-                if let Some(max) = opts.max_depth {
-                    if event.depth > max {
-                        continue;
-                    }
-                }
-
                 let frame = format_frame(&event.file, &event.function);
 
                 // Check if this frame establishes the anchor
@@ -301,6 +302,30 @@ pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFram
 
                 // If an anchor is required but not yet reached, skip emission
                 if anchor.is_some() && anchor_depth.is_none() {
+                    continue;
+                }
+
+                // Compute depth relative to anchor (0-based) when anchored
+                let emit_depth = match anchor_depth {
+                    Some(ad) => event.depth.saturating_sub(ad),
+                    None => event.depth,
+                };
+
+                // Apply max_depth RELATIVE TO ANCHOR
+                if let Some(max) = opts.max_depth {
+                    if emit_depth > max {
+                        continue;
+                    }
+                }
+
+                // Skip-and-reparent: drop this frame from the summary but keep
+                // processing subsequent frames (no reparenting needed in summary
+                // since each frame is emitted independently).
+                if opts
+                    .skip_patterns
+                    .iter()
+                    .any(|p| matches_pattern(&frame, p))
+                {
                     continue;
                 }
 
@@ -321,12 +346,6 @@ pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFram
                     continue;
                 }
 
-                // Compute depth relative to anchor (0-based) when anchored
-                let emit_depth = match anchor_depth {
-                    Some(ad) => event.depth.saturating_sub(ad),
-                    None => event.depth,
-                };
-
                 if let Some(&idx) = seen.get(&frame) {
                     result[idx].calls += 1;
                 } else {
@@ -346,7 +365,6 @@ pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFram
                         anchor_depth = None;
                     }
                 }
-                call_stack_depths.pop();
             }
             _ => {}
         }
@@ -391,7 +409,8 @@ pub fn to_mermaid_sequence_filtered(
 }
 
 /// Produce a filtered event list: trim everything before the anchor frame,
-/// apply depth cap. Pattern filters are applied per-stack, not here.
+/// apply depth cap relative to anchor, skip matching frames.
+/// Pattern filters (include/exclude) are applied per-stack, not here.
 fn filter_events(events: &[CallEvent], opts: &FilterOptions) -> Vec<CallEvent> {
     let mut result = Vec::with_capacity(events.len());
     let anchor = opts.effective_anchor();
@@ -412,7 +431,6 @@ fn filter_events(events: &[CallEvent], opts: &FilterOptions) -> Vec<CallEvent> {
                     continue;
                 }
             } else if event.event == "return" {
-                // If we return above the anchor depth, we've exited the anchor's subtree.
                 if let Some(ad) = anchor_depth {
                     if event.depth < ad {
                         anchor_depth = None;
@@ -422,9 +440,26 @@ fn filter_events(events: &[CallEvent], opts: &FilterOptions) -> Vec<CallEvent> {
             }
         }
 
-        // Apply depth cap
+        // Relative depth (0 at the anchor) for max_depth and matching.
+        let emit_depth = match anchor_depth {
+            Some(ad) => event.depth.saturating_sub(ad),
+            None => event.depth,
+        };
+
         if let Some(max) = opts.max_depth {
-            if event.depth > max {
+            if emit_depth > max {
+                continue;
+            }
+        }
+
+        // Skip frames matching skip_patterns (keep stack otherwise intact)
+        if event.event == "call" {
+            let frame = format_frame(&event.file, &event.function);
+            if opts
+                .skip_patterns
+                .iter()
+                .any(|p| matches_pattern(&frame, p))
+            {
                 continue;
             }
         }

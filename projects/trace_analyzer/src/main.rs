@@ -130,7 +130,16 @@ enum Commands {
         #[arg(long, action = clap::ArgAction::Append)]
         exclude: Vec<String>,
 
-        /// Cap stack depth at N frames.
+        /// Skip (remove) matching frames from output while keeping the surrounding
+        /// stack intact. Use this for infrastructure frames that appear on every
+        /// stack (e.g. dependency-injection wrappers). Accepts repetition and
+        /// comma-separated values, same as --exclude.
+        #[arg(long, action = clap::ArgAction::Append)]
+        skip: Vec<String>,
+
+        /// Cap stack depth at N frames below the anchor. Applied AFTER anchoring,
+        /// so --max-depth 3 means "anchor + 3 more frames" regardless of how deep
+        /// the anchor sits in the raw stack.
         #[arg(long)]
         max_depth: Option<u32>,
 
@@ -203,6 +212,7 @@ fn main() {
             include_fixtures,
             include,
             exclude,
+            skip,
             max_depth,
             index,
         } => cmd_flamegraph(
@@ -212,6 +222,7 @@ fn main() {
             include_fixtures,
             &include,
             &exclude,
+            &skip,
             max_depth,
             &index,
         ),
@@ -364,6 +375,7 @@ fn cmd_flamegraph(
     include_fixtures: bool,
     include: &[String],
     exclude: &[String],
+    skip: &[String],
     max_depth: Option<u32>,
     index_dir: &Path,
 ) -> anyhow::Result<()> {
@@ -400,6 +412,7 @@ fn cmd_flamegraph(
         include_fixtures,
         include_patterns: flatten_csv(include),
         exclude_patterns: flatten_csv(exclude),
+        skip_patterns: flatten_csv(skip),
         max_depth,
     };
 

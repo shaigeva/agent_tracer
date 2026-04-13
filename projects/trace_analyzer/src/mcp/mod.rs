@@ -113,7 +113,12 @@ pub struct FlamegraphRequest {
     /// Comma-separated glob patterns; drop stacks containing a matching frame.
     #[serde(default)]
     pub exclude: String,
-    /// Cap stack depth at N frames.
+    /// Comma-separated glob patterns; REMOVE matching frames from output while
+    /// keeping the surrounding stack intact (skip-and-reparent). Use for
+    /// infrastructure frames that appear on every stack.
+    #[serde(default)]
+    pub skip: String,
+    /// Cap stack depth at N frames BELOW the anchor. Applied after anchoring.
     #[serde(default)]
     pub max_depth: Option<u32>,
 }
@@ -406,6 +411,7 @@ impl TraceServer {
             include_fixtures: params.0.include_fixtures,
             include_patterns: call_trace::parse_patterns(&params.0.include),
             exclude_patterns: call_trace::parse_patterns(&params.0.exclude),
+            skip_patterns: call_trace::parse_patterns(&params.0.skip),
             max_depth: params.0.max_depth,
         };
 
