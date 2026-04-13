@@ -39,31 +39,259 @@ pub fn parse_call_traces(path: &Path) -> Result<CallTraces, ScenarioError> {
     Ok(file.traces)
 }
 
-/// Generate folded stacks format from call events (for flame graph tools).
+/// Filter options applied when rendering flame graphs and derived formats.
+#[derive(Debug, Clone, Default)]
+pub struct FilterOptions {
+    /// If false (default), drop stacks rooted at a fixture frame (file=conftest.py).
+    /// This cuts pytest fixture setup/teardown noise, which usually dominates the trace.
+    pub include_fixtures: bool,
+    /// If non-empty, keep only stacks containing a frame matching one of these patterns.
+    /// Patterns support simple globs: `foo*` (prefix), `*foo` (suffix), `foo` (substring).
+    pub include_patterns: Vec<String>,
+    /// Drop stacks containing a frame matching any of these patterns.
+    pub exclude_patterns: Vec<String>,
+    /// Cap stacks at this depth. Frames deeper than this are dropped.
+    pub max_depth: Option<u32>,
+}
+
+/// Parse a comma-separated list of patterns.
+pub fn parse_patterns(s: &str) -> Vec<String> {
+    if s.is_empty() {
+        return Vec::new();
+    }
+    s.split(',')
+        .map(|p| p.trim().to_string())
+        .filter(|p| !p.is_empty())
+        .collect()
+}
+
+/// Check if a file path is a pytest conftest (fixture) file.
+pub fn is_fixture_file(path: &str) -> bool {
+    path.ends_with("conftest.py") || path.contains("/conftest.py")
+}
+
+/// Simple glob matching: supports `foo*` (prefix), `*foo` (suffix), `foo` (substring).
+fn matches_pattern(frame: &str, pattern: &str) -> bool {
+    if let Some(prefix) = pattern.strip_suffix('*') {
+        if let Some(rest) = prefix.strip_prefix('*') {
+            // *foo* = contains
+            frame.contains(rest)
+        } else {
+            frame.starts_with(prefix)
+        }
+    } else if let Some(suffix) = pattern.strip_prefix('*') {
+        frame.ends_with(suffix)
+    } else {
+        // No wildcards: substring match (agent feedback suggested this is most useful)
+        frame.contains(pattern)
+    }
+}
+
+fn stack_passes_filters(frames: &[String], opts: &FilterOptions) -> bool {
+    if !opts.include_patterns.is_empty() {
+        let any_match = frames
+            .iter()
+            .any(|f| opts.include_patterns.iter().any(|p| matches_pattern(f, p)));
+        if !any_match {
+            return false;
+        }
+    }
+    if !opts.exclude_patterns.is_empty() {
+        let any_match = frames
+            .iter()
+            .any(|f| opts.exclude_patterns.iter().any(|p| matches_pattern(f, p)));
+        if any_match {
+            return false;
+        }
+    }
+    true
+}
+
+/// Generate folded stacks format with default (no) filtering.
+/// Kept for backward compatibility; new callers should use `to_folded_stacks_filtered`.
+pub fn to_folded_stacks(events: &[CallEvent]) -> String {
+    to_folded_stacks_filtered(events, &FilterOptions::default())
+}
+
+/// Generate folded stacks format from call events with filter options applied.
 ///
 /// Each line is: `stack;frames count\n`
 /// where stack is semicolon-separated function names representing the call stack.
 ///
 /// Frame format is `module.qualname` where module is the file stem (no path, no .py).
-/// This keeps frames short enough to display on narrow bars while staying unique
-/// (qualname already includes class prefix for methods).
-pub fn to_folded_stacks(events: &[CallEvent]) -> String {
-    let mut result = String::new();
+pub fn to_folded_stacks_filtered(events: &[CallEvent], opts: &FilterOptions) -> String {
+    let lines = build_stack_lines(events, opts);
+    let mut result = String::with_capacity(lines.len() * 64);
+    for line in &lines {
+        result.push_str(line);
+        result.push('\n');
+    }
+    result
+}
+
+/// Build the raw list of stack lines (each: "frame1;frame2;frame3 1") with filters applied.
+fn build_stack_lines(events: &[CallEvent], opts: &FilterOptions) -> Vec<String> {
     let mut stack: Vec<String> = Vec::new();
+    let mut pushed: Vec<bool> = Vec::new();
+    let mut skip_until_depth: Option<u32> = None;
+    let mut lines: Vec<String> = Vec::new();
 
     for event in events {
+        // Currently skipping a fixture subtree?
+        if let Some(d) = skip_until_depth {
+            if event.event == "return" && event.depth == d {
+                skip_until_depth = None;
+            }
+            continue;
+        }
+
         match event.event.as_str() {
             "call" => {
-                let frame = format_frame(&event.file, &event.function);
-                stack.push(frame);
-                let stack_str = stack.join(";");
-                result.push_str(&stack_str);
-                result.push_str(" 1\n");
+                // Drop fixture-rooted stacks (unless explicitly included)
+                if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
+                    skip_until_depth = Some(event.depth);
+                    continue;
+                }
+
+                // Depth cap: don't push beyond max depth
+                let push_it = opts.max_depth.is_none_or(|m| event.depth <= m);
+
+                if push_it {
+                    let frame = format_frame(&event.file, &event.function);
+                    stack.push(frame);
+                    // Apply per-stack include/exclude filters
+                    if stack_passes_filters(&stack, opts) {
+                        lines.push(format!("{} 1", stack.join(";")));
+                    }
+                }
+                pushed.push(push_it);
             }
             "return" => {
-                stack.pop();
+                if let Some(was_pushed) = pushed.pop() {
+                    if was_pushed {
+                        stack.pop();
+                    }
+                }
             }
             _ => {}
+        }
+    }
+
+    lines
+}
+
+/// Generate folded-compact stacks: prefix collapse with ellipsis.
+///
+/// Each line after the first replaces its common prefix with the previous line
+/// by `...(N)` where N is the number of collapsed frames. Dramatically reduces
+/// token count for deeply-nested traces.
+pub fn to_folded_compact(events: &[CallEvent], opts: &FilterOptions) -> String {
+    let lines = build_stack_lines(events, opts);
+    let mut result = String::new();
+    let mut prev_frames: Vec<&str> = Vec::new();
+
+    for line in &lines {
+        let (stack_part, count_part) = line.rsplit_once(' ').unwrap_or((line.as_str(), "1"));
+        let frames: Vec<&str> = stack_part.split(';').collect();
+
+        // Find common prefix length with previous line
+        let common = frames
+            .iter()
+            .zip(prev_frames.iter())
+            .take_while(|(a, b)| a == b)
+            .count();
+
+        if common >= 2 && common < frames.len() {
+            let rest = &frames[common..];
+            result.push_str(&format!(
+                "...({}) ;{} {}\n",
+                common,
+                rest.join(";"),
+                count_part
+            ));
+        } else {
+            result.push_str(&format!("{} {}\n", frames.join(";"), count_part));
+        }
+
+        prev_frames = frames;
+    }
+
+    result
+}
+
+/// Entry in the summary format.
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct SummaryFrame {
+    pub frame: String,
+    pub depth: u32,
+    pub calls: u32,
+    pub file: String,
+}
+
+/// Generate a compact summary: unique frames in order of first appearance,
+/// with their depth and total call count.
+///
+/// This is typically 10-50x shorter than folded stacks and is what agents
+/// usually want: "what functions does this test touch?"
+pub fn to_summary(events: &[CallEvent], opts: &FilterOptions) -> Vec<SummaryFrame> {
+    let mut seen: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
+    let mut result: Vec<SummaryFrame> = Vec::new();
+    let mut skip_until_depth: Option<u32> = None;
+
+    for event in events {
+        if event.event != "call" {
+            if let Some(d) = skip_until_depth {
+                if event.event == "return" && event.depth == d {
+                    skip_until_depth = None;
+                }
+            }
+            continue;
+        }
+
+        if skip_until_depth.is_some() {
+            continue;
+        }
+
+        if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
+            skip_until_depth = Some(event.depth);
+            continue;
+        }
+
+        if let Some(max) = opts.max_depth {
+            if event.depth > max {
+                continue;
+            }
+        }
+
+        let frame = format_frame(&event.file, &event.function);
+
+        // Apply include/exclude filters on the single frame
+        if !opts.include_patterns.is_empty()
+            && !opts
+                .include_patterns
+                .iter()
+                .any(|p| matches_pattern(&frame, p))
+        {
+            continue;
+        }
+        if opts
+            .exclude_patterns
+            .iter()
+            .any(|p| matches_pattern(&frame, p))
+        {
+            continue;
+        }
+
+        if let Some(&idx) = seen.get(&frame) {
+            result[idx].calls += 1;
+        } else {
+            seen.insert(frame.clone(), result.len());
+            result.push(SummaryFrame {
+                frame,
+                depth: event.depth,
+                calls: 1,
+                file: event.file.clone(),
+            });
         }
     }
 
@@ -89,8 +317,60 @@ fn file_stem(path: &str) -> String {
     }
 }
 
-/// Generate a mermaid sequence diagram from call events.
+/// Generate a mermaid sequence diagram from call events with default (no) filtering.
 pub fn to_mermaid_sequence(events: &[CallEvent], scenario_name: &str) -> String {
+    to_mermaid_sequence_filtered(events, scenario_name, &FilterOptions::default())
+}
+
+/// Generate a mermaid sequence diagram from call events with filter options.
+pub fn to_mermaid_sequence_filtered(
+    events: &[CallEvent],
+    scenario_name: &str,
+    opts: &FilterOptions,
+) -> String {
+    // Apply fixture / depth filtering to produce the effective event sequence
+    let filtered = filter_events(events, opts);
+    to_mermaid_sequence_impl(&filtered, scenario_name)
+}
+
+/// Produce a filtered event list (fixture skip + depth cap). Pattern filters
+/// are per-stack so they're not applied here.
+fn filter_events(events: &[CallEvent], opts: &FilterOptions) -> Vec<CallEvent> {
+    let mut result = Vec::with_capacity(events.len());
+    let mut skip_until_depth: Option<u32> = None;
+
+    for event in events {
+        if let Some(d) = skip_until_depth {
+            if event.event == "return" && event.depth == d {
+                skip_until_depth = None;
+            }
+            continue;
+        }
+
+        if event.event == "call" {
+            if !opts.include_fixtures && event.depth == 0 && is_fixture_file(&event.file) {
+                skip_until_depth = Some(event.depth);
+                continue;
+            }
+            if let Some(max) = opts.max_depth {
+                if event.depth > max {
+                    continue;
+                }
+            }
+        } else if event.event == "return" {
+            if let Some(max) = opts.max_depth {
+                if event.depth > max {
+                    continue;
+                }
+            }
+        }
+        result.push(event.clone());
+    }
+
+    result
+}
+
+fn to_mermaid_sequence_impl(events: &[CallEvent], scenario_name: &str) -> String {
     let mut mermaid = String::new();
     mermaid.push_str("sequenceDiagram\n");
 
@@ -147,14 +427,18 @@ pub fn to_mermaid_sequence(events: &[CallEvent], scenario_name: &str) -> String 
     mermaid
 }
 
-/// Render a flame graph SVG from call events using inferno.
-///
-/// Returns an SVG string. With `fixed_width=None` the SVG is "fluid" (scales
-/// to container; needs interactive JS for label layout). With a fixed width,
-/// labels are computed statically so text renders correctly in non-JS viewers
-/// and when rasterized to PNG.
+/// Render a flame graph SVG from call events using inferno (default filters).
 pub fn to_svg_flamegraph(events: &[CallEvent], title: &str) -> Result<String, String> {
-    render_svg(events, title, None)
+    render_svg(events, title, None, &FilterOptions::default())
+}
+
+/// Render a flame graph SVG with explicit filter options.
+pub fn to_svg_flamegraph_filtered(
+    events: &[CallEvent],
+    title: &str,
+    opts: &FilterOptions,
+) -> Result<String, String> {
+    render_svg(events, title, None, opts)
 }
 
 /// Render a flame graph with a fixed pixel width (useful for static viewers).
@@ -163,19 +447,19 @@ pub fn to_svg_flamegraph_fixed(
     title: &str,
     width: usize,
 ) -> Result<String, String> {
-    render_svg(events, title, Some(width))
+    render_svg(events, title, Some(width), &FilterOptions::default())
 }
 
-/// Render a flame graph with a fixed pixel width. Used for PNG rasterization
-/// where we want deterministic label layout since JS can't run.
+/// Render a flame graph SVG with fixed width and filter options.
 fn render_svg(
     events: &[CallEvent],
     title: &str,
     fixed_width: Option<usize>,
+    opts: &FilterOptions,
 ) -> Result<String, String> {
-    let folded = to_folded_stacks(events);
+    let folded = to_folded_stacks_filtered(events, opts);
     if folded.is_empty() {
-        return Err("No events to render".to_string());
+        return Err("No events to render (all filtered out? try --include-fixtures)".to_string());
     }
 
     let mut options = inferno::flamegraph::Options::default();
@@ -192,15 +476,19 @@ fn render_svg(
     String::from_utf8(svg).map_err(|e| format!("Invalid UTF-8 in SVG output: {}", e))
 }
 
-/// Render a flame graph PNG from call events.
-///
-/// Uses inferno to produce a fixed-width SVG (so labels layout correctly
-/// without JS), then resvg to rasterize to PNG at 2x scale for crispness.
-/// Returns PNG bytes. Static image (no interactivity) but renders in any viewer.
+/// Render a flame graph PNG from call events (default filters).
 pub fn to_png_flamegraph(events: &[CallEvent], title: &str) -> Result<Vec<u8>, String> {
+    to_png_flamegraph_filtered(events, title, &FilterOptions::default())
+}
+
+/// Render a flame graph PNG with filter options applied.
+pub fn to_png_flamegraph_filtered(
+    events: &[CallEvent],
+    title: &str,
+    opts: &FilterOptions,
+) -> Result<Vec<u8>, String> {
     // Use a wide canvas (2400px) so labels fit on narrow bars.
-    // Without JS, inferno can only truncate based on declared width.
-    let svg = render_svg(events, title, Some(2400))?;
+    let svg = render_svg(events, title, Some(2400), opts)?;
     svg_to_png(&svg, 1.5)
 }
 
@@ -227,12 +515,18 @@ fn svg_to_png(svg: &str, scale: f32) -> Result<Vec<u8>, String> {
         .map_err(|e| format!("PNG encoding failed: {}", e))
 }
 
-/// Wrap an SVG in an HTML page for guaranteed browser rendering.
-///
-/// Some browsers restrict scripts in SVGs loaded via file://, and VS Code shows
-/// SVGs as XML text by default. Wrapping in HTML sidesteps both issues.
+/// Wrap an SVG in an HTML page for guaranteed browser rendering (default filters).
 pub fn to_html_flamegraph(events: &[CallEvent], title: &str) -> Result<String, String> {
-    let svg = to_svg_flamegraph(events, title)?;
+    to_html_flamegraph_filtered(events, title, &FilterOptions::default())
+}
+
+/// Wrap an SVG in an HTML page with filter options applied.
+pub fn to_html_flamegraph_filtered(
+    events: &[CallEvent],
+    title: &str,
+    opts: &FilterOptions,
+) -> Result<String, String> {
+    let svg = to_svg_flamegraph_filtered(events, title, opts)?;
     Ok(format!(
         r#"<!DOCTYPE html>
 <html lang="en">

@@ -79,6 +79,16 @@ enum Commands {
         /// File path, optionally with line number (e.g., "src/auth.py" or "src/auth.py:25")
         target: String,
 
+        /// Include source code snippets for the matching lines.
+        /// Avoids a follow-up file Read by the agent.
+        #[arg(long)]
+        with_snippets: bool,
+
+        /// Return function names (from call traces) covering the matching lines
+        /// instead of just line numbers. Requires --call-traces in the index.
+        #[arg(long)]
+        functions_only: bool,
+
         /// Index directory (default: .trace-index)
         #[arg(long, default_value = DEFAULT_INDEX_DIR)]
         index: PathBuf,
@@ -95,9 +105,27 @@ enum Commands {
         /// Scenario ID
         scenario_id: String,
 
-        /// Output format: folded | svg | html | png | mermaid
+        /// Output format: folded | folded-compact | summary | svg | html | png | mermaid
         #[arg(long, default_value = "folded")]
         format: String,
+
+        /// Include pytest fixture (conftest.py) frames. Off by default since fixtures
+        /// dominate trace volume and rarely contain the signal you want.
+        #[arg(long)]
+        include_fixtures: bool,
+
+        /// Comma-separated patterns; keep only stacks containing a matching frame.
+        /// Patterns: `foo*` (prefix), `*foo` (suffix), `foo` (substring).
+        #[arg(long, default_value = "")]
+        include: String,
+
+        /// Comma-separated patterns; drop stacks containing a matching frame.
+        #[arg(long, default_value = "")]
+        exclude: String,
+
+        /// Cap stack depth at N frames.
+        #[arg(long)]
+        max_depth: Option<u32>,
 
         /// Index directory (default: .trace-index)
         #[arg(long, default_value = DEFAULT_INDEX_DIR)]
@@ -154,13 +182,30 @@ fn main() {
         } => cmd_list(behavior.as_deref(), errors, &index),
         Commands::Search { query, index } => cmd_search(&query, &index),
         Commands::Context { scenario_id, index } => cmd_context(&scenario_id, &index),
-        Commands::Affected { target, index } => cmd_affected(&target, &index),
+        Commands::Affected {
+            target,
+            with_snippets,
+            functions_only,
+            index,
+        } => cmd_affected(&target, with_snippets, functions_only, &index),
         Commands::Run { scenario_id } => cmd_run(&scenario_id),
         Commands::Flamegraph {
             scenario_id,
             format,
+            include_fixtures,
+            include,
+            exclude,
+            max_depth,
             index,
-        } => cmd_flamegraph(&scenario_id, &format, &index),
+        } => cmd_flamegraph(
+            &scenario_id,
+            &format,
+            include_fixtures,
+            &include,
+            &exclude,
+            max_depth,
+            &index,
+        ),
         Commands::Gallery { output, index } => cmd_gallery(&output, &index),
         Commands::Diagram {
             scenario_id,
@@ -255,7 +300,12 @@ fn cmd_context(scenario_id: &str, index_dir: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn cmd_affected(target: &str, index_dir: &Path) -> anyhow::Result<()> {
+fn cmd_affected(
+    target: &str,
+    with_snippets: bool,
+    functions_only: bool,
+    index_dir: &Path,
+) -> anyhow::Result<()> {
     use trace_analyzer::index::Index;
     use trace_analyzer::query;
 
@@ -263,8 +313,10 @@ fn cmd_affected(target: &str, index_dir: &Path) -> anyhow::Result<()> {
     let (file_path, line) = query::parse_target(target);
     let affected = query::find_affected_scenarios(&index, &file_path, line)?;
 
-    // Output as JSON
-    println!("{}", serde_json::to_string_pretty(&affected)?);
+    let enriched =
+        query::enrich_affected(&index, affected, &file_path, with_snippets, functions_only)?;
+
+    println!("{}", serde_json::to_string_pretty(&enriched)?);
     Ok(())
 }
 
@@ -284,7 +336,16 @@ fn cmd_run(scenario_id: &str) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn cmd_flamegraph(scenario_id: &str, format: &str, index_dir: &Path) -> anyhow::Result<()> {
+#[allow(clippy::too_many_arguments)]
+fn cmd_flamegraph(
+    scenario_id: &str,
+    format: &str,
+    include_fixtures: bool,
+    include: &str,
+    exclude: &str,
+    max_depth: Option<u32>,
+    index_dir: &Path,
+) -> anyhow::Result<()> {
     use trace_analyzer::call_trace;
     use trace_analyzer::index::Index;
     use trace_analyzer::query;
@@ -299,38 +360,51 @@ fn cmd_flamegraph(scenario_id: &str, format: &str, index_dir: &Path) -> anyhow::
         );
     }
 
+    let opts = call_trace::FilterOptions {
+        include_fixtures,
+        include_patterns: call_trace::parse_patterns(include),
+        exclude_patterns: call_trace::parse_patterns(exclude),
+        max_depth,
+    };
+
+    let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
+
     match format {
         "folded" => {
-            let folded = call_trace::to_folded_stacks(&events);
+            let folded = call_trace::to_folded_stacks_filtered(&events, &opts);
             print!("{}", folded);
         }
+        "folded-compact" => {
+            let compact = call_trace::to_folded_compact(&events, &opts);
+            print!("{}", compact);
+        }
+        "summary" => {
+            let summary = call_trace::to_summary(&events, &opts);
+            println!("{}", serde_json::to_string_pretty(&summary)?);
+        }
         "mermaid" => {
-            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
-            let mermaid = call_trace::to_mermaid_sequence(&events, short_name);
+            let mermaid = call_trace::to_mermaid_sequence_filtered(&events, short_name, &opts);
             println!("{}", mermaid);
         }
         "svg" => {
-            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
-            let svg = call_trace::to_svg_flamegraph(&events, short_name)
+            let svg = call_trace::to_svg_flamegraph_filtered(&events, short_name, &opts)
                 .map_err(|e| anyhow::anyhow!("{}", e))?;
             print!("{}", svg);
         }
         "html" => {
-            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
-            let html = call_trace::to_html_flamegraph(&events, short_name)
+            let html = call_trace::to_html_flamegraph_filtered(&events, short_name, &opts)
                 .map_err(|e| anyhow::anyhow!("{}", e))?;
             print!("{}", html);
         }
         "png" => {
             use std::io::Write;
-            let short_name = scenario_id.split("::").last().unwrap_or(scenario_id);
-            let png = call_trace::to_png_flamegraph(&events, short_name)
+            let png = call_trace::to_png_flamegraph_filtered(&events, short_name, &opts)
                 .map_err(|e| anyhow::anyhow!("{}", e))?;
             std::io::stdout().write_all(&png)?;
         }
         _ => {
             anyhow::bail!(
-                "Unknown format '{}'. Use 'folded', 'svg', 'html', 'png', or 'mermaid'.",
+                "Unknown format '{}'. Use one of: folded, folded-compact, summary, mermaid, svg, html, png.",
                 format
             );
         }

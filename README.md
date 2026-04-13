@@ -19,31 +19,53 @@ AI coding agents struggle to understand codebases because they lack execution co
 
 ## For AI Agents
 
-**Agents cannot read PNGs or view interactive SVGs.** Use text-based outputs to extract and understand traces. The recommended workflow:
+**Agents cannot read PNGs or view interactive SVGs.** Use text-based outputs to extract and understand traces.
+
+### Recommended workflow
 
 ```bash
-# 1. Find tests that cover the file you're about to change
-trace affected src/auth.py --index .trace-index
+# 1. Find tests that cover the file you're about to change - with source snippets and function names
+trace affected src/auth.py --with-snippets --functions-only --index .trace-index
 
-# 2. For a specific scenario, read the full call chain (textual)
-trace flamegraph "tests/test_auth.py::test_login" --format folded --index .trace-index
+# 2. For a specific scenario, get a compact summary of what it touches
+trace flamegraph "tests/test_auth.py::test_login" --format summary --index .trace-index
 
-# 3. Or get a mermaid sequence diagram (readable as text, renders if needed)
+# 3. For the full call order (longer, use when you need the tree)
+trace flamegraph "tests/test_auth.py::test_login" --format folded-compact --index .trace-index
+
+# 4. For cross-file call flow
 trace flamegraph "tests/test_auth.py::test_login" --format mermaid --index .trace-index
-
-# 4. Get coverage context (files + line numbers touched by a test)
-trace context "tests/test_auth.py::test_login" --index .trace-index
 ```
 
-All text outputs are JSON or plain text that an agent can parse and reason about:
-- **`folded`** — each line is a call stack (`frame1;frame2;frame3 count`). Good for understanding what got called in what order.
-- **`mermaid`** — sequenceDiagram with `ParticipantA ->> ParticipantB: function_name`. Shows cross-file call flow.
-- **`context`** — JSON with scenario metadata and covered files/lines.
-- **`list` / `search` / `affected`** — JSON scenario lists for discovery.
+### Output formats ranked by token cost
+
+| Format | Tokens | Best for |
+|--------|--------|----------|
+| `summary` | Low | "What functions does this test touch?" — JSON list of unique frames |
+| `folded-compact` | Medium | Call tree with prefix collapsing (`...(N);newframe`) |
+| `mermaid` | Medium | Cross-file call order as a sequence diagram |
+| `folded` | High | Full call tree — every nested call is a separate line |
+| `svg` / `html` / `png` | N/A | For humans only |
+
+### Filters (default-on fixture filtering)
+
+Pytest fixtures (setup/teardown) usually dominate trace volume and rarely contain signal. By default, stacks rooted in `conftest.py` are dropped. Override with `--include-fixtures` if you need the full picture.
+
+Additional filters:
+- `--include <glob1,glob2>` — keep only stacks containing a matching frame (substring or `foo*` / `*foo`)
+- `--exclude <glob1,glob2>` — drop stacks containing a matching frame
+- `--max-depth N` — truncate call stacks beyond N frames
+
+### `trace affected` enhancements for agents
+
+- `--with-snippets` — includes the actual source code for each matching line (saves a file Read)
+- `--functions-only` — augments output with function names (from call traces) covering the matching lines
+
+### JSON structure
+
+All text outputs except `folded` are JSON or structured text. The `documentation` field is omitted when identical to `description` to save tokens.
 
 The **MCP server** (`trace mcp --index .trace-index`) exposes all of these as tools for agents. See [CLAUDE.md snippet](docs/claude_md_snippet.md) for how to wire it into Claude Code.
-
-The `png`, `html`, and `svg` formats are **for humans**. Agents should stick to `folded`, `mermaid`, and the JSON-output commands.
 
 ## Quick Start
 

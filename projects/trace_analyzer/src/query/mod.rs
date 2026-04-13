@@ -38,6 +38,28 @@ pub struct FileCoverageInfo {
 pub struct AffectedScenario {
     pub scenario: ScenarioInfo,
     pub matching_lines: Vec<u32>,
+    /// Source snippets for the matching lines. Populated only when requested.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub snippets: Vec<LineSnippet>,
+    /// Function names (from call traces) that cover these lines. Populated only when requested.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub functions: Vec<String>,
+}
+
+/// A single line of source code with its line number.
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct LineSnippet {
+    pub line: u32,
+    pub code: String,
+}
+
+/// Normalize a scenario: drop documentation field if it's identical to description.
+/// Saves tokens in the common case where the docstring is a single line.
+pub fn normalize_scenario(mut s: ScenarioInfo) -> ScenarioInfo {
+    if s.documentation.as_ref() == Some(&s.description) {
+        s.documentation = None;
+    }
+    s
 }
 
 /// List scenarios with optional filters.
@@ -125,7 +147,7 @@ pub fn list_scenarios(
         scenarios
     };
 
-    Ok(base_query)
+    Ok(base_query.into_iter().map(normalize_scenario).collect())
 }
 
 /// Search scenarios by description text.
@@ -167,7 +189,7 @@ pub fn search_scenarios(index: &Index, query: &str) -> Result<Vec<ScenarioInfo>,
         });
     }
 
-    Ok(scenarios)
+    Ok(scenarios.into_iter().map(normalize_scenario).collect())
 }
 
 /// Get full coverage context for a scenario.
@@ -233,7 +255,10 @@ pub fn get_scenario_context(
         .map(|(path, lines)| FileCoverageInfo { path, lines })
         .collect();
 
-    Ok(ScenarioContext { scenario, coverage })
+    Ok(ScenarioContext {
+        scenario: normalize_scenario(scenario),
+        coverage,
+    })
 }
 
 /// Find scenarios that cover a specific file or line.
@@ -273,6 +298,8 @@ pub fn find_affected_scenarios(
             affected.push(AffectedScenario {
                 scenario: context.scenario,
                 matching_lines: lines,
+                snippets: Vec::new(),
+                functions: Vec::new(),
             });
         }
     } else {
@@ -300,6 +327,8 @@ pub fn find_affected_scenarios(
             affected.push(AffectedScenario {
                 scenario: context.scenario,
                 matching_lines: lines,
+                snippets: Vec::new(),
+                functions: Vec::new(),
             });
         }
     }
@@ -338,6 +367,90 @@ pub fn get_call_trace(
     }
 
     Ok(events)
+}
+
+/// Get unique function names called in `file_path` during `scenario_id`.
+/// Uses the call_traces table; returns empty if no traces are indexed.
+pub fn get_functions_in_file(
+    index: &Index,
+    scenario_id: &str,
+    file_path: &str,
+) -> Result<Vec<String>, IndexError> {
+    let conn = index.connection();
+    let pattern = format!("%{}", file_path);
+
+    let mut stmt = conn.prepare(
+        "SELECT DISTINCT function FROM call_traces
+         WHERE scenario_id = ?1 AND event = 'call' AND file_path LIKE ?2
+         ORDER BY function",
+    )?;
+
+    let rows = stmt.query_map([scenario_id, &pattern], |row| row.get::<_, String>(0))?;
+
+    let mut functions = Vec::new();
+    for row in rows {
+        functions.push(row?);
+    }
+
+    Ok(functions)
+}
+
+/// Read source-line snippets for the given (scenario, file, lines) using disk reads.
+/// Returns lines as `LineSnippet { line, code }`. Lines that can't be read are skipped.
+pub fn read_snippets(file_path: &str, lines: &[u32]) -> Vec<LineSnippet> {
+    use std::io::{BufRead, BufReader};
+    let Ok(file) = std::fs::File::open(file_path) else {
+        return Vec::new();
+    };
+    let reader = BufReader::new(file);
+    let line_set: std::collections::HashSet<u32> = lines.iter().copied().collect();
+
+    let mut snippets: Vec<LineSnippet> = Vec::new();
+    for (i, line) in reader.lines().enumerate() {
+        let line_no = (i + 1) as u32;
+        if line_set.contains(&line_no) {
+            if let Ok(code) = line {
+                snippets.push(LineSnippet {
+                    line: line_no,
+                    code: code.trim_end().to_string(),
+                });
+            }
+        }
+    }
+
+    snippets.sort_by_key(|s| s.line);
+    snippets
+}
+
+/// Enrich an AffectedScenario list with snippets and/or function names.
+/// `with_snippets` reads source files; `with_functions` queries call traces.
+pub fn enrich_affected(
+    index: &Index,
+    affected: Vec<AffectedScenario>,
+    file_path: &str,
+    with_snippets: bool,
+    with_functions: bool,
+) -> Result<Vec<AffectedScenario>, IndexError> {
+    let mut result = Vec::with_capacity(affected.len());
+    for mut a in affected {
+        if with_snippets {
+            // Try the path as-is first, then with project-root resolution
+            let mut snippets = read_snippets(file_path, &a.matching_lines);
+            if snippets.is_empty() {
+                // Try resolving relative to current dir
+                if let Ok(cwd) = std::env::current_dir() {
+                    let abs = cwd.join(file_path);
+                    snippets = read_snippets(&abs.display().to_string(), &a.matching_lines);
+                }
+            }
+            a.snippets = snippets;
+        }
+        if with_functions {
+            a.functions = get_functions_in_file(index, &a.scenario.id, file_path)?;
+        }
+        result.push(a);
+    }
+    Ok(result)
 }
 
 /// Helper to get behaviors for a scenario.

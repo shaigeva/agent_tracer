@@ -7,14 +7,26 @@ Invoke with `/trace` or when the user asks about test coverage, affected tests, 
 
 You cannot read PNGs or interactive SVGs. For extraction and reasoning, use:
 
-- `trace flamegraph <id> --format folded` — call stacks as text
+- `trace flamegraph <id> --format summary` — compact JSON list of unique frames touched (use first)
+- `trace flamegraph <id> --format folded-compact` — call tree with collapsed prefixes
 - `trace flamegraph <id> --format mermaid` — sequence diagram as text
+- `trace affected <file> --with-snippets --functions-only` — scenarios + source + function names
 - `trace context <id>` — JSON coverage data
-- `trace affected <file>` — JSON list of scenarios touching a file
 - `trace list / search` — JSON scenario lists
 
 The `png`, `html`, and `svg` formats are for humans. Only produce them when the user
 explicitly asks to view/share a flame graph.
+
+### Default: fixtures are filtered out
+
+Stacks rooted in pytest `conftest.py` fixtures are dropped by default (they're ~95% noise in
+most traces). Use `--include-fixtures` to see them.
+
+### Scoping and pruning
+
+- `--include 'auth_api,password'` — keep only stacks containing a matching frame
+- `--exclude 'conftest,bootstrap'` — drop stacks containing a matching frame
+- `--max-depth 3` — truncate deeply-nested stacks
 
 ## Prerequisites
 
