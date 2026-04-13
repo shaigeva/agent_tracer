@@ -55,11 +55,5 @@ run_step "cargo-build" cargo build || {
     exit 1
 }
 
-run_step "cargo-build-release" cargo build --release || {
-    echo "❌ Release build failed:"
-    cat "$TEMP_OUTPUT"
-    exit 1
-}
-
 # All validations passed
-echo "✅ All Rust validations passed (fmt, clippy, test, build, release)"
+echo "✅ All Rust validations passed (fmt, clippy, test, build)"

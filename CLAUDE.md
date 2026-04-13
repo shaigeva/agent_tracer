@@ -170,14 +170,15 @@ The root `devtools/run_all_agent_validations.sh` runs validations for ALL projec
    - Python only: `cd projects/pytest_tracer_python && ./devtools/run_all_agent_validations.sh`
    - Rust only: `cd projects/trace_analyzer && ./devtools/run_all_agent_validations.sh`
 
-   The Rust validation script also runs `cargo build --release` so the
-   shipped binary at `target/release/trace` is always up-to-date with the
-   current source. **Never declare a feature done without running validations**
-   — the release build is part of the contract.
+   Validations run debug builds for fast iteration. The **release binary**
+   (`target/release/trace`) is built separately via `./devtools/build_release.sh`.
+   A Claude Code `PreToolUse` hook (`devtools/hook_pre_commit.sh`) runs the
+   release build automatically before any `git commit`, so the shipped binary
+   is always fresh on commit without slowing down the inner dev loop.
 
 🚨 **ZERO TOLERANCE** 🚨
 - ZERO test failures, linting errors, type errors, warnings
-- Release binary must be fresh (`run_all_agent_validations.sh` ensures this)
+- Release binary is auto-built on commit via the hook (don't bypass)
 
 **When validation fails:**
 1. Check spec first - verify correct behavior
