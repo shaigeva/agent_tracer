@@ -65,6 +65,9 @@ htmlcov/
 coverage.xml
 *.cover
 
+# Pytest fixture cache — regenerated per sample_project content hash
+projects/pytest_tracer_python/tests/fixtures/cache/*/scenarios.json
+
 # Claude private stuff
 .claude/settings.local.json
 .claude/worktrees/
