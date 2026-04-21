@@ -1,0 +1,74 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    name: Python (pytest_tracer_python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: projects/pytest_tracer_python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Python version
+        id: py
+        working-directory: ${{ github.workspace }}
+        run: echo "version=$(cat .python-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: ${{ steps.py.outputs.version }}
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --diff .
+
+      - name: Type check
+        run: uv run ty check --exclude "tests/fixtures/sample_project*"
+
+      - name: Tests
+        run: uv run pytest
+
+  rust:
+    name: Rust (trace_analyzer)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: projects/trace_analyzer
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cargo cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: projects/trace_analyzer
+
+      - name: Cargo fmt check
+        run: cargo fmt -- --check
+
+      - name: Cargo clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Cargo test
+        run: cargo test
+
+      - name: Cargo build
+        run: cargo build
