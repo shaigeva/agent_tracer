@@ -67,4 +67,5 @@ coverage.xml
 
 # Claude private stuff
 .claude/settings.local.json
+.claude/worktrees/
 notebooks_chroma_db/
