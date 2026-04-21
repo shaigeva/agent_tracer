@@ -1,6 +1,7 @@
 # pytest-tracer
 
 A tool for helping AI coding agents understand codebases by capturing test execution traces and making them available for context gathering.
+NOTE - this is not a mature tool, it's still experimental.
 
 ## Overview
 
