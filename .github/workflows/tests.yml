@@ -51,6 +51,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Read Python version
+        id: py
+        working-directory: ${{ github.workspace }}
+        run: echo "version=$(cat .python-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: ${{ steps.py.outputs.version }}
+
+      - name: Generate Rust test fixtures (coverage cache)
+        working-directory: projects/pytest_tracer_python
+        run: |
+          uv sync
+          uv run pytest
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
